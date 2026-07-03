@@ -1,0 +1,49 @@
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+
+# ─── LangChain Ecosystem ───────────────────────────────
+langchain==0.3.13
+langchain-openai==0.2.14
+langchain-community==0.3.13
+langchain-qdrant==0.2.0
+langgraph==0.2.60
+
+# ─── Vector Store ──────────────────────────────────────
+qdrant-client==1.12.1
+
+# ─── Embeddings ────────────────────────────────────────
+sentence-transformers==3.3.1
+torch==2.5.1
+transformers==4.47.1
+
+# ─── Document Processing ───────────────────────────────
+pypdf==5.1.0
+PyMuPDF==1.24.14
+python-docx==1.1.2
+unstructured[pdf,docx]==0.16.11
+openpyxl==3.1.5
+
+# ─── OCR ────────────────────────────────────────────────
+pytesseract==0.3.13
+Pillow==11.0.0
+opencv-python-headless==4.10.0.84
+
+# ─── Configuration ─────────────────────────────────────
+pydantic==2.10.3
+pydantic-settings==2.6.1
+python-dotenv==1.0.1
+
+# ─── HTTP / Async ──────────────────────────────────────
+httpx==0.28.1
+aiofiles==24.1.0
+
+# ─── Redis ─────────────────────────────────────────────
+redis==5.2.1
+
+# ─── Logging ───────────────────────────────────────────
+structlog==24.4.0
+
+# ─── Dev / Testing ─────────────────────────────────────
+pytest==8.3.4
+pytest-asyncio==0.24.0
+ruff==0.8.4
