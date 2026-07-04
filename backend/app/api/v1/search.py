@@ -5,17 +5,28 @@ from fastapi import APIRouter, Query, status
 
 router = APIRouter()
 
+from pydantic import BaseModel
+from typing import Any, Dict, List, Optional
+from app.services.similarity_service import SimilaritySearchService
 
-@router.get("/", status_code=status.HTTP_200_OK)
-async def semantic_search(
-    q: str = Query(..., min_length=1, description="Search query"),
-    document_ids: str = Query(None, description="Comma-separated document IDs to scope search"),
-    top_k: int = Query(5, ge=1, le=20, description="Number of results to return"),
-    score_threshold: float = Query(0.7, ge=0.0, le=1.0),
-):
+
+class SearchRequest(BaseModel):
+    query: str
+    limit: int = 5
+    document_id: Optional[str] = None
+    collection_name: Optional[str] = None
+
+
+@router.post("/similarity", status_code=status.HTTP_200_OK)
+async def semantic_search(request: SearchRequest):
     """
-    Perform semantic similarity search across the knowledge base.
-    Returns ranked chunks with document references and scores.
-    TODO: Call AI service vector search endpoint.
+    Perform semantic similarity search across the vector store.
     """
-    raise NotImplementedError("Semantic search not yet implemented")
+    results = await SimilaritySearchService.search(
+        query=request.query,
+        limit=request.limit,
+        document_id=request.document_id,
+        collection_name=request.collection_name
+    )
+    
+    return {"results": results, "total": len(results)}
