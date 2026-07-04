@@ -1,83 +1,141 @@
 """
-ForgeMind AI — AI Chat Endpoints
-POST /chat/conversations           — Create a new conversation
-GET  /chat/conversations           — List conversations
-GET  /chat/conversations/{id}      — Get conversation with messages
-DELETE /chat/conversations/{id}    — Delete a conversation
-POST /chat/conversations/{id}/message — Send a message and get AI response
-GET  /chat/conversations/{id}/stream  — Stream AI response (SSE)
+ForgeMind AI — Chat API Router
 """
-from fastapi import APIRouter, Query, status
+from typing import Any, Dict, List, Optional
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.schemas.chat import (
-    ConversationResponse,
-    CreateConversationRequest,
-    MessageRequest,
-    MessageResponse,
-)
+from app.api.deps import get_current_user, get_db
+from app.chat.chat_repository import ChatRepository
+from app.chat.chat_service import ChatService
+from app.models.user import User
+from app.services.similarity_service import SimilaritySearchService
+
 
 router = APIRouter()
 
 
-@router.post("/conversations", response_model=ConversationResponse, status_code=status.HTTP_201_CREATED)
-async def create_conversation(body: CreateConversationRequest):
-    """
-    Start a new AI chat conversation.
-    Optionally bind specific document IDs to the conversation scope.
-    TODO: Create conversation record in DB.
-    """
-    raise NotImplementedError("Create conversation not yet implemented")
+class ChatRequest(BaseModel):
+    query: str
+    conversation_id: Optional[str] = None
 
 
-@router.get("/conversations", status_code=status.HTTP_200_OK)
-async def list_conversations(
-    page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
-    archived: bool = Query(False),
+class ChatResponse(BaseModel):
+    conversation_id: str
+    answer: str
+    citations: List[Dict[str, Any]]
+
+
+def get_chat_service(db: AsyncSession = Depends(get_db)) -> ChatService:
+    repo = ChatRepository(db)
+    sim_service = SimilaritySearchService()
+    return ChatService(repository=repo, similarity_service=sim_service)
+
+
+@router.post("", response_model=ChatResponse)
+async def process_chat(
+    request: ChatRequest,
+    current_user: User = Depends(get_current_user),
+    chat_service: ChatService = Depends(get_chat_service)
 ):
     """
-    List the current user's conversations.
-    TODO: Implement conversation repository query.
+    Send a message to the AI and get a full RAG response.
     """
-    raise NotImplementedError("List conversations not yet implemented")
+    try:
+        result = await chat_service.process_chat(
+            user_id=current_user.id,
+            query=request.query,
+            conversation_id=request.conversation_id
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/conversations/{conversation_id}", response_model=ConversationResponse)
-async def get_conversation(conversation_id: str):
+@router.post("/stream")
+async def process_chat_stream(
+    request: ChatRequest,
+    current_user: User = Depends(get_current_user),
+    chat_service: ChatService = Depends(get_chat_service)
+):
     """
-    Retrieve a conversation with its full message history.
-    TODO: Join conversations with messages.
+    Send a message and get an SSE streaming RAG response.
     """
-    raise NotImplementedError("Get conversation not yet implemented")
+    return StreamingResponse(
+        chat_service.process_chat_stream(
+            user_id=current_user.id,
+            query=request.query,
+            conversation_id=request.conversation_id
+        ),
+        media_type="text/event-stream"
+    )
 
 
-@router.delete("/conversations/{conversation_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_conversation(conversation_id: str):
+@router.get("/history")
+async def get_conversations(
+    limit: int = 50,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
     """
-    Delete a conversation and all associated messages.
-    TODO: Cascade delete via DB.
+    Get the current user's conversation history.
     """
-    return None
+    repo = ChatRepository(db)
+    convs = await repo.get_user_conversations(user_id=current_user.id, limit=limit)
+    return [
+        {
+            "id": c.id,
+            "title": c.title,
+            "updated_at": c.updated_at
+        }
+        for c in convs
+    ]
 
 
-@router.post("/conversations/{conversation_id}/message", response_model=MessageResponse)
-async def send_message(conversation_id: str, body: MessageRequest):
+@router.get("/{conversation_id}")
+async def get_conversation_details(
+    conversation_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
     """
-    Send a user message and receive an AI response with citations.
-    Calls the AI service RAG pipeline.
-    TODO: Call AI service, save messages, return response with citations.
+    Get all messages for a specific conversation.
     """
-    raise NotImplementedError("Send message not yet implemented")
+    repo = ChatRepository(db)
+    conv = await repo.get_conversation(conversation_id, user_id=current_user.id)
+    if not conv:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+        
+    messages = [
+        {
+            "id": m.id,
+            "role": m.role.value,
+            "content": m.content,
+            "context_json": m.context_json,
+            "created_at": m.created_at
+        }
+        for m in conv.messages
+    ]
+    return {
+        "id": conv.id,
+        "title": conv.title,
+        "messages": messages
+    }
 
 
-@router.get("/conversations/{conversation_id}/stream")
-async def stream_message(conversation_id: str, message: str = Query(...)):
+@router.delete("/{conversation_id}")
+async def delete_conversation(
+    conversation_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
     """
-    Stream an AI response using Server-Sent Events (SSE).
-    TODO: Implement SSE streaming from AI service.
+    Delete a conversation.
     """
-    async def event_generator():
-        yield "data: placeholder\n\n"
-
-    return StreamingResponse(event_generator(), media_type="text/event-stream")
+    repo = ChatRepository(db)
+    success = await repo.delete_conversation(conversation_id, user_id=current_user.id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Conversation not found or not owned by user")
+    return {"message": "Conversation deleted"}
