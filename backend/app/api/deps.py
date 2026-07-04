@@ -4,9 +4,10 @@ FastAPI Dependencies — reusable dependency functions.
 These are injected into route handlers via Depends().
 
 Provided:
-- get_db          → AsyncSession
-- get_current_user → User (raises 401 if token missing/invalid)
-- require_roles   → factory that checks role membership (raises 403)
+- get_db                  → AsyncSession
+- get_current_user        → User (raises 401 if token missing/invalid)
+- require_roles           → factory that checks role membership (raises 403)
+- get_storage_provider    → StorageProvider (LocalStorageProvider by default)
 """
 from typing import Annotated
 
@@ -25,9 +26,27 @@ logger = structlog.get_logger(__name__)
 # Tells FastAPI where to find the token (used in OpenAPI docs too)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
+from app.storage.base import StorageProvider
+from app.storage.local_storage import LocalStorageProvider
+
 # ─── Type aliases (clean route signatures) ──────────────────────────
 DBSession = Annotated[AsyncSession, Depends(get_db)]
 BearerToken = Annotated[str, Depends(oauth2_scheme)]
+
+
+# ─── Storage Provider Dependency ────────────────────────────────────
+
+def get_storage_provider() -> StorageProvider:
+    """
+    Return the active StorageProvider instance.
+
+    Swap LocalStorageProvider for S3Provider or AzureBlobProvider
+    here without touching any route handler.
+    """
+    return LocalStorageProvider()
+
+
+Storage = Annotated[StorageProvider, Depends(get_storage_provider)]
 
 
 # ─── Current User Dependency ────────────────────────────────────────
