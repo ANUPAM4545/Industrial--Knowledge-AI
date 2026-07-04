@@ -59,6 +59,11 @@ class Settings(BaseSettings):
     # ─── AI Service ──────────────────────────────────────────────
     AI_SERVICE_URL: str = "http://ai-service:8001"
     
+    # ─── LLM Configuration ───────────────────────────────────────
+    LLM_PROVIDER: str = "openai"
+    OPENAI_API_KEY: str = ""
+    GEMINI_API_KEY: str = ""
+    
     # ─── Embeddings & Vector Store ───────────────────────────────
     EMBEDDING_PROVIDER: str = "fastembed"
     VECTOR_STORE: str = "qdrant"

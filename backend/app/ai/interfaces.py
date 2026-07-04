@@ -97,5 +97,21 @@ class LLMProvider(ABC):
     """Interface for Large Language Models."""
     
     @abstractmethod
-    async def generate(self, prompt: str, **kwargs) -> str:
+    async def generate(self, prompt: str, system_prompt: Optional[str] = None, **kwargs) -> str:
+        """Generate a complete text response."""
+        pass
+        
+    @abstractmethod
+    async def stream_generate(self, prompt: str, system_prompt: Optional[str] = None, **kwargs):
+        """Yield chunks of text for streaming."""
+        pass
+        
+    @abstractmethod
+    def model_name(self) -> str:
+        """Return the model identifier."""
+        pass
+        
+    @abstractmethod
+    async def health_check(self) -> Dict[str, Any]:
+        """Check if provider is available."""
         pass
