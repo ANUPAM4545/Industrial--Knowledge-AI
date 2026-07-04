@@ -16,25 +16,8 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    # ── PostgreSQL enums ──────────────────────────────────────────────
-    op.execute("""
-        DO $$ BEGIN
-            CREATE TYPE documentstatus AS ENUM (
-                'uploaded', 'processing', 'extracting', 'embedding', 'ready', 'failed'
-            );
-        EXCEPTION WHEN duplicate_object THEN NULL;
-        END $$
-    """)
-    op.execute("""
-        DO $$ BEGIN
-            CREATE TYPE documenttype AS ENUM (
-                'pdf', 'docx', 'txt', 'image', 'manual', 'sop', 'maintenance_log', 'other'
-            );
-        EXCEPTION WHEN duplicate_object THEN NULL;
-        END $$
-    """)
-
-    # ── Table ─────────────────────────────────────────────────────────
+    # Alembic creates documenttype/documentstatus enums automatically
+    # as part of create_table — no manual op.execute needed.
     op.create_table(
         "documents",
         sa.Column("id", sa.String(36), primary_key=True, nullable=False),
@@ -94,24 +77,20 @@ def upgrade() -> None:
                   server_default=sa.text("now()")),
     )
 
-    # ── Indexes ──────────────────────────────────────────────────────
-    op.create_index("ix_documents_id", "documents", ["id"])
-    op.create_index("ix_documents_owner_id", "documents", ["owner_id"])      # list by owner
-    op.create_index("ix_documents_status", "documents", ["status"])          # filter by status
-    op.create_index("ix_documents_created_at", "documents", ["created_at"])  # sort by date
-    op.create_index(
-        "ix_documents_owner_status",
-        "documents",
-        ["owner_id", "status"],   # composite: owner list filtered by status
-    )
+    # ── Indexes ──────────────────────────────────────────────────────────
+    op.create_index("ix_documents_id",         "documents", ["id"])
+    op.create_index("ix_documents_owner_id",   "documents", ["owner_id"])
+    op.create_index("ix_documents_status",     "documents", ["status"])
+    op.create_index("ix_documents_created_at", "documents", ["created_at"])
+    op.create_index("ix_documents_owner_status", "documents", ["owner_id", "status"])
 
 
 def downgrade() -> None:
     op.drop_index("ix_documents_owner_status", table_name="documents")
-    op.drop_index("ix_documents_created_at", table_name="documents")
-    op.drop_index("ix_documents_status", table_name="documents")
-    op.drop_index("ix_documents_owner_id", table_name="documents")
-    op.drop_index("ix_documents_id", table_name="documents")
+    op.drop_index("ix_documents_created_at",   table_name="documents")
+    op.drop_index("ix_documents_status",       table_name="documents")
+    op.drop_index("ix_documents_owner_id",     table_name="documents")
+    op.drop_index("ix_documents_id",           table_name="documents")
     op.drop_table("documents")
 
     op.execute("DROP TYPE IF EXISTS documentstatus")

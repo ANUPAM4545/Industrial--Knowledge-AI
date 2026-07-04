@@ -6,7 +6,7 @@ Never trust the client-supplied filename or Content-Type alone —
 we validate both the MIME type and the file extension.
 """
 import mimetypes
-from typing import Final
+from typing import Final, Optional
 
 from fastapi import UploadFile
 
@@ -65,7 +65,7 @@ def validate_extension(filename: str) -> str:
     return ext
 
 
-def validate_mime_type(content_type: str | None, filename: str) -> str:
+def validate_mime_type(content_type: Optional[str], filename: str) -> str:
     """
     Validate the MIME type against the allowlist.
 
@@ -99,7 +99,7 @@ def validate_file_size(size: int) -> None:
         )
 
 
-async def validate_upload(file: UploadFile) -> tuple[str, str, int]:
+async def validate_upload(file: UploadFile) -> tuple:
     """
     Full validation pipeline for an incoming UploadFile.
 

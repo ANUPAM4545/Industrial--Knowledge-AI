@@ -6,6 +6,7 @@ File system paths are never exposed to callers — only opaque string keys
 are exchanged across the service boundary.
 """
 import asyncio
+import os
 from pathlib import Path
 
 import structlog
@@ -14,8 +15,13 @@ from app.storage.base import StorageProvider
 
 logger = structlog.get_logger(__name__)
 
-# Root directory for all stored documents (mounted volume in Docker)
-STORAGE_ROOT = Path("/storage/documents")
+# Root directory — read from env (Docker sets /storage/documents; local dev overrides)
+STORAGE_ROOT = Path(
+    os.environ.get(
+        "UPLOAD_DIR",
+        str(Path(__file__).resolve().parent.parent.parent.parent / "storage" / "documents"),
+    )
+)
 
 
 class LocalStorageProvider(StorageProvider):

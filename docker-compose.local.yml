@@ -1,0 +1,74 @@
+# ═══════════════════════════════════════════════════════════════
+#  ForgeMind AI — Local Infrastructure Only
+#  Starts: PostgreSQL, Redis, Qdrant
+#  Backend + Frontend run natively on the host (faster dev loop)
+#
+#  Usage: docker compose -f docker-compose.local.yml up -d
+# ═══════════════════════════════════════════════════════════════
+
+name: forgemind-local
+
+services:
+
+  # ─── PostgreSQL 16 ─────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: forgemind-postgres
+    restart: unless-stopped
+    ports:
+      - "5435:5432"   # 5432=lifeai, 5433=grampulse — using 5435 for forgemind
+    environment:
+      POSTGRES_DB: forgemind_db
+      POSTGRES_USER: forgemind
+      POSTGRES_PASSWORD: forgemind_local_pass
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-local:/var/lib/postgresql/data
+      - ./deployment/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U forgemind -d forgemind_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  # ─── Redis 7 ───────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: forgemind-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: >
+      redis-server
+      --requirepass redis_local_pass
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "redis_local_pass", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ─── Qdrant Vector DB ──────────────────────────────────────
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: forgemind-qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant-local:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:6333/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+volumes:
+  postgres-local:
+    name: forgemind-postgres-local
+  qdrant-local:
+    name: forgemind-qdrant-local
