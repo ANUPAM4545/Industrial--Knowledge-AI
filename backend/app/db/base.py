@@ -7,6 +7,11 @@ from datetime import datetime, timezone
 from sqlalchemy import DateTime, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
+from app.models.user import User  # noqa
+from app.models.document import Document  # noqa
+from app.models.chunk import Chunk  # noqa
+from app.chat.models import Conversation, Message  # noqa
+
 
 class Base(DeclarativeBase):
     """Base class for all SQLAlchemy models."""
