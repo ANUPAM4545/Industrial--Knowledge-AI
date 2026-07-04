@@ -1,18 +1,88 @@
-import { useState } from 'react'
-import { MessageSquare, Send, Plus, Bot, User, FileText, ExternalLink } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { MessageSquare, Send, Plus, Bot, User, FileText, ExternalLink, Loader2 } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { cn } from '@/lib/utils'
-import type { Message } from '@/types'
-
-const PLACEHOLDER_MESSAGES: Message[] = []
+import { chatService, Conversation, Message } from '@/services/chatService'
 
 export function ChatPage() {
   const [inputValue, setInputValue] = useState('')
-  const [messages, _setMessages] = useState<Message[]>(PLACEHOLDER_MESSAGES)
+  const [messages, setMessages] = useState<Message[]>([])
+  const [conversations, setConversations] = useState<Conversation[]>([])
+  const [activeConversationId, setActiveConversationId] = useState<string | undefined>()
+  const [isLoading, setIsLoading] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const handleSend = () => {
-    if (!inputValue.trim()) return
-    // TODO: Implement API call to POST /api/v1/chat/conversations/{id}/message
+  useEffect(() => {
+    loadConversations()
+  }, [])
+
+  useEffect(() => {
+    if (activeConversationId) {
+      loadMessages(activeConversationId)
+    } else {
+      setMessages([])
+    }
+  }, [activeConversationId])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, isLoading])
+
+  const loadConversations = async () => {
+    try {
+      const data = await chatService.getConversations()
+      setConversations(data)
+    } catch (error) {
+      console.error('Failed to load conversations:', error)
+    }
+  }
+
+  const loadMessages = async (id: string) => {
+    try {
+      const data = await chatService.getConversationDetails(id)
+      setMessages(data.messages)
+    } catch (error) {
+      console.error('Failed to load messages:', error)
+    }
+  }
+
+  const handleSend = async () => {
+    if (!inputValue.trim() || isLoading) return
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: inputValue,
+      created_at: new Date().toISOString(),
+    }
+
+    setMessages((prev) => [...prev, userMessage])
     setInputValue('')
+    setIsLoading(true)
+
+    try {
+      const response = await chatService.sendMessage(userMessage.content, activeConversationId)
+      
+      if (!activeConversationId) {
+        setActiveConversationId(response.conversation_id)
+        loadConversations()
+      }
+
+      const aiMessage: Message = {
+        id: Date.now().toString() + 1,
+        role: 'assistant',
+        content: response.answer,
+        context_json: { citations: response.citations },
+        created_at: new Date().toISOString(),
+      }
+
+      setMessages((prev) => [...prev, aiMessage])
+    } catch (error) {
+      console.error('Failed to send message:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -20,17 +90,37 @@ export function ChatPage() {
       {/* ─── Conversation List ──────────────────────────────────── */}
       <div className="w-64 border-r border-white/[0.06] flex flex-col bg-[#0c0f22]">
         <div className="p-4 border-b border-white/[0.06]">
-          <button id="new-chat-btn" className="btn-primary w-full text-sm">
+          <button 
+            id="new-chat-btn" 
+            className="btn-primary w-full text-sm"
+            onClick={() => setActiveConversationId(undefined)}
+          >
             <Plus className="w-4 h-4" />
             New Chat
           </button>
         </div>
-        <div className="flex-1 p-3 overflow-y-auto">
-          <div className="flex flex-col items-center justify-center h-full text-center py-8">
-            <MessageSquare className="w-8 h-8 text-slate-600 mb-2" />
-            <p className="text-slate-500 text-sm">No conversations yet</p>
-            <p className="text-slate-600 text-xs mt-1">Start a new chat to begin</p>
-          </div>
+        <div className="flex-1 p-3 overflow-y-auto space-y-1">
+          {conversations.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-center py-8">
+              <MessageSquare className="w-8 h-8 text-slate-600 mb-2" />
+              <p className="text-slate-500 text-sm">No conversations yet</p>
+            </div>
+          ) : (
+            conversations.map((conv) => (
+              <button
+                key={conv.id}
+                onClick={() => setActiveConversationId(conv.id)}
+                className={cn(
+                  "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors truncate",
+                  activeConversationId === conv.id
+                    ? "bg-forge-600 text-white"
+                    : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                )}
+              >
+                {conv.title}
+              </button>
+            ))
+          )}
         </div>
       </div>
 
@@ -85,24 +175,31 @@ export function ChatPage() {
                 </div>
                 <div className={cn('max-w-[70%] space-y-2', msg.role === 'user' && 'items-end')}>
                   <div className={cn(
-                    'px-4 py-3 rounded-2xl text-sm leading-relaxed',
+                    'px-4 py-3 rounded-2xl text-sm leading-relaxed prose prose-sm prose-invert max-w-none',
                     msg.role === 'user'
                       ? 'bg-forge-600 text-white rounded-tr-sm'
                       : 'glass-card text-slate-200 rounded-tl-sm'
                   )}>
-                    {msg.content}
+                    {msg.role === 'user' ? (
+                      msg.content
+                    ) : (
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {msg.content}
+                      </ReactMarkdown>
+                    )}
                   </div>
                   {/* Citations */}
-                  {msg.citations && msg.citations.length > 0 && (
-                    <div className="space-y-1">
-                      {msg.citations.map((cite, i) => (
-                        <div key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-forge-600/10 border border-forge-500/20 text-xs">
+                  {msg.role === 'assistant' && msg.context_json?.citations && msg.context_json.citations.length > 0 && (
+                    <div className="space-y-1 mt-2">
+                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Sources</p>
+                      {msg.context_json.citations.map((cite, i) => (
+                        <div key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-forge-600/10 border border-forge-500/20 text-xs w-max max-w-full">
                           <FileText className="w-3 h-3 text-forge-400 flex-shrink-0" />
-                          <span className="text-forge-300">{cite.document_title}</span>
+                          <span className="text-forge-300 truncate">{cite.document_name}</span>
                           {cite.page_number && (
-                            <span className="text-slate-500">p.{cite.page_number}</span>
+                            <span className="text-slate-500 flex-shrink-0">p.{cite.page_number}</span>
                           )}
-                          <ExternalLink className="w-3 h-3 text-slate-500 ml-auto" />
+                          <ExternalLink className="w-3 h-3 text-slate-500 ml-2 flex-shrink-0" />
                         </div>
                       ))}
                     </div>
@@ -110,6 +207,19 @@ export function ChatPage() {
                 </div>
               </div>
             ))}
+            
+            {isLoading && (
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0">
+                  <Bot className="w-4 h-4 text-forge-400" />
+                </div>
+                <div className="glass-card text-slate-200 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin text-forge-400" />
+                  <span className="text-sm">Thinking...</span>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
           </div>
         )}
 
@@ -128,7 +238,8 @@ export function ChatPage() {
                     handleSend()
                   }
                 }}
-                className="input-field resize-none min-h-[42px] max-h-32 py-2.5 pr-4"
+                disabled={isLoading}
+                className="input-field resize-none min-h-[42px] max-h-32 py-2.5 pr-4 disabled:opacity-50"
                 placeholder="Ask anything about your documents..."
                 style={{ overflow: 'hidden' }}
               />
@@ -136,7 +247,7 @@ export function ChatPage() {
             <button
               id="chat-send-btn"
               onClick={handleSend}
-              disabled={!inputValue.trim()}
+              disabled={!inputValue.trim() || isLoading}
               className="btn-primary py-2.5 px-4 flex-shrink-0 disabled:opacity-40"
             >
               <Send className="w-4 h-4" />
