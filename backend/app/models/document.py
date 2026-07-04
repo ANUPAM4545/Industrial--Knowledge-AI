@@ -61,6 +61,13 @@ class Document(Base):
     chunk_count: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     processing_error: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
+    # Embeddings
+    embedding_model: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
+    embedding_dimension: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    vector_count: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    indexed_at: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    index_status: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+
     # Qdrant reference
     qdrant_collection: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
 
