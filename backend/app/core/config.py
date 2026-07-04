@@ -58,6 +58,13 @@ class Settings(BaseSettings):
 
     # ─── AI Service ──────────────────────────────────────────────
     AI_SERVICE_URL: str = "http://ai-service:8001"
+    
+    # ─── Embeddings & Vector Store ───────────────────────────────
+    EMBEDDING_PROVIDER: str = "fastembed"
+    VECTOR_STORE: str = "qdrant"
+    EMBEDDING_MODEL: str = "BAAI/bge-small-en-v1.5"
+    QDRANT_URL: str = "http://qdrant:6333"
+    QDRANT_COLLECTION: str = "documents"
 
     # ─── File Upload ─────────────────────────────────────────────
     UPLOAD_DIR: str = "/app/uploads"
