@@ -3,7 +3,7 @@ ForgeMind AI — API v1 Router
 """
 from fastapi import APIRouter
 
-from app.api.v1 import auth, users, documents, chat, analytics, admin, search, chunks, embeddings, evaluation, observability
+from app.api.v1 import auth, users, documents, chat, analytics, admin, search, chunks, embeddings, evaluation, observability, dashboard
 
 api_router = APIRouter()
 
@@ -18,5 +18,6 @@ api_router.include_router(analytics.router, prefix="/analytics", tags=["Analytic
 api_router.include_router(admin.router, prefix="/admin", tags=["Admin"])
 api_router.include_router(evaluation.router, prefix="/evaluation", tags=["Evaluation"])
 api_router.include_router(observability.router, prefix="/ai", tags=["Observability"])
+api_router.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
 
 
