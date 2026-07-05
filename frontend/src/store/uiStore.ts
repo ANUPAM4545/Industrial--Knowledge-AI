@@ -10,6 +10,7 @@ interface UIState {
   zoomLevel: number
   lastViewedPages: Record<string, number>
   developerMode: boolean
+  demoMode: boolean
 
   // Actions
   toggleSidebar: () => void
@@ -20,6 +21,7 @@ interface UIState {
   setZoomLevel: (zoom: number) => void
   setLastViewedPage: (docId: string, page: number) => void
   setDeveloperMode: (mode: boolean) => void
+  setDemoMode: (mode: boolean) => void
 }
 
 const getLocal = <T>(key: string, def: T): T => {
@@ -46,6 +48,7 @@ export const useUIStore = create<UIState>()((set) => ({
   zoomLevel: getLocal('zoomLevel', 100),
   lastViewedPages: getLocal('lastViewedPages', {}),
   developerMode: getLocal('developerMode', false),
+  demoMode: getLocal('demoMode', false),
 
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
@@ -71,5 +74,15 @@ export const useUIStore = create<UIState>()((set) => ({
   setDeveloperMode: (mode) => set(() => {
     setLocal('developerMode', mode)
     return { developerMode: mode }
+  }),
+
+  setDemoMode: (mode) => set(() => {
+    setLocal('demoMode', mode)
+    if (mode) {
+      // Auto enable Developer Mode for best dashboard diagnostics display
+      setLocal('developerMode', true)
+      return { demoMode: true, developerMode: true }
+    }
+    return { demoMode: false }
   }),
 }))
