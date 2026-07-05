@@ -7,6 +7,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import apiClient from '@/services/apiClient'
 import type { Document, PaginatedResponse } from '@/types'
+import { useUIStore } from '@/store/uiStore'
 
 // ── Query Keys ───────────────────────────────────────────────────────────────
 
@@ -43,6 +44,52 @@ export function useDocuments(params: ListParams = {}) {
   return useQuery({
     queryKey: documentKeys.list(params),
     queryFn: async (): Promise<PaginatedResponse<Document>> => {
+      if (useUIStore.getState().demoMode) {
+        return {
+          items: [
+            {
+              id: "demo_1",
+              title: "Standard Safety SOP.pdf",
+              description: "Emergency checklist for backpressure valve limits",
+              original_filename: "Standard_Safety_SOP.pdf",
+              file_size: 2048576,
+              mime_type: "application/pdf",
+              document_type: "sop",
+              status: "ready",
+              tags: "safety, valves, sop",
+              category: "Manuals",
+              department: "Engineering",
+              is_ocr_processed: true,
+              language: "en",
+              owner_id: "demo_user",
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            },
+            {
+              id: "demo_2",
+              title: "Valve Specs Checklist.docx",
+              description: "Specifications datasheet of backpressure check valve systems",
+              original_filename: "Valve_Specs_Checklist.docx",
+              file_size: 512400,
+              mime_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              document_type: "manual",
+              status: "ready",
+              tags: "valves, checklist, specs",
+              category: "Datasheets",
+              department: "Maintenance",
+              is_ocr_processed: true,
+              language: "en",
+              owner_id: "demo_user",
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            }
+          ],
+          total: 2,
+          page: 1,
+          page_size: 20,
+          total_pages: 1
+        };
+      }
       const { data } = await apiClient.get('/documents/', { params })
       return data
     },
@@ -55,6 +102,26 @@ export function useDocument(id: string) {
   return useQuery({
     queryKey: documentKeys.detail(id),
     queryFn: async (): Promise<Document> => {
+      if (useUIStore.getState().demoMode && id.startsWith("demo_")) {
+        return {
+          id,
+          title: id === "demo_1" ? "Standard Safety SOP.pdf" : "Valve Specs Checklist.docx",
+          description: id === "demo_1" ? "Emergency checklist for backpressure valve limits" : "Specifications datasheet of backpressure check valve systems",
+          original_filename: id === "demo_1" ? "Standard_Safety_SOP.pdf" : "Valve_Specs_Checklist.docx",
+          file_size: id === "demo_1" ? 2048576 : 512400,
+          mime_type: id === "demo_1" ? "application/pdf" : "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          document_type: id === "demo_1" ? "sop" : "manual",
+          status: "ready",
+          tags: id === "demo_1" ? "safety, valves, sop" : "valves, checklist, specs",
+          category: id === "demo_1" ? "Manuals" : "Datasheets",
+          department: id === "demo_1" ? "Engineering" : "Maintenance",
+          is_ocr_processed: true,
+          language: "en",
+          owner_id: "demo_user",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+      }
       const { data } = await apiClient.get(`/documents/${id}`)
       return data
     },
@@ -67,6 +134,9 @@ export function useDocumentStatus(id: string, enabled = true) {
   return useQuery({
     queryKey: documentKeys.status(id),
     queryFn: async (): Promise<Pick<Document, 'id' | 'status'>> => {
+      if (useUIStore.getState().demoMode && id.startsWith("demo_")) {
+        return { id, status: "ready" };
+      }
       const { data } = await apiClient.get(`/documents/${id}/status`)
       return data
     },
