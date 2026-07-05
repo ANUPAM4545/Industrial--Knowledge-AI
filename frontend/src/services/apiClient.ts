@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useAuthStore } from '@/store/authStore'
+import { authService } from './authService'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
@@ -33,11 +34,13 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true
 
       try {
-        // TODO: Implement token refresh logic
-        // const refreshToken = useAuthStore.getState().refreshToken
-        // const response = await authService.refresh(refreshToken)
-        // useAuthStore.getState().setTokens(response.data)
-        // return apiClient(originalRequest)
+        const refreshToken = useAuthStore.getState().refreshToken
+        if (refreshToken) {
+          const tokens = await authService.refresh(refreshToken)
+          useAuthStore.getState().setTokens(tokens)
+          originalRequest.headers.Authorization = `Bearer ${tokens.access_token}`
+          return apiClient(originalRequest)
+        }
       } catch {
         useAuthStore.getState().logout()
         window.location.href = '/login'
