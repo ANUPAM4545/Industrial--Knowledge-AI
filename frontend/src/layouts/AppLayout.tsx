@@ -1,10 +1,12 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Database, Upload, MessageSquare,
-  BarChart3, Settings, LogOut, Menu, X, Zap, Users
+  BarChart3, Settings, LogOut, Menu, X, Zap, Users, Sparkles
 } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { useUIStore } from '@/store/uiStore'
+import { useToastStore } from '@/store/toastStore'
+import { ToastContainer } from '@/components/ui/Toast'
 import { cn } from '@/lib/utils'
 
 const navItems = [
@@ -18,7 +20,8 @@ const navItems = [
 
 export function AppLayout() {
   const { user, logout } = useAuthStore()
-  const { sidebarOpen, toggleSidebar } = useUIStore()
+  const { sidebarOpen, toggleSidebar, demoMode, setDemoMode } = useUIStore()
+  const { addToast } = useToastStore()
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -26,8 +29,18 @@ export function AppLayout() {
     navigate('/login')
   }
 
+  const handleToggleDemoMode = () => {
+    const nextMode = !demoMode
+    setDemoMode(nextMode)
+    addToast(
+      nextMode ? 'Demo Mode enabled! Simulated document workspace registered.' : 'Demo Mode disabled.',
+      nextMode ? 'success' : 'info'
+    )
+  }
+
   return (
     <div className="flex h-screen bg-[#0a0d1a] overflow-hidden">
+      <ToastContainer />
       {/* ─── Sidebar ─────────────────────────────────────────────── */}
       <aside
         className={cn(
@@ -40,7 +53,7 @@ export function AppLayout() {
         <div className="flex items-center justify-between p-4 border-b border-white/[0.06] h-16">
           {sidebarOpen && (
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-forge-gradient-bg flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center">
                 <Zap className="w-4 h-4 text-white" />
               </div>
               <span className="font-bold text-white text-sm">ForgeMind AI</span>
@@ -55,6 +68,30 @@ export function AppLayout() {
           </button>
         </div>
 
+        {/* Demo Mode Button */}
+        <div className="p-3 border-b border-white/5">
+          <button
+            onClick={handleToggleDemoMode}
+            className={cn(
+              "flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold w-full transition-all border",
+              demoMode
+                ? "bg-indigo-950/40 border-indigo-500/30 text-indigo-400"
+                : "bg-slate-900/40 border-slate-800 text-slate-400 hover:text-white"
+            )}
+            title="Toggle Demo Mode"
+          >
+            <Sparkles className={cn("w-4 h-4 shrink-0", demoMode ? "text-indigo-400 animate-spin" : "")} />
+            {sidebarOpen && (
+              <div className="flex justify-between items-center w-full">
+                <span>Demo Mode</span>
+                <span className={cn("text-[10px] uppercase px-1.5 py-0.5 rounded", demoMode ? "bg-indigo-500/20 text-indigo-300" : "bg-slate-800 text-slate-500")}>
+                  {demoMode ? 'Active' : 'Off'}
+                </span>
+              </div>
+            )}
+          </button>
+        </div>
+
         {/* Navigation */}
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {navItems.map(({ path, icon: Icon, label }) => (
@@ -65,7 +102,7 @@ export function AppLayout() {
                 cn(
                   'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
                   isActive
-                    ? 'text-white bg-forge-600/20 border border-forge-500/30'
+                    ? 'text-white bg-indigo-600/20 border border-indigo-500/30'
                     : 'text-slate-400 hover:text-white hover:bg-white/5'
                 )
               }
@@ -99,7 +136,7 @@ export function AppLayout() {
         {/* User Profile */}
         <div className="p-3 border-t border-white/[0.06]">
           <div className="flex items-center gap-3 px-3 py-2">
-            <div className="w-8 h-8 rounded-full bg-forge-600 flex items-center justify-center flex-shrink-0 text-xs font-bold text-white">
+            <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0 text-xs font-bold text-white">
               {user?.full_name?.charAt(0) ?? 'U'}
             </div>
             {sidebarOpen && (
