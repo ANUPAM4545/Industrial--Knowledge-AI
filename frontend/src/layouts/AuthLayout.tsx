@@ -1,7 +1,13 @@
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
+import { useAuthStore } from '@/store/authStore'
 import { Zap } from 'lucide-react'
 
 export function AuthLayout() {
+  const { isAuthenticated } = useAuthStore()
+
+  if (isAuthenticated) {
+    return <Navigate to="/app/dashboard" replace />
+  }
   return (
     <div className="min-h-screen bg-[#0a0d1a] flex">
       {/* ─── Left Panel (Branding) ──────────────────────────────── */}
