@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/authStore'
 import { useUIStore } from '@/store/uiStore'
 import { useToastStore } from '@/store/toastStore'
 import { ToastContainer } from '@/components/ui/Toast'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { cn } from '@/lib/utils'
 
 const navItems = [
@@ -18,11 +19,17 @@ const navItems = [
   { path: '/app/settings',       icon: Settings,          label: 'Settings'        },
 ]
 
+import { Navigate } from 'react-router-dom'
+
 export function AppLayout() {
-  const { user, logout } = useAuthStore()
+  const { user, logout, isAuthenticated } = useAuthStore()
   const { sidebarOpen, toggleSidebar, demoMode, setDemoMode } = useUIStore()
   const { addToast } = useToastStore()
   const navigate = useNavigate()
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />
+  }
 
   const handleLogout = () => {
     logout()
@@ -132,6 +139,13 @@ export function AppLayout() {
             </NavLink>
           )}
         </nav>
+
+        {/* Theme switcher */}
+        {sidebarOpen && (
+          <div className="px-6 py-2 border-t border-white/[0.06] flex justify-center">
+            <ThemeToggle />
+          </div>
+        )}
 
         {/* User Profile */}
         <div className="p-3 border-t border-white/[0.06]">
