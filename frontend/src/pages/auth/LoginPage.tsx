@@ -1,10 +1,13 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Eye, EyeOff, LogIn } from 'lucide-react'
+import { Eye, EyeOff, LogIn, Mail, Lock } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { authService } from '@/services/authService'
+import { useAuthStore } from '@/store/authStore'
+import { useToastStore } from '@/store/toastStore'
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -15,6 +18,9 @@ type LoginFormData = z.infer<typeof loginSchema>
 
 export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
+  const { login } = useAuthStore()
+  const { addToast } = useToastStore()
 
   const {
     register,
@@ -25,12 +31,19 @@ export function LoginPage() {
   })
 
   const onSubmit = async (data: LoginFormData) => {
-    // TODO: Implement login API call
-    console.log('Login submitted:', data)
+    try {
+      const resp = await authService.login(data.email, data.password)
+      login(resp.user, resp.tokens)
+      addToast('Welcome back! Signed in successfully.', 'success')
+      navigate('/app/dashboard')
+    } catch (error: any) {
+      const errMsg = error.response?.data?.detail || 'Invalid email or password. Please try again.'
+      addToast(errMsg, 'error')
+    }
   }
 
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in bg-slate-900/60 border border-slate-800 p-8 rounded-xl shadow-2xl backdrop-blur-md">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-white mb-2">Welcome back</h1>
         <p className="text-slate-400 text-sm">
@@ -44,14 +57,17 @@ export function LoginPage() {
           <label className="block text-sm font-medium text-slate-300 mb-1.5" htmlFor="login-email">
             Email address
           </label>
-          <input
-            id="login-email"
-            type="email"
-            autoComplete="email"
-            className={cn('input-field', errors.email && 'border-red-500/50 focus:ring-red-500/50')}
-            placeholder="engineer@company.com"
-            {...register('email')}
-          />
+          <div className="relative">
+            <input
+              id="login-email"
+              type="email"
+              autoComplete="email"
+              className={cn('input-field pl-10', errors.email && 'border-red-500/50 focus:ring-red-500/50')}
+              placeholder="engineer@company.com"
+              {...register('email')}
+            />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          </div>
           {errors.email && (
             <p className="mt-1 text-xs text-red-400">{errors.email.message}</p>
           )}
@@ -67,10 +83,11 @@ export function LoginPage() {
               id="login-password"
               type={showPassword ? 'text' : 'password'}
               autoComplete="current-password"
-              className={cn('input-field pr-10', errors.password && 'border-red-500/50')}
+              className={cn('input-field pl-10 pr-10', errors.password && 'border-red-500/50')}
               placeholder="••••••••"
               {...register('password')}
             />
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
@@ -90,7 +107,7 @@ export function LoginPage() {
           id="login-submit"
           type="submit"
           disabled={isSubmitting}
-          className="btn-primary w-full py-3"
+          className="btn-primary w-full py-3 mt-4 flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
             <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -105,10 +122,11 @@ export function LoginPage() {
 
       <p className="mt-6 text-center text-sm text-slate-500">
         Don't have an account?{' '}
-        <Link to="/register" className="text-forge-400 hover:text-forge-300 font-medium transition-colors">
+        <Link to="/register" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
           Create one
         </Link>
       </p>
     </div>
   )
 }
+export default LoginPage
