@@ -11,6 +11,7 @@ interface UIState {
   lastViewedPages: Record<string, number>
   developerMode: boolean
   demoMode: boolean
+  theme: 'dark' | 'light' | 'system'
 
   // Actions
   toggleSidebar: () => void
@@ -22,6 +23,25 @@ interface UIState {
   setLastViewedPage: (docId: string, page: number) => void
   setDeveloperMode: (mode: boolean) => void
   setDemoMode: (mode: boolean) => void
+  setTheme: (theme: 'dark' | 'light' | 'system') => void
+}
+
+export const applyTheme = (theme: 'dark' | 'light' | 'system') => {
+  try {
+    const el = document.documentElement
+    if (theme === 'light') {
+      el.classList.add('light')
+    } else if (theme === 'dark') {
+      el.classList.remove('light')
+    } else {
+      const systemIsLight = window.matchMedia('(prefers-color-scheme: light)').matches
+      if (systemIsLight) {
+        el.classList.add('light')
+      } else {
+        el.classList.remove('light')
+      }
+    }
+  } catch {}
 }
 
 const getLocal = <T>(key: string, def: T): T => {
@@ -49,6 +69,7 @@ export const useUIStore = create<UIState>()((set) => ({
   lastViewedPages: getLocal('lastViewedPages', {}),
   developerMode: getLocal('developerMode', false),
   demoMode: getLocal('demoMode', false),
+  theme: getLocal<'dark' | 'light' | 'system'>('theme', 'dark'),
 
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
@@ -85,4 +106,14 @@ export const useUIStore = create<UIState>()((set) => ({
     }
     return { demoMode: false }
   }),
+
+  setTheme: (theme) => set(() => {
+    setLocal('theme', theme)
+    applyTheme(theme)
+    return { theme }
+  }),
 }))
+
+// Run theme check immediately at runtime bootstrap
+applyTheme(getLocal<'dark' | 'light' | 'system'>('theme', 'dark'))
+
