@@ -1,131 +1,94 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Eye, EyeOff, LogIn, Mail, Lock } from 'lucide-react'
-import { useState } from 'react'
-import { cn } from '@/lib/utils'
-import { authService } from '@/services/authService'
-import { useAuthStore } from '@/store/authStore'
-import { useToastStore } from '@/store/toastStore'
+import { motion } from 'framer-motion'
+import { Zap, Brain, Shield } from 'lucide-react'
+import { SignIn } from '@clerk/clerk-react'
 
-const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-})
-
-type LoginFormData = z.infer<typeof loginSchema>
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 export function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false)
-  const navigate = useNavigate()
-  const { login } = useAuthStore()
-  const { addToast } = useToastStore()
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-  })
-
-  const onSubmit = async (data: LoginFormData) => {
-    try {
-      const resp = await authService.login(data.email, data.password)
-      login(resp.user, resp.tokens)
-      addToast('Welcome back! Signed in successfully.', 'success')
-      navigate('/app/dashboard')
-    } catch (error: any) {
-      const errMsg = error.response?.data?.detail || 'Invalid email or password. Please try again.'
-      addToast(errMsg, 'error')
-    }
-  }
-
   return (
-    <div className="animate-fade-in bg-slate-900/60 border border-slate-800 p-8 rounded-xl shadow-2xl backdrop-blur-md">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white mb-2">Welcome back</h1>
-        <p className="text-slate-400 text-sm">
-          Sign in to your ForgeMind AI account
-        </p>
+    <div className="min-h-screen flex w-full bg-slate-950 text-slate-200">
+      
+      {/* ─── LEFT SIDE (Visuals & Brand) ───────────────────────────────── */}
+      <div className="hidden lg:flex w-1/2 relative flex-col justify-between overflow-hidden bg-slate-900 border-r border-slate-800">
+        
+        {/* Animated Background Gradients & Grid */}
+        <div className="absolute inset-0 z-0 opacity-20">
+          <div className="absolute top-0 left-0 w-full h-[500px] bg-indigo-600/30 rounded-full blur-[120px] -translate-y-1/2 -translate-x-1/4" />
+          <div className="absolute bottom-0 right-0 w-full h-[500px] bg-purple-600/30 rounded-full blur-[120px] translate-y-1/2 translate-x-1/4" />
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 p-12">
+          <div className="flex items-center gap-2 mb-16">
+            <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+              <Zap className="w-5 h-5 text-white" />
+            </div>
+            <span className="font-bold text-2xl text-white tracking-tight">ForgeMind AI</span>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h1 className="text-4xl font-bold text-white leading-tight mb-6">
+              Industrial Knowledge <br/>
+              <span className="text-indigo-400">Intelligence Platform</span>
+            </h1>
+            <p className="text-slate-400 text-lg max-w-md leading-relaxed">
+              Connect your manuals, specs, and SOPs into a singular, queryable AI engine with deterministic citations.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="mt-12 space-y-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            {[
+              { icon: Brain, title: 'Explainable AI', desc: 'Every answer cited to the exact source paragraph.' },
+              { icon: Shield, title: 'Enterprise Security', desc: 'Role-based access controls and isolated tenant vectors.' },
+            ].map((feature, i) => (
+              <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800/50 backdrop-blur-sm">
+                <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center shrink-0">
+                  <feature.icon className="w-5 h-5 text-indigo-400" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white mb-1">{feature.title}</h3>
+                  <p className="text-sm text-slate-400">{feature.desc}</p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" id="login-form">
-        {/* Email */}
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1.5" htmlFor="login-email">
-            Email address
-          </label>
-          <div className="relative">
-            <input
-              id="login-email"
-              type="email"
-              autoComplete="email"
-              className={cn('input-field pl-10', errors.email && 'border-red-500/50 focus:ring-red-500/50')}
-              placeholder="engineer@company.com"
-              {...register('email')}
-            />
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+      {/* ─── RIGHT SIDE (Auth Form) ────────────────────────────────────── */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center relative p-8 sm:p-12 lg:p-24 overflow-hidden">
+        
+        {/* Mobile Logo & Theme Toggle */}
+        <div className="absolute top-8 left-8 lg:hidden flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
+            <Zap className="w-4 h-4 text-white" />
           </div>
-          {errors.email && (
-            <p className="mt-1 text-xs text-red-400">{errors.email.message}</p>
-          )}
+          <span className="font-bold text-lg text-white">ForgeMind</span>
+        </div>
+        
+        <div className="absolute top-8 right-8">
+          <ThemeToggle />
         </div>
 
-        {/* Password */}
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1.5" htmlFor="login-password">
-            Password
-          </label>
-          <div className="relative">
-            <input
-              id="login-password"
-              type={showPassword ? 'text' : 'password'}
-              autoComplete="current-password"
-              className={cn('input-field pl-10 pr-10', errors.password && 'border-red-500/50')}
-              placeholder="••••••••"
-              {...register('password')}
-            />
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
-              aria-label="Toggle password visibility"
-            >
-              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
-          </div>
-          {errors.password && (
-            <p className="mt-1 text-xs text-red-400">{errors.password.message}</p>
-          )}
-        </div>
-
-        {/* Submit */}
-        <button
-          id="login-submit"
-          type="submit"
-          disabled={isSubmitting}
-          className="btn-primary w-full py-3 mt-4 flex items-center justify-center gap-2"
+        <motion.div 
+          className="w-full max-w-md mx-auto flex flex-col items-center justify-center"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
         >
-          {isSubmitting ? (
-            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-          ) : (
-            <>
-              <LogIn className="w-4 h-4" />
-              Sign In
-            </>
-          )}
-        </button>
-      </form>
-
-      <p className="mt-6 text-center text-sm text-slate-500">
-        Don't have an account?{' '}
-        <Link to="/register" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
-          Create one
-        </Link>
-      </p>
+          <SignIn routing="path" path="/login" signUpUrl="/register" forceRedirectUrl="/app" />
+        </motion.div>
+      </div>
     </div>
   )
 }

@@ -5,9 +5,8 @@
  * the JWT Bearer token and handles 401 refresh.
  */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import apiClient from '@/services/apiClient'
+import { ProviderFactory } from '@/services/providers/ProviderFactory'
 import type { Document, PaginatedResponse } from '@/types'
-import { useUIStore } from '@/store/uiStore'
 
 // ── Query Keys ───────────────────────────────────────────────────────────────
 
@@ -44,54 +43,7 @@ export function useDocuments(params: ListParams = {}) {
   return useQuery({
     queryKey: documentKeys.list(params),
     queryFn: async (): Promise<PaginatedResponse<Document>> => {
-      if (useUIStore.getState().demoMode) {
-        return {
-          items: [
-            {
-              id: "demo_1",
-              title: "Standard Safety SOP.pdf",
-              description: "Emergency checklist for backpressure valve limits",
-              original_filename: "Standard_Safety_SOP.pdf",
-              file_size: 2048576,
-              mime_type: "application/pdf",
-              document_type: "sop",
-              status: "ready",
-              tags: "safety, valves, sop",
-              category: "Manuals",
-              department: "Engineering",
-              is_ocr_processed: true,
-              language: "en",
-              owner_id: "demo_user",
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            },
-            {
-              id: "demo_2",
-              title: "Valve Specs Checklist.docx",
-              description: "Specifications datasheet of backpressure check valve systems",
-              original_filename: "Valve_Specs_Checklist.docx",
-              file_size: 512400,
-              mime_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-              document_type: "manual",
-              status: "ready",
-              tags: "valves, checklist, specs",
-              category: "Datasheets",
-              department: "Maintenance",
-              is_ocr_processed: true,
-              language: "en",
-              owner_id: "demo_user",
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString()
-            }
-          ],
-          total: 2,
-          page: 1,
-          page_size: 20,
-          total_pages: 1
-        };
-      }
-      const { data } = await apiClient.get('/documents/', { params })
-      return data
+      return ProviderFactory.getDocumentProvider().getDocuments(params)
     },
     staleTime: 30_000, // 30 s
   })
@@ -102,28 +54,7 @@ export function useDocument(id: string) {
   return useQuery({
     queryKey: documentKeys.detail(id),
     queryFn: async (): Promise<Document> => {
-      if (useUIStore.getState().demoMode && id.startsWith("demo_")) {
-        return {
-          id,
-          title: id === "demo_1" ? "Standard Safety SOP.pdf" : "Valve Specs Checklist.docx",
-          description: id === "demo_1" ? "Emergency checklist for backpressure valve limits" : "Specifications datasheet of backpressure check valve systems",
-          original_filename: id === "demo_1" ? "Standard_Safety_SOP.pdf" : "Valve_Specs_Checklist.docx",
-          file_size: id === "demo_1" ? 2048576 : 512400,
-          mime_type: id === "demo_1" ? "application/pdf" : "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          document_type: id === "demo_1" ? "sop" : "manual",
-          status: "ready",
-          tags: id === "demo_1" ? "safety, valves, sop" : "valves, checklist, specs",
-          category: id === "demo_1" ? "Manuals" : "Datasheets",
-          department: id === "demo_1" ? "Engineering" : "Maintenance",
-          is_ocr_processed: true,
-          language: "en",
-          owner_id: "demo_user",
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        };
-      }
-      const { data } = await apiClient.get(`/documents/${id}`)
-      return data
+      return ProviderFactory.getDocumentProvider().getDocument(id)
     },
     enabled: Boolean(id),
   })
@@ -134,11 +65,7 @@ export function useDocumentStatus(id: string, enabled = true) {
   return useQuery({
     queryKey: documentKeys.status(id),
     queryFn: async (): Promise<Pick<Document, 'id' | 'status'>> => {
-      if (useUIStore.getState().demoMode && id.startsWith("demo_")) {
-        return { id, status: "ready" };
-      }
-      const { data } = await apiClient.get(`/documents/${id}/status`)
-      return data
+      return ProviderFactory.getDocumentProvider().getDocumentStatus(id)
     },
     enabled: Boolean(id) && enabled,
     refetchInterval: (query) => {
@@ -168,14 +95,7 @@ export function useUploadDocument(onProgress?: (pct: number) => void) {
       if (payload.tags)        form.append('tags',        payload.tags)
       if (payload.department)  form.append('department',  payload.department)
 
-      const { data } = await apiClient.post('/documents/upload', form, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        onUploadProgress: (evt) => {
-          if (onProgress && evt.total) {
-            onProgress(Math.round((evt.loaded / evt.total) * 100))
-          }
-        },
-      })
+      const data = await ProviderFactory.getDocumentProvider().uploadDocument(form, onProgress)
       return data
     },
     onSuccess: () => {
@@ -190,7 +110,7 @@ export function useDeleteDocument() {
 
   return useMutation({
     mutationFn: async (id: string): Promise<void> => {
-      await apiClient.delete(`/documents/${id}`)
+      await ProviderFactory.getDocumentProvider().deleteDocument(id)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: documentKeys.lists() })
@@ -200,10 +120,8 @@ export function useDeleteDocument() {
 
 /** Trigger a browser download for a document. */
 export async function downloadDocument(id: string, filename: string): Promise<void> {
-  const response = await apiClient.get(`/documents/${id}/download`, {
-    responseType: 'blob',
-  })
-  const url = URL.createObjectURL(response.data as Blob)
+  const blob = await ProviderFactory.getDocumentProvider().downloadDocument(id)
+  const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
   a.download = filename

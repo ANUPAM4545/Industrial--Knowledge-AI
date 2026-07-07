@@ -74,9 +74,9 @@ export function DragDropZone({ file, onFileSelect, onFileClear, error }: DragDro
           'glass-card border-2 border-dashed p-12 flex flex-col items-center',
           'justify-center cursor-pointer transition-all duration-200 rounded-2xl',
           'focus:outline-none focus:ring-2 focus:ring-forge-500/50',
-          dragOver && 'border-forge-500/70 bg-forge-600/10 scale-[1.01]',
-          !dragOver && !file && 'border-white/10 hover:border-forge-500/40 hover:bg-forge-600/5',
-          file && 'border-green-500/40 bg-green-600/5',
+          dragOver && 'border-forge-500/70 bg-forge-500/10 scale-[1.01]',
+          !dragOver && !file && 'border-[var(--border-strong)] hover:border-forge-500/40 hover:bg-[var(--bg-glass-hover)]',
+          file && 'border-green-500/40 bg-green-500/10',
           displayError && 'border-red-500/40',
         )}
         onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
@@ -99,8 +99,8 @@ export function DragDropZone({ file, onFileSelect, onFileClear, error }: DragDro
               <FileText className="w-7 h-7 text-green-400" />
             </div>
             <div className="text-center">
-              <p className="font-semibold text-white truncate max-w-xs">{file.name}</p>
-              <p className="text-sm text-slate-400 mt-0.5">{formatFileSize(file.size)}</p>
+              <p className="font-semibold text-[var(--text-primary)] truncate max-w-xs">{file.name}</p>
+              <p className="text-sm text-[var(--text-secondary)] mt-0.5">{formatFileSize(file.size)}</p>
             </div>
             <button
               type="button"
@@ -115,17 +115,17 @@ export function DragDropZone({ file, onFileSelect, onFileClear, error }: DragDro
           <div className="flex flex-col items-center gap-3">
             <div className={cn(
               'w-14 h-14 rounded-2xl flex items-center justify-center transition-colors',
-              dragOver ? 'bg-forge-500/20' : 'bg-forge-600/10',
+              dragOver ? 'bg-forge-500/20' : 'bg-[var(--bg-glass-hover)]',
             )}>
-              <Upload className={cn('w-7 h-7 transition-colors', dragOver ? 'text-forge-300' : 'text-forge-400')} />
+              <Upload className={cn('w-7 h-7 transition-colors', dragOver ? 'text-forge-400' : 'text-[var(--text-secondary)]')} />
             </div>
             <div className="text-center">
-              <p className="font-semibold text-white">
+              <p className="font-semibold text-[var(--text-primary)]">
                 {dragOver ? 'Drop it here!' : 'Drop your document here'}
               </p>
-              <p className="text-sm text-slate-500 mt-0.5">or click to browse</p>
+              <p className="text-sm text-[var(--text-secondary)] mt-0.5">or click to browse</p>
             </div>
-            <p className="text-xs text-slate-600 mt-1">PDF, DOCX · Max 50 MB</p>
+            <p className="text-xs text-[var(--text-muted)] mt-1">PDF, DOCX · Max 50 MB</p>
           </div>
         )}
       </div>

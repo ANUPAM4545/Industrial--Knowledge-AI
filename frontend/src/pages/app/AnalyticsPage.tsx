@@ -24,14 +24,14 @@ export function AnalyticsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Analytics</h1>
-          <p className="text-slate-400 text-sm mt-1">Track your knowledge base performance</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Analytics</h1>
+          <p className="text-[var(--text-secondary)] text-sm mt-1">Track your knowledge base performance</p>
         </div>
         <div className="flex gap-2">
           {['7d', '30d', '90d'].map((period) => (
             <button
               key={period}
-              className="px-3 py-1.5 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors first:bg-forge-600/20 first:text-forge-400 first:border first:border-forge-500/30"
+              className="px-3 py-1.5 rounded-lg text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-glass-hover)] transition-colors first:bg-forge-500/10 first:text-forge-500 first:border first:border-forge-500/20"
             >
               {period}
             </button>
@@ -46,15 +46,15 @@ export function AnalyticsPage() {
             <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${bg}`}>
               <Icon className={`w-4.5 h-4.5 ${color}`} />
             </div>
-            <p className="text-2xl font-bold text-white">{value}</p>
-            <p className="text-sm text-slate-400 mt-0.5">{label}</p>
+            <p className="text-2xl font-bold text-[var(--text-primary)]">{value}</p>
+            <p className="text-sm text-[var(--text-secondary)] mt-0.5">{label}</p>
           </div>
         ))}
       </div>
 
       {/* Activity Chart */}
       <div className="glass-card p-6">
-        <h2 className="font-semibold text-white mb-6 flex items-center gap-2">
+        <h2 className="font-semibold text-[var(--text-primary)] mb-6 flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-forge-400" />
           Activity Over Time
         </h2>
@@ -84,15 +84,15 @@ export function AnalyticsPage() {
       {/* Two column charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="glass-card p-6">
-          <h2 className="font-semibold text-white mb-6">Documents by Status</h2>
-          <div className="flex flex-col items-center justify-center h-40 text-slate-500 text-sm">
+          <h2 className="font-semibold text-[var(--text-primary)] mb-6">Documents by Status</h2>
+          <div className="flex flex-col items-center justify-center h-40 text-[var(--text-muted)] text-sm">
             No data yet — upload documents to see breakdown
           </div>
         </div>
 
         <div className="glass-card p-6">
-          <h2 className="font-semibold text-white mb-6">Top Search Queries</h2>
-          <div className="flex flex-col items-center justify-center h-40 text-slate-500 text-sm">
+          <h2 className="font-semibold text-[var(--text-primary)] mb-6">Top Search Queries</h2>
+          <div className="flex flex-col items-center justify-center h-40 text-[var(--text-muted)] text-sm">
             No searches yet — start querying your knowledge base
           </div>
         </div>

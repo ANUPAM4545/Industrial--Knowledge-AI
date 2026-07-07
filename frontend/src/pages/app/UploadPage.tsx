@@ -104,14 +104,14 @@ export function UploadPage() {
         <button
           type="button"
           onClick={() => navigate('/app/knowledge-base')}
-          className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+          className="p-2 rounded-xl text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-glass-hover)] transition-colors"
           aria-label="Back to Knowledge Base"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-white">Upload Document</h1>
-          <p className="text-slate-400 text-sm mt-0.5">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Upload Document</h1>
+          <p className="text-[var(--text-secondary)] text-sm mt-0.5">
             Add industrial PDFs or DOCX files to your knowledge base.
           </p>
         </div>
@@ -124,8 +124,8 @@ export function UploadPage() {
             <Upload className="w-8 h-8 text-green-400" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-white">Document uploaded successfully</h2>
-            <p className="text-sm text-slate-400 mt-1">
+            <h2 className="text-lg font-semibold text-[var(--text-primary)]">Document uploaded successfully</h2>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">
               Your document is now being processed. It will be available in the Knowledge Base
               once indexing is complete.
             </p>
@@ -175,13 +175,13 @@ export function UploadPage() {
             <form
               id="upload-form"
               onSubmit={handleSubmit(onSubmit)}
-              className="glass-card p-6 rounded-2xl space-y-5 animate-fade-in"
+              className="glass-card p-6 rounded-2xl space-y-5 animate-fade-in border border-[var(--border-subtle)]"
             >
-              <h2 className="font-semibold text-white text-base">Document Details</h2>
+              <h2 className="font-semibold text-[var(--text-primary)] text-base">Document Details</h2>
 
               {/* Title */}
               <div>
-                <label htmlFor="doc-title" className="block text-sm font-medium text-slate-300 mb-1.5">
+                <label htmlFor="doc-title" className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">
                   Title <span className="text-red-400">*</span>
                 </label>
                 <input
@@ -197,7 +197,7 @@ export function UploadPage() {
               {/* Type + Category */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="doc-type" className="block text-sm font-medium text-slate-300 mb-1.5">Type</label>
+                  <label htmlFor="doc-type" className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Type</label>
                   <select id="doc-type" className="input-field" {...register('document_type')}>
                     <option value="pdf">PDF Document</option>
                     <option value="docx">Word Document</option>
@@ -208,7 +208,7 @@ export function UploadPage() {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="doc-category" className="block text-sm font-medium text-slate-300 mb-1.5">Category</label>
+                  <label htmlFor="doc-category" className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Category</label>
                   <input
                     id="doc-category"
                     type="text"
@@ -221,7 +221,7 @@ export function UploadPage() {
 
               {/* Department */}
               <div>
-                <label htmlFor="doc-department" className="block text-sm font-medium text-slate-300 mb-1.5">Department</label>
+                <label htmlFor="doc-department" className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Department</label>
                 <input
                   id="doc-department"
                   type="text"
@@ -233,7 +233,7 @@ export function UploadPage() {
 
               {/* Description */}
               <div>
-                <label htmlFor="doc-desc" className="block text-sm font-medium text-slate-300 mb-1.5">Description</label>
+                <label htmlFor="doc-desc" className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Description</label>
                 <textarea
                   id="doc-desc"
                   rows={3}
@@ -245,7 +245,7 @@ export function UploadPage() {
 
               {/* Tags */}
               <div>
-                <label htmlFor="doc-tags" className="block text-sm font-medium text-slate-300 mb-1.5">Tags</label>
+                <label htmlFor="doc-tags" className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Tags</label>
                 <input
                   id="doc-tags"
                   type="text"

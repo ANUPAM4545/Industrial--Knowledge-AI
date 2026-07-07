@@ -19,6 +19,7 @@ export function ChatPage() {
   // Split-pane layout preferences
   const splitPaneWidth = useUIStore((state) => state.splitPaneWidth)
   const setSplitPaneWidth = useUIStore((state) => state.setSplitPaneWidth)
+  const { workspaceMode, setWorkspaceMode, setTourState } = useUIStore()
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null)
   const [selectedCitationId, setSelectedCitationId] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -64,6 +65,13 @@ export function ChatPage() {
       setMessages([])
     }
   }, [activeConversationId])
+
+  useEffect(() => {
+    loadConversations()
+    if (workspaceMode === 'demo') {
+      setActiveConversationId(undefined)
+    }
+  }, [workspaceMode])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -201,6 +209,21 @@ export function ChatPage() {
                   </button>
                 ))}
               </div>
+
+              {workspaceMode === 'live' && (
+                <div className="mt-8">
+                  <p className="text-sm text-slate-500 mb-3">No documents yet? Try our demo environment.</p>
+                  <button
+                    onClick={() => {
+                      setWorkspaceMode('demo')
+                      setTourState({ isActive: true, currentStep: 0, hasSeenTour: false })
+                    }}
+                    className="px-6 py-2 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 font-semibold rounded-xl transition-all shadow-glow-sm"
+                  >
+                    Explore Demo Workspace
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             /* Messages */

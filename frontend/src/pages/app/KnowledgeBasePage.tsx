@@ -16,7 +16,7 @@ import { DocumentTable } from '@/components/documents/DocumentTable'
 import { DocumentCard } from '@/components/documents/DocumentCard'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { LoadingState } from '@/components/ui/LoadingState'
-import type { DocumentStatus } from '@/types'
+import { useUIStore } from '@/store/uiStore'
 
 const STATUS_OPTIONS: { label: string; value: string }[] = [
   { label: 'All',        value: ''           },
@@ -35,6 +35,7 @@ export function KnowledgeBasePage() {
   const [page, setPage]               = useState(1)
   const [view, setView]               = useState<ViewMode>('table')
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null)
+  const { workspaceMode, setWorkspaceMode, setTourState } = useUIStore()
 
   const { data, isLoading, isError, refetch } = useDocuments({
     page,
@@ -75,8 +76,8 @@ export function KnowledgeBasePage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Knowledge Base</h1>
-          <p className="text-slate-400 text-sm mt-0.5">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Knowledge Base</h1>
+          <p className="text-[var(--text-secondary)] text-sm mt-0.5">
             {data ? `${data.total} document${data.total !== 1 ? 's' : ''}` : 'Loading…'}
           </p>
         </div>
@@ -95,7 +96,7 @@ export function KnowledgeBasePage() {
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)] pointer-events-none" />
           <input
             id="kb-search"
             type="text"
@@ -108,7 +109,7 @@ export function KnowledgeBasePage() {
 
         {/* Status filter */}
         <div className="relative">
-          <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+          <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)] pointer-events-none" />
           <select
             id="kb-status-filter"
             value={statusFilter}
@@ -129,7 +130,7 @@ export function KnowledgeBasePage() {
             onClick={() => setView('table')}
             className={cn(
               'p-2 rounded-lg transition-colors',
-              view === 'table' ? 'bg-forge-500/20 text-forge-300' : 'text-slate-500 hover:text-slate-300',
+              view === 'table' ? 'bg-forge-500/20 text-forge-400' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-glass-hover)]',
             )}
             aria-label="Table view"
           >
@@ -141,7 +142,7 @@ export function KnowledgeBasePage() {
             onClick={() => setView('grid')}
             className={cn(
               'p-2 rounded-lg transition-colors',
-              view === 'grid' ? 'bg-forge-500/20 text-forge-300' : 'text-slate-500 hover:text-slate-300',
+              view === 'grid' ? 'bg-forge-500/20 text-forge-400' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-glass-hover)]',
             )}
             aria-label="Grid view"
           >
@@ -151,7 +152,7 @@ export function KnowledgeBasePage() {
             id="kb-refresh-btn"
             type="button"
             onClick={() => refetch()}
-            className="p-2 rounded-lg text-slate-500 hover:text-slate-300 transition-colors"
+            className="p-2 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-glass-hover)] transition-colors"
             aria-label="Refresh document list"
           >
             <RefreshCw className="w-4 h-4" />
@@ -183,15 +184,28 @@ export function KnowledgeBasePage() {
               }
               action={
                 !search && !statusFilter ? (
-                  <button
-                    id="empty-upload-btn"
-                    type="button"
-                    onClick={() => navigate('/app/upload')}
-                    className="btn-primary flex items-center gap-2"
-                  >
-                    <Upload className="w-4 h-4" />
-                    Upload Document
-                  </button>
+                  <div className="flex gap-3 justify-center mt-4">
+                    {workspaceMode === 'live' && (
+                      <button
+                        onClick={() => {
+                          setWorkspaceMode('demo')
+                          setTourState({ isActive: true, currentStep: 0, hasSeenTour: false })
+                        }}
+                        className="px-4 py-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 font-semibold rounded-lg transition-colors flex items-center gap-2"
+                      >
+                        Explore Demo Workspace
+                      </button>
+                    )}
+                    <button
+                      id="empty-upload-btn"
+                      type="button"
+                      onClick={() => navigate('/app/upload')}
+                      className="btn-primary flex items-center gap-2"
+                    >
+                      <Upload className="w-4 h-4" />
+                      Upload Document
+                    </button>
+                  </div>
                 ) : undefined
               }
             />
@@ -226,7 +240,7 @@ export function KnowledgeBasePage() {
               >
                 Previous
               </button>
-              <span className="text-sm text-slate-400">
+              <span className="text-sm text-[var(--text-secondary)]">
                 Page {page} of {data.total_pages}
               </span>
               <button
@@ -252,10 +266,10 @@ export function KnowledgeBasePage() {
           aria-labelledby="delete-dialog-title"
         >
           <div className="glass-card rounded-2xl p-6 w-full max-w-sm space-y-4 border border-red-500/20 animate-fade-in">
-            <h2 id="delete-dialog-title" className="text-lg font-semibold text-white">
+            <h2 id="delete-dialog-title" className="text-lg font-semibold text-[var(--text-primary)]">
               Delete Document?
             </h2>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-[var(--text-secondary)]">
               This will permanently remove the document and its stored file.
               This action cannot be undone.
             </p>
