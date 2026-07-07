@@ -1,111 +1,56 @@
 """
 Authentication Endpoints
-
-POST /api/v1/auth/register  — Create a new user account
-POST /api/v1/auth/login     — Login → JWT access + refresh tokens
-POST /api/v1/auth/refresh   — Issue new access token from refresh token
-POST /api/v1/auth/logout    — Client-side logout (token is stateless)
-GET  /api/v1/auth/me        — Get current user profile
 """
-from fastapi import APIRouter, Depends, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, status
 
-from app.api.deps import CurrentUser, DBSession
-from app.schemas.auth import (
-    LoginResponse,
-    RefreshTokenRequest,
-    RegisterRequest,
-    TokenResponse,
-)
+from app.api.deps import CurrentUser
 from app.schemas.user import UserResponse
-from app.services.auth_service import AuthService
+from fastapi import Depends
+from app.security.rate_limit.decorators import rate_limit
+from app.security.rate_limit.models import LimitType
 
 router = APIRouter()
-
-
-@router.post(
-    "/register",
-    response_model=UserResponse,
-    status_code=status.HTTP_201_CREATED,
-    summary="Register a new user account",
-)
-async def register(body: RegisterRequest, session: DBSession) -> UserResponse:
-    """
-    Create a new ForgeMind AI user.
-
-    - Email and username must be unique.
-    - Password is bcrypt-hashed before storage.
-    - Default role is `operator` unless specified.
-    """
-    service = AuthService(session)
-    user = await service.register(body)
-    return UserResponse.model_validate(user)
-
-
-@router.post(
-    "/login",
-    response_model=LoginResponse,
-    status_code=status.HTTP_200_OK,
-    summary="Login with email and password",
-)
-async def login(
-    session: DBSession,
-    form_data: OAuth2PasswordRequestForm = Depends(),
-) -> LoginResponse:
-    """
-    Authenticate with email + password using the OAuth2 password flow.
-
-    Returns a short-lived **access token** and a long-lived **refresh token**.
-    The access token must be sent as `Authorization: Bearer <token>`.
-    """
-    service = AuthService(session)
-    return await service.login(
-        email=form_data.username,   # OAuth2 spec: username field carries email
-        password=form_data.password,
-    )
-
-
-@router.post(
-    "/refresh",
-    response_model=TokenResponse,
-    status_code=status.HTTP_200_OK,
-    summary="Refresh an access token",
-)
-async def refresh_token(body: RefreshTokenRequest, session: DBSession) -> TokenResponse:
-    """
-    Exchange a valid refresh token for a new access token.
-
-    Refresh tokens expire after `JWT_REFRESH_TOKEN_EXPIRE_DAYS` days.
-    """
-    service = AuthService(session)
-    return await service.refresh(body.refresh_token)
-
-
-@router.post(
-    "/logout",
-    status_code=status.HTTP_204_NO_CONTENT,
-    summary="Logout (invalidate client token)",
-)
-async def logout() -> None:
-    """
-    Logout the current user.
-
-    Since JWTs are stateless, the client is responsible for discarding
-    the token. Future milestone: blacklist the refresh token in Redis.
-    """
-    return None
-
 
 @router.get(
     "/me",
     response_model=UserResponse,
     status_code=status.HTTP_200_OK,
-    summary="Get current user profile",
+    summary="Get current user profile (Synced with Clerk)",
+    dependencies=[Depends(rate_limit(LimitType.AUTH, "me"))]
 )
 async def get_me(current_user: CurrentUser) -> UserResponse:
     """
-    Return the profile of the currently authenticated user.
+    Return the profile of the currently authenticated user from the local database.
 
-    Requires a valid `Authorization: Bearer <access_token>` header.
+    Requires a valid Clerk `Authorization: Bearer <access_token>` header.
     """
+    return UserResponse.model_validate(current_user)
+
+@router.put(
+    "/me",
+    response_model=UserResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Update current user profile",
+    dependencies=[Depends(rate_limit(LimitType.AUTH, "me_update"))]
+)
+async def update_me(
+    payload: __import__('app.schemas.user', fromlist=['UpdateUserRequest']).UpdateUserRequest,
+    current_user: CurrentUser,
+    session: __import__('app.api.deps', fromlist=['DBSession']).DBSession
+) -> UserResponse:
+    """
+    Update the current user's profile information (e.g. department, full_name).
+    """
+    if payload.full_name is not None:
+        current_user.full_name = payload.full_name
+    if payload.department is not None:
+        current_user.department = payload.department
+    if payload.bio is not None:
+        current_user.bio = payload.bio
+    if payload.avatar_url is not None:
+        current_user.avatar_url = payload.avatar_url
+
+    session.add(current_user)
+    await session.commit()
+    await session.refresh(current_user)
     return UserResponse.model_validate(current_user)

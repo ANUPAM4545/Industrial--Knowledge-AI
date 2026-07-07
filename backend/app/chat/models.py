@@ -5,8 +5,7 @@ import enum
 from datetime import datetime
 from typing import List, Optional
 
-from sqlalchemy import DateTime, Enum, ForeignKey, Integer, String, Text
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import DateTime, Enum, ForeignKey, Integer, String, Text, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -61,14 +60,14 @@ class Message(Base):
     )
     
     role: Mapped[Role] = mapped_column(
-        Enum(Role),
+        Enum(Role, values_callable=lambda obj: [e.value for e in obj]),
         nullable=False,
     )
     
     content: Mapped[str] = mapped_column(Text, nullable=False)
     
     # Store retrieved context or citations for assistant messages
-    context_json: Mapped[Optional[dict]] = mapped_column(JSONB, nullable=True)
+    context_json: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
     
     # Metrics
     tokens_used: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)

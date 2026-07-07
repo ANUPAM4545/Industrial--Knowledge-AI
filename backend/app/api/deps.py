@@ -19,12 +19,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.exceptions import ForbiddenException, UnauthorizedException
 from app.db.session import get_db
 from app.models.user import User, UserRole
-from app.services.auth_service import AuthService
+from fastapi import Query
+
 
 logger = structlog.get_logger(__name__)
 
 # Tells FastAPI where to find the token (used in OpenAPI docs too)
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+# auto_error=False allows us to fallback to query parameters (for SSE)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login", auto_error=False)
 
 from app.storage.base import StorageProvider
 from app.storage.local_storage import LocalStorageProvider
@@ -52,21 +54,70 @@ Storage = Annotated[StorageProvider, Depends(get_storage_provider)]
 # ─── Current User Dependency ────────────────────────────────────────
 
 async def get_current_user(
-    token: BearerToken,
     session: DBSession,
+    token: str = Depends(oauth2_scheme),
+    query_token: str = Query(None, alias="token"),
 ) -> User:
     """
-    Resolve the JWT bearer token to an active User instance.
+    Resolve the JWT bearer token to an active User instance using Clerk.
+    Falls back to query_token for Server-Sent Events which can't send headers.
 
     Usage in routes:
         CurrentUser = Annotated[User, Depends(get_current_user)]
     """
-    auth_service = AuthService(session)
-    return await auth_service.get_user_from_token(token)
+    from app.services.clerk_service import verify_clerk_token, fetch_clerk_user_info
+    from sqlalchemy import select
+    from fastapi import Request
+    
+    # Priority: Header -> Query Parameter
+    actual_token = token or query_token
+    
+    if not actual_token:
+        raise UnauthorizedException(message="Not authenticated")
+    
+    try:
+        clerk_id = verify_clerk_token(actual_token)
+    except ValueError as e:
+        raise UnauthorizedException(message=str(e))
+
+    # Query DB for user
+    stmt = select(User).where(User.clerk_user_id == clerk_id)
+    result = await session.execute(stmt)
+    user = result.scalar_one_or_none()
+
+    if not user:
+        # Auto-sync user if they do not exist
+        user_info = await fetch_clerk_user_info(clerk_id)
+        user = User(
+            clerk_user_id=clerk_id,
+            email=user_info["email"],
+            full_name=user_info["full_name"],
+            role=UserRole.OPERATOR,
+            is_active=True
+        )
+        session.add(user)
+        await session.commit()
+        await session.refresh(user)
+
+    if not user.is_active:
+        raise ForbiddenException("User account is inactive")
+
+    return user
 
 
 # Type alias for clean route signatures
 CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+# ─── Notification Service Dependency ────────────────────────────────
+def get_notification_service(session: DBSession):
+    from app.repositories.notification_repository import NotificationRepository
+    from app.services.notification_service import NotificationService
+    
+    repository = NotificationRepository(session)
+    return NotificationService(repository)
+
+NotificationSvc = Annotated[__import__('app.services.notification_service', fromlist=['NotificationService']).NotificationService, Depends(get_notification_service)]
 
 
 # ─── RBAC Dependency Factory ────────────────────────────────────────

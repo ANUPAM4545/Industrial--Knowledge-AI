@@ -11,7 +11,7 @@ GET    /documents/{id}/download  — Download the original file
 All routes are JWT-protected via CurrentUser.
 Business logic lives in DocumentService — routers only handle HTTP.
 """
-from fastapi import APIRouter, File, Form, Query, Response, UploadFile, status
+from fastapi import APIRouter, File, Form, Query, Response, UploadFile, status, Depends
 from fastapi.responses import StreamingResponse
 
 from app.api.deps import CurrentUser, DBSession, Storage
@@ -21,6 +21,8 @@ from app.schemas.document import (
     DocumentStatusResponse,
 )
 from app.services.document_service import DocumentService
+from app.security.rate_limit.decorators import rate_limit
+from app.security.rate_limit.models import LimitType
 
 router = APIRouter()
 
@@ -32,6 +34,7 @@ router = APIRouter()
     response_model=DocumentResponse,
     status_code=status.HTTP_202_ACCEPTED,
     summary="Upload a new industrial document",
+    dependencies=[Depends(rate_limit(LimitType.DOCUMENT))]
 )
 async def upload_document(
     current_user: CurrentUser,

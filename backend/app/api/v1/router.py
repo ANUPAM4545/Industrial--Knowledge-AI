@@ -4,7 +4,8 @@ ForgeMind AI — API v1 Router
 import app.db.base
 from fastapi import APIRouter
 
-from app.api.v1 import auth, users, documents, chat, analytics, admin, search, chunks, embeddings, evaluation, observability, dashboard, viewer
+from app.api.v1 import admin, analytics, auth, chat, chunks, dashboard, documents, embeddings, evaluation, marketing, notifications, observability, search, users, viewer, security
+from app.security.security_center import router as security_center_router
 
 api_router = APIRouter()
 
@@ -21,3 +22,7 @@ api_router.include_router(admin.router, prefix="/admin", tags=["Admin"])
 api_router.include_router(evaluation.router, prefix="/evaluation", tags=["Evaluation"])
 api_router.include_router(observability.router, prefix="/ai", tags=["Observability"])
 api_router.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
+api_router.include_router(marketing.router, prefix="/marketing", tags=["Marketing"])
+api_router.include_router(notifications.router, prefix="/notifications", tags=["Notifications"])
+api_router.include_router(security.router, prefix="/security", tags=["Security"])
+api_router.include_router(security_center_router.router, prefix="/security-center", tags=["Security Center"])

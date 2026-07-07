@@ -5,7 +5,8 @@ import { cn } from '@/lib/utils'
 const adminNavItems = [
   { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Overview' },
   { path: '/admin/users',     icon: Users,           label: 'Users'    },
-  { path: '/app/settings',    icon: Settings,         label: 'Settings' },
+  { path: '/admin/security',  icon: ShieldCheck,     label: 'Security Center' },
+  { path: '/admin/settings',  icon: Settings,        label: 'Settings' },
 ]
 
 export function AdminLayout() {
