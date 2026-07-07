@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="100%" height="100%">
+    <defs>
+        <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0a0b10" />
+            <stop offset="100%" stop-color="#12141d" />
+        </linearGradient>
+        <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#3b82f6" />
+            <stop offset="50%" stop-color="#8b5cf6" />
+            <stop offset="100%" stop-color="#f59e0b" />
+        </linearGradient>
+        <filter id="glow">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+            <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+
+    <rect width="800" height="400" fill="url(#bg-grad)" rx="16" />
+    <text x="400" y="45" font-family="sans-serif" font-size="22" font-weight="700" fill="#fff" text-anchor="middle">HYBRID RAG PIPELINE</text>
+
+    <!-- Nodes -->
+    <g transform="translate(100, 100)">
+        <rect x="0" y="0" width="140" height="50" rx="8" fill="#1e293b" stroke="#334155" />
+        <text x="70" y="30" font-family="sans-serif" font-size="14" fill="#e2e8f0" text-anchor="middle">User Query</text>
+    </g>
+
+    <g transform="translate(330, 40)">
+        <rect x="0" y="0" width="140" height="50" rx="8" fill="#1e293b" stroke="#8b5cf6" />
+        <text x="70" y="30" font-family="sans-serif" font-size="14" fill="#c4b5fd" text-anchor="middle">Vector Search</text>
+    </g>
+
+    <g transform="translate(330, 160)">
+        <rect x="0" y="0" width="140" height="50" rx="8" fill="#1e293b" stroke="#3b82f6" />
+        <text x="70" y="30" font-family="sans-serif" font-size="14" fill="#93c5fd" text-anchor="middle">BM25 Keyword</text>
+    </g>
+
+    <g transform="translate(560, 100)">
+        <rect x="0" y="0" width="140" height="50" rx="8" fill="#1e293b" stroke="#f59e0b" />
+        <text x="70" y="30" font-family="sans-serif" font-size="14" fill="#fcd34d" text-anchor="middle">Reciprocal Rank</text>
+    </g>
+
+    <g transform="translate(560, 220)">
+        <rect x="0" y="0" width="140" height="50" rx="8" fill="#1e293b" stroke="#ec4899" />
+        <text x="70" y="30" font-family="sans-serif" font-size="14" fill="#f9a8d4" text-anchor="middle">LLM Generation</text>
+    </g>
+
+    <!-- Lines -->
+    <path d="M 240 125 L 285 125 L 285 65 L 330 65" stroke="#94a3b8" stroke-width="2" fill="none" />
+    <path d="M 240 125 L 285 125 L 285 185 L 330 185" stroke="#94a3b8" stroke-width="2" fill="none" />
+    <path d="M 470 65 L 515 65 L 515 125 L 560 125" stroke="#94a3b8" stroke-width="2" fill="none" />
+    <path d="M 470 185 L 515 185 L 515 125 L 560 125" stroke="#94a3b8" stroke-width="2" fill="none" />
+    <path d="M 630 150 L 630 220" stroke="#f59e0b" stroke-width="2" fill="none" stroke-dasharray="4,4" filter="url(#glow)" />
+</svg>

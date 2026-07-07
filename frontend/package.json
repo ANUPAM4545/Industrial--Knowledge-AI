@@ -1,7 +1,25 @@
 {
   "name": "frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "NEXO — Enterprise AI Knowledge Platform",
+  "keywords": [
+    "artificial-intelligence",
+    "rag",
+    "knowledge-management",
+    "react",
+    "fastapi",
+    "typescript",
+    "python",
+    "gemini",
+    "clerk",
+    "postgresql",
+    "qdrant",
+    "docker",
+    "tailwindcss",
+    "pwa",
+    "enterprise-ai"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",

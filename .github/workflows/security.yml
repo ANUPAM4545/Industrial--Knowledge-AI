@@ -1,0 +1,25 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 0 * * 0' # Weekly
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: npm audit
+        working-directory: ./frontend
+        run: npm audit --audit-level=high || true
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Bandit
+        run: pip install bandit
+      - name: Bandit Scan
+        working-directory: ./backend
+        run: bandit -r . -x tests || true
