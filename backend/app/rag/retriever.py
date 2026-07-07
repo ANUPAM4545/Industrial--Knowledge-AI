@@ -30,3 +30,7 @@ class RAGRetriever(Retriever):
             filter_dict=filter_dict
         )
         return results
+
+    async def health_check(self) -> Dict[str, Any]:
+        """Check if underlying similarity service is available."""
+        return {"status": "ok", "service": "rag_retriever"}

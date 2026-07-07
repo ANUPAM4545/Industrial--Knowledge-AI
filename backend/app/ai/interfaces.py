@@ -76,12 +76,38 @@ class VectorStore(ABC):
         pass
 
 
-# ─── Future Interfaces (Placeholders) ────────────────────────────────────────
-class Retriever(ABC):
-    """Interface for document retrieval strategies."""
+# ─── Keyword Search Provider ──────────────────────────────────────────────────
+class KeywordSearchProvider(ABC):
+    """Interface for Keyword Search engines (BM25, Elasticsearch, etc.)."""
     
     @abstractmethod
-    async def retrieve(self, query: str, limit: int = 5) -> List[Dict[str, Any]]:
+    async def index_documents(self, collection_name: str, documents: List[Dict[str, Any]]) -> None:
+        """Index a batch of documents for keyword search."""
+        pass
+        
+    @abstractmethod
+    async def search(self, collection_name: str, query: str, limit: int = 5, filter_dict: Optional[Dict[str, Any]] = None) -> List[Tuple[Dict[str, Any], float]]:
+        """Search and return (metadata, score) tuples."""
+        pass
+        
+    @abstractmethod
+    async def health_check(self) -> Dict[str, Any]:
+        """Check if provider is available."""
+        pass
+
+
+# ─── Retrieval Orchestration Interfaces ──────────────────────────────────────
+class Retriever(ABC):
+    """Interface for abstract retrieval strategies (Vector, Keyword, Hybrid)."""
+    
+    @abstractmethod
+    async def retrieve(self, query: str, limit: int = 5, filter_dict: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+        """Retrieve relevant chunks."""
+        pass
+        
+    @abstractmethod
+    async def health_check(self) -> Dict[str, Any]:
+        """Check if underlying services are available."""
         pass
 
 
@@ -89,10 +115,17 @@ class Reranker(ABC):
     """Interface for cross-encoder or reranking models."""
     
     @abstractmethod
-    async def rerank(self, query: str, documents: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    async def rerank(self, query: str, documents: List[Dict[str, Any]], top_k: int = 5) -> List[Dict[str, Any]]:
+        """Rerank the provided documents based on the query."""
+        pass
+        
+    @abstractmethod
+    async def health_check(self) -> Dict[str, Any]:
+        """Check if the reranker model is available."""
         pass
 
 
+# ─── LLM Provider ────────────────────────────────────────────────────────────
 class LLMProvider(ABC):
     """Interface for Large Language Models."""
     
@@ -115,3 +148,4 @@ class LLMProvider(ABC):
     async def health_check(self) -> Dict[str, Any]:
         """Check if provider is available."""
         pass
+
