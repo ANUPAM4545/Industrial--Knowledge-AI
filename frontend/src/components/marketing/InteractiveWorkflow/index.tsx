@@ -6,13 +6,13 @@ import {
 } from 'lucide-react'
 
 const PIPELINE_STEPS = [
-  { id: 'upload', label: 'Document Ingestion', icon: FileUp, desc: 'Secure OCR & Parsing' },
-  { id: 'chunking', label: 'Semantic Chunking', icon: Settings2, desc: 'Context-aware splits' },
-  { id: 'embed', label: 'Vector Embeddings', icon: Database, desc: 'Multilingual models' },
-  { id: 'retrieve', label: 'Hybrid Retrieval', icon: Search, desc: 'Keyword + Vector' },
-  { id: 'security', label: 'AI Security Layer', icon: ShieldAlert, desc: 'Prompt Injection Guard' },
-  { id: 'generate', label: 'LLM Reasoning', icon: Brain, desc: 'Explainable AI' },
-  { id: 'validate', label: 'Citation Validation', icon: CheckCircle, desc: 'Hallucination Check' },
+  { id: 'upload', label: 'Upload Files', icon: FileUp, desc: '(Data Ingestion)' },
+  { id: 'chunking', label: 'Read Documents', icon: Settings2, desc: '(Parsing & Chunking)' },
+  { id: 'embed', label: 'Build AI Knowledge', icon: Database, desc: '(Vector Embeddings)' },
+  { id: 'retrieve', label: 'Search Smarter', icon: Search, desc: '(Hybrid Search)' },
+  { id: 'security', label: 'Block Threats', icon: ShieldAlert, desc: '(Prompt Injection Guards)' },
+  { id: 'generate', label: 'Generate Answers', icon: Brain, desc: '(LLM Synthesis)' },
+  { id: 'validate', label: 'Show Sources', icon: CheckCircle, desc: '(Citation Mapping)' },
 ]
 
 export function InteractiveWorkflow() {
@@ -30,33 +30,22 @@ export function InteractiveWorkflow() {
     <section ref={containerRef} className="relative min-h-[150vh] py-32 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center max-w-3xl mx-auto mb-24">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-            The Industrial AI <span className="text-forge-400">Pipeline</span>
+          <h2 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-6">
+            How ForgeMind <span className="text-forge-400">Works</span>
           </h2>
-          <p className="text-slate-400 text-lg">
-            A secure, deterministic, and highly observable workflow that transforms unstructured industrial manuals into explainable answers.
+          <p className="text-[var(--text-secondary)] text-lg">
+            A simple, secure process that turns your scattered documents into a powerful AI assistant.
           </p>
         </div>
 
         <div className="relative max-w-4xl mx-auto">
-          {/* Animated SVG Connecting Line */}
-          <div className="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-1 hidden md:block">
-            <svg className="w-full h-full" preserveAspectRatio="none">
-              <line x1="50%" y1="0" x2="50%" y2="100%" stroke="rgba(255,255,255,0.05)" strokeWidth="4" />
-              <m.line 
-                x1="50%" y1="0" x2="50%" y2="100%" 
-                stroke="url(#pipeline-gradient)" 
-                strokeWidth="4"
-                style={{ pathLength }}
-              />
-              <defs>
-                <linearGradient id="pipeline-gradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#3b82f6" />
-                  <stop offset="50%" stopColor="#8b5cf6" />
-                  <stop offset="100%" stopColor="#f59e0b" />
-                </linearGradient>
-              </defs>
-            </svg>
+          {/* Animated Energy Line */}
+          <div className="absolute left-[32px] md:left-1/2 top-8 bottom-8 -translate-x-1/2 w-1 bg-[var(--border-subtle)] overflow-hidden rounded-full z-0">
+            <m.div 
+              animate={{ top: ["-20%", "120%"] }} 
+              transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
+              className="absolute w-full h-[20%] bg-gradient-to-b from-transparent via-forge-500 to-transparent"
+            />
           </div>
 
           <div className="space-y-24 relative">
@@ -73,23 +62,25 @@ export function InteractiveWorkflow() {
                 >
                   <div className={`flex-1 hidden md:block ${isEven ? 'text-right' : 'text-left'}`}>
                     {/* Glass Preview Panel - changes based on step */}
-                    <div className="p-6 rounded-2xl liquid-glass border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] transition-colors">
-                       <h3 className="text-xl font-bold text-white mb-2">{step.label}</h3>
-                       <p className="text-sm text-slate-400">{step.desc}</p>
-                       <div className="mt-4 flex items-center gap-2 text-xs font-mono text-slate-500 justify-end">
+                    <div className="group p-6 rounded-2xl liquid-glass border border-[var(--border-subtle)] bg-[var(--surface-elevated)] hover:bg-[var(--surface-elevated)] transition-colors cursor-default">
+                       <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">{step.label}</h3>
+                       <p className="text-sm text-[var(--text-secondary)] opacity-0 group-hover:opacity-100 transition-opacity duration-300">{step.desc}</p>
+                       <div className="mt-4 flex items-center gap-2 text-xs font-mono text-[var(--text-muted)] justify-end">
                          <Activity className="w-3 h-3 text-forge-400" />
                          <span>Latency: &lt;100ms</span>
                        </div>
                     </div>
                   </div>
 
-                  <div className="relative z-10 w-16 h-16 shrink-0 rounded-2xl bg-[#0B0F19] border-2 border-forge-500/30 flex items-center justify-center shadow-glow-sm">
+                  <div className="relative z-10 w-16 h-16 shrink-0 rounded-2xl bg-[var(--surface-primary)] border-2 border-forge-500/30 flex items-center justify-center shadow-glow-sm">
                     <step.icon className="w-6 h-6 text-forge-400" />
                   </div>
 
                   <div className="flex-1 md:hidden">
-                    <h3 className="text-lg font-bold text-white mb-1">{step.label}</h3>
-                    <p className="text-sm text-slate-400">{step.desc}</p>
+                    <div className="group">
+                      <h3 className="text-lg font-bold text-[var(--text-primary)] mb-1">{step.label}</h3>
+                      <p className="text-sm text-[var(--text-secondary)]">{step.desc}</p>
+                    </div>
                   </div>
                   
                   {/* Empty div for desktop alignment */}
