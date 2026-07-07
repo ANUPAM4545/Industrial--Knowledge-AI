@@ -1,7 +1,7 @@
 import React from 'react'
 import { m } from 'framer-motion'
-import { SectionContainer } from './SectionContainer'
-import { SectionTitle } from './SectionTitle'
+import { SectionContainer } from '../SectionContainer'
+import { SectionTitle } from '../SectionTitle'
 import { Quote } from 'lucide-react'
 
 const testimonials = [

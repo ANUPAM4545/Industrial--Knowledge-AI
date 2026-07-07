@@ -1,10 +1,10 @@
 import React, { useRef } from 'react'
 import { m, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, Layout, Terminal } from 'lucide-react'
-import { SectionContainer } from './SectionContainer'
+import { SectionContainer } from '../SectionContainer'
 import { fadeUp } from '@/lib/animations'
 import { Link } from 'react-router-dom'
-import { MagneticButton } from '../ui/MagneticButton'
+import { MagneticButton } from '../../ui/MagneticButton'
 
 export function CTA() {
   const ref = useRef<HTMLDivElement>(null)

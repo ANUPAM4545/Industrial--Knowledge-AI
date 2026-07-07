@@ -1,10 +1,10 @@
 import React from 'react'
 import { m } from 'framer-motion'
 import { Check, Sparkles } from 'lucide-react'
-import { SectionContainer } from './SectionContainer'
-import { SectionTitle } from './SectionTitle'
+import { SectionContainer } from '../SectionContainer'
+import { SectionTitle } from '../SectionTitle'
 import { staggerContainer, fadeUp } from '@/lib/animations'
-import { MagneticButton } from '../ui/MagneticButton'
+import { MagneticButton } from '../../ui/MagneticButton'
 
 export function Pricing() {
   return (

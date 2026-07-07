@@ -35,7 +35,7 @@ export function SettingsPage() {
   })
 
   const [fullName, setFullName] = useState(clerkUser?.fullName ?? '')
-  const [department, setDepartment] = useState(dbUser?.department ?? '')
+  const [department, setDepartment] = useState((dbUser as any)?.department ?? '')
 
   const handleSaveProfile = async () => {
     setIsSaving(true)
