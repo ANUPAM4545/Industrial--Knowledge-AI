@@ -1,5 +1,5 @@
 """
-ForgeMind AI — AI Health Checker Service
+NEXO — AI Health Checker Service
 """
 from typing import Any, Dict
 from app.ai.registry import registry

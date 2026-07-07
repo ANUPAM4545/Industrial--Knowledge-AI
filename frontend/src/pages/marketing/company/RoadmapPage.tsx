@@ -39,7 +39,7 @@ export function RoadmapPage() {
       <div className="max-w-7xl mx-auto px-6 py-20 lg:py-32">
         <div className="text-center max-w-3xl mx-auto mb-20">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">Product Roadmap</h1>
-          <p className="text-lg text-[var(--text-secondary)]">See where ForgeMind AI is heading next. We are constantly pushing the boundaries of Industrial Intelligence.</p>
+          <p className="text-lg text-[var(--text-secondary)]">See where NEXO is heading next. We are constantly pushing the boundaries of Industrial Intelligence.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

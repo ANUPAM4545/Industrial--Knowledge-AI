@@ -1,5 +1,5 @@
 """
-ForgeMind AI — RAG Query Processor
+NEXO — RAG Query Processor
 """
 
 class QueryProcessor:

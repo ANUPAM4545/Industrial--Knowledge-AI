@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Security Event Bus
+NEXO — Security Event Bus
 """
 import asyncio
 import structlog

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Chat Database Models
+NEXO — Chat Database Models
 """
 import enum
 from datetime import datetime

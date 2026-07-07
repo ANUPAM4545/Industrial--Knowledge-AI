@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Dashboard Trend & Analytics aggregator
+NEXO — Dashboard Trend & Analytics aggregator
 """
 from datetime import datetime, timedelta, timezone
 from collections import Counter

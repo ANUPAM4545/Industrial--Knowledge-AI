@@ -1,5 +1,5 @@
 """
-ForgeMind AI — OpenAI Embedding Provider (Placeholder)
+NEXO — OpenAI Embedding Provider (Placeholder)
 """
 from typing import Any, Dict, List
 

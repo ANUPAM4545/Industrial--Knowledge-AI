@@ -1,5 +1,5 @@
 """
-ForgeMind AI — AI Component Interfaces
+NEXO — AI Component Interfaces
 Abstract base classes for AI components following Dependency Inversion Principle.
 """
 from abc import ABC, abstractmethod

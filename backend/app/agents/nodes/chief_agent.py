@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Chief Agent
+NEXO — Chief Agent
 The entry point for the Multi-Agent Orchestrator. Analyzes intent and routes the query.
 """
 from typing import Dict, Any

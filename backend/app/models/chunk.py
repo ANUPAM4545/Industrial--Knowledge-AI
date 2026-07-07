@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Chunk Model
+NEXO — Chunk Model
 """
 from typing import Optional
 

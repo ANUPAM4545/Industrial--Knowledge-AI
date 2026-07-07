@@ -15,7 +15,7 @@ export function PresentationMode() {
       icon: <Database size={48} className="text-forge-400" />
     },
     {
-      title: 'The Solution: ForgeMind AI',
+      title: 'The Solution: NEXO',
       subtitle: 'A Multi-Agent Enterprise Intelligence Platform powered by dynamic Knowledge Graphs.',
       icon: <Server size={48} className="text-indigo-400" />
     },
@@ -66,7 +66,7 @@ export function PresentationMode() {
           <div className="w-10 h-10 rounded-xl bg-forge-gradient flex items-center justify-center">
             <Hexagon size={24} className="text-white" />
           </div>
-          <span className="text-2xl font-bold tracking-tight">ForgeMind AI</span>
+          <span className="text-2xl font-bold tracking-tight">NEXO</span>
         </div>
         
         <div className="flex items-center gap-4">

@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.chunk import Chunk
 from app.document_viewer.models import DocumentHighlight
 
-logger = logging.getLogger("ForgeMind.HighlightService")
+logger = logging.getLogger("NEXO.HighlightService")
 
 
 class HighlightService:

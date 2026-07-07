@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Rate Limiting Exceptions
+NEXO — Rate Limiting Exceptions
 """
 from fastapi import HTTPException, status
 

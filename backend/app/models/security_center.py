@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Security Center Models
+NEXO — Security Center Models
 """
 import uuid
 from typing import Optional

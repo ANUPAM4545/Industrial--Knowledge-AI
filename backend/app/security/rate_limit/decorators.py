@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Rate Limiting FastAPI Dependencies / Decorators
+NEXO — Rate Limiting FastAPI Dependencies / Decorators
 """
 from typing import Callable, Optional
 from fastapi import Request, Depends, HTTPException

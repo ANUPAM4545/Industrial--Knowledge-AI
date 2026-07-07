@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Rate Limiting Interfaces
+NEXO — Rate Limiting Interfaces
 """
 from abc import ABC, abstractmethod
 from app.security.rate_limit.models import RateLimitPolicy

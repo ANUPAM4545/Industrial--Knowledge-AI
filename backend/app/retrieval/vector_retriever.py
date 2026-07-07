@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Vector Retriever
+NEXO — Vector Retriever
 """
 from typing import Any, Dict, List, Optional
 import time

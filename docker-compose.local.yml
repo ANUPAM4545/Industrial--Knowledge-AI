@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════
-#  ForgeMind AI — Local Infrastructure Only
+#  NEXO — Local Infrastructure Only
 #  Starts: PostgreSQL, Redis, Qdrant
 #  Backend + Frontend run natively on the host (faster dev loop)
 #

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Keyword Retriever
+NEXO — Keyword Retriever
 """
 from typing import Any, Dict, List, Optional
 import time

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — RAG Context Builder
+NEXO — RAG Context Builder
 """
 from typing import Any, Dict, List
 

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — OpenAI LLM Provider
+NEXO — OpenAI LLM Provider
 """
 from typing import Any, AsyncGenerator, Dict, Optional
 

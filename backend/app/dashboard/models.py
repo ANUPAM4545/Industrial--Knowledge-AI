@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Dashboard Data Models
+NEXO — Dashboard Data Models
 """
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field

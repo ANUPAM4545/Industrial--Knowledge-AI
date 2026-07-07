@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Authentication Schemas (Pydantic v2)
+NEXO — Authentication Schemas (Pydantic v2)
 """
 from pydantic import BaseModel, EmailStr, Field
 

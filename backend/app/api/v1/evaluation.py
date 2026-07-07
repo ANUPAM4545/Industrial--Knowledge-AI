@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Evaluation API Endpoints
+NEXO — Evaluation API Endpoints
 """
 from fastapi import APIRouter, status, HTTPException
 from typing import List

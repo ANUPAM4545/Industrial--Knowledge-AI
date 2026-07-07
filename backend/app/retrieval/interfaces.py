@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Retrieval Interfaces (Re-exports)
+NEXO — Retrieval Interfaces (Re-exports)
 """
 from app.ai.interfaces import Retriever
 

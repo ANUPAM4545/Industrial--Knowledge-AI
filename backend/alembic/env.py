@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Alembic Migration Environment
+NEXO — Alembic Migration Environment
 Async-compatible migration runner using asyncpg.
 """
 import asyncio

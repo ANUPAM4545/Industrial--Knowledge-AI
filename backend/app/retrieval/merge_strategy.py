@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Retrieval Merge Strategy
+NEXO — Retrieval Merge Strategy
 """
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Set, Tuple

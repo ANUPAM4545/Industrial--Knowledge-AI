@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Vector Search Endpoints
+NEXO — Vector Search Endpoints
 GET /search — Semantic similarity search
 """
 from typing import List, Optional

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Chunking Strategy Factory
+NEXO — Chunking Strategy Factory
 """
 import enum
 

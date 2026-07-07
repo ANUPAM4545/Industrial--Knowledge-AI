@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Postgres Graph Provider
+NEXO — Postgres Graph Provider
 Implementation of GraphProvider using PostgreSQL relational tables for hackathon/demo.
 """
 from typing import List, Dict, Any, Optional

@@ -19,7 +19,7 @@ export function AdminLayout() {
             <ShieldCheck className="w-4 h-4 text-black" />
           </div>
           <div>
-            <span className="font-bold text-white text-sm">ForgeMind AI</span>
+            <span className="font-bold text-white text-sm">NEXO</span>
             <p className="text-xs text-amber-400">Admin Panel</p>
           </div>
         </div>

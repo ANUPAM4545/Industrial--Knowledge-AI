@@ -24,7 +24,7 @@ export function Analytics() {
             </h2>
             
             <p className="text-lg text-[var(--text-secondary)] mb-8 leading-relaxed">
-              Track token consumption, query volume, and active sessions across your entire organization. ForgeMind's analytics engine provides real-time visibility into how your teams are utilizing the knowledge base.
+              Track token consumption, query volume, and active sessions across your entire organization. NEXO's analytics engine provides real-time visibility into how your teams are utilizing the knowledge base.
             </p>
             
             <ul className="space-y-4">

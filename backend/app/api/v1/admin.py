@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Admin Panel Endpoints
+NEXO — Admin Panel Endpoints
 """
 import asyncio
 from datetime import datetime, timedelta, timezone

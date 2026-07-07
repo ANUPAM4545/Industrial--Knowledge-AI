@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Retrieval Agent
+NEXO — Retrieval Agent
 Queries the Vector Database (Qdrant) for semantic matches.
 """
 from typing import Dict, Any

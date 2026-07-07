@@ -1,5 +1,5 @@
 """
-ForgeMind AI — AI Service API Router
+NEXO — AI Service API Router
 """
 from fastapi import APIRouter
 

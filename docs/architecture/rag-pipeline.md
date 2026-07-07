@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Retrieval-Augmented Generation (RAG) orchestration layer manages the flow of user queries through document retrieval and AI text generation, culminating in a response formatted with citations. It implements the "Chat" capabilities of ForgeMind AI.
+The Retrieval-Augmented Generation (RAG) orchestration layer manages the flow of user queries through document retrieval and AI text generation, culminating in a response formatted with citations. It implements the "Chat" capabilities of NEXO.
 
 ## Flow of Data
 

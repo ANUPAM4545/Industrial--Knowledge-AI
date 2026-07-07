@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Conversation & Message Models
+NEXO — Conversation & Message Models
 """
 import enum
 from typing import Optional

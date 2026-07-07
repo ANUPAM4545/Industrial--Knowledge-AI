@@ -1,5 +1,5 @@
 """
-ForgeMind AI — User Schemas (Pydantic v2)
+NEXO — User Schemas (Pydantic v2)
 """
 from datetime import datetime
 from typing import Optional

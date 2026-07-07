@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Chunk Repository
+NEXO — Chunk Repository
 """
 import json
 from typing import List, Sequence

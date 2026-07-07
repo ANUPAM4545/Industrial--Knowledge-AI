@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Retrieval Orchestration Service
+NEXO — Retrieval Orchestration Service
 """
 import time
 from typing import Any, Dict, List, Optional

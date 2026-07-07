@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Notification Schemas (Pydantic v2)
+NEXO — Notification Schemas (Pydantic v2)
 """
 from datetime import datetime
 from typing import Optional

@@ -62,7 +62,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                   autoFocus
                   type="text"
                   className="flex-1 bg-transparent border-none outline-none text-[var(--text-primary)] placeholder-[var(--text-muted)] text-base"
-                  placeholder="Ask ForgeMind AI or search..."
+                  placeholder="Ask NEXO or search..."
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />
@@ -123,7 +123,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                       >
                         <Download className="w-4 h-4 text-forge-400" />
                         <div className="flex flex-col">
-                          <span className="text-sm font-medium">Install ForgeMind AI</span>
+                          <span className="text-sm font-medium">Install NEXO</span>
                           <span className="text-xs text-[var(--text-secondary)]">Install this app natively on your device</span>
                         </div>
                       </button>

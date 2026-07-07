@@ -1,5 +1,5 @@
 """
-ForgeMind AI — SQLAlchemy Base Model
+NEXO — SQLAlchemy Base Model
 """
 import uuid
 from datetime import datetime, timezone

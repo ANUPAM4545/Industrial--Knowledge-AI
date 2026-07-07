@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Executive Dashboard Service
+NEXO — Executive Dashboard Service
 """
 from datetime import datetime, timezone
 from collections import Counter
@@ -191,6 +191,6 @@ class DashboardService:
             llm_provider=llm_prov,
             vector_store=store_prov,
             retriever="HybridRetriever",
-            evaluation_framework="RAGAS/ForgeMind",
+            evaluation_framework="RAGAS/NEXO",
             overall_system_health=health.get("overall_status", "Healthy")
         )

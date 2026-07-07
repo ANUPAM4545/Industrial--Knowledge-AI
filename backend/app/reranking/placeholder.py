@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Placeholder Reranker
+NEXO — Placeholder Reranker
 """
 from typing import Any, Dict, List
 

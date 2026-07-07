@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ForgeMind AI — Initial Setup Script
+# NEXO — Initial Setup Script
 # Run this once after cloning the repository.
 
 set -e
@@ -11,7 +11,7 @@ RESET='\033[0m'
 
 echo ""
 echo "${CYAN}╔═══════════════════════════════════╗${RESET}"
-echo "${CYAN}║   ForgeMind AI — Setup Script     ║${RESET}"
+echo "${CYAN}║   NEXO — Setup Script     ║${RESET}"
 echo "${CYAN}╚═══════════════════════════════════╝${RESET}"
 echo ""
 

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Fixed Size Chunker Strategy
+NEXO — Fixed Size Chunker Strategy
 """
 from typing import List
 

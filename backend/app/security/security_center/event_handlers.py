@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Security Center Event Handlers
+NEXO — Security Center Event Handlers
 
 These listeners are bound to the SecurityEventBus and fan out
 security events into the unified timeline and audit logs.

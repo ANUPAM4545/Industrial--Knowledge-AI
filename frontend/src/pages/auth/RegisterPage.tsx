@@ -22,7 +22,7 @@ export function RegisterPage() {
             <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
               <Zap className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-2xl text-white tracking-tight">ForgeMind AI</span>
+            <span className="font-bold text-2xl text-white tracking-tight">NEXO</span>
           </div>
 
           <motion.div

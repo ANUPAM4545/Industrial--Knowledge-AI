@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Pipeline Diagnostics Compiler
+NEXO — Pipeline Diagnostics Compiler
 """
 from typing import Any, Dict, List, Optional
 from app.ai.registry import registry

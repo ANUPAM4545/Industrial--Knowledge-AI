@@ -10,7 +10,7 @@ export function ChangelogPage() {
       date: 'October 15, 2026',
       tag: 'New Feature',
       title: 'LangGraph Multi-Agent Workflows released',
-      description: 'We have completely overhauled the retrieval engine to use LangGraph. ForgeMind now deploys specialized agents (Chief, Retrieval, Knowledge Graph, Reasoning) for every complex engineering query.'
+      description: 'We have completely overhauled the retrieval engine to use LangGraph. NEXO now deploys specialized agents (Chief, Retrieval, Knowledge Graph, Reasoning) for every complex engineering query.'
     },
     {
       version: 'v1.3.2',
@@ -39,7 +39,7 @@ export function ChangelogPage() {
     <MarketingLayout>
       <div className="max-w-4xl mx-auto px-6 py-20 lg:py-32">
         <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">Changelog</h1>
-        <p className="text-lg text-[var(--text-secondary)] mb-16">See what's new in ForgeMind AI.</p>
+        <p className="text-lg text-[var(--text-secondary)] mb-16">See what's new in NEXO.</p>
 
         <div className="space-y-16">
           {logs.map((log, i) => (

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Reasoning Agent
+NEXO — Reasoning Agent
 Synthesizes retrieved chunks and graph data using an LLM.
 """
 from typing import Dict, Any

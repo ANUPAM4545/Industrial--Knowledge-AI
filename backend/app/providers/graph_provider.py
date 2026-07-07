@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Graph Provider Abstraction
+NEXO — Graph Provider Abstraction
 Keeps the business logic decoupled from the underlying graph storage engine.
 """
 from abc import ABC, abstractmethod

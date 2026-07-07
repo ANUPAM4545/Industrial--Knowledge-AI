@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Security Utilities
+NEXO — Security Utilities
 JWT token creation, verification, and password hashing.
 """
 from datetime import datetime, timedelta, timezone

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — RAG Citation Builder
+NEXO — RAG Citation Builder
 """
 from typing import Any, Dict, List
 

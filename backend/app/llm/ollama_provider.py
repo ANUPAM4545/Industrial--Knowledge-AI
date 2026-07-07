@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Ollama LLM Provider (Placeholder)
+NEXO — Ollama LLM Provider (Placeholder)
 """
 from typing import Any, AsyncGenerator, Dict, Optional
 

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Application Configuration
+NEXO — Application Configuration
 Pydantic v2 settings with environment variable loading.
 """
 from functools import lru_cache
@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     )
 
     # ─── Application ─────────────────────────────────────────────
-    APP_NAME: str = "ForgeMind AI"
+    APP_NAME: str = "NEXO"
     APP_ENV: str = "development"
     APP_DEBUG: bool = True
     APP_VERSION: str = "1.0.0"

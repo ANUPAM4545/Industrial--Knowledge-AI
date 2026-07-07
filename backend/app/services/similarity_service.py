@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Similarity Search Service
+NEXO — Similarity Search Service
 """
 from typing import Any, Dict, List, Optional
 

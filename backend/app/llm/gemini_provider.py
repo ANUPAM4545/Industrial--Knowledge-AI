@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Gemini LLM Provider
+NEXO — Gemini LLM Provider
 """
 from typing import Any, AsyncGenerator, Dict, Optional
 

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — AI Service Entry Point
+NEXO — AI Service Entry Point
 LangChain-powered RAG microservice.
 """
 from contextlib import asynccontextmanager
@@ -20,13 +20,13 @@ logger = structlog.get_logger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialize AI service resources on startup."""
-    logger.info("Starting ForgeMind AI Service", version=settings.APP_VERSION)
+    logger.info("Starting NEXO Service", version=settings.APP_VERSION)
     # TODO: Initialize embedding model, Qdrant client, LangChain chains
     # from app.embeddings.manager import EmbeddingManager
     # app.state.embedding_manager = EmbeddingManager()
     # await app.state.embedding_manager.initialize()
     yield
-    logger.info("Shutting down ForgeMind AI Service")
+    logger.info("Shutting down NEXO Service")
 
 
 app = FastAPI(

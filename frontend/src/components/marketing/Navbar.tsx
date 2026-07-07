@@ -49,7 +49,7 @@ export function Navbar() {
               >
                 <Zap className="w-4 h-4 text-white" />
               </m.div>
-              <span className="font-bold text-lg text-[var(--text-primary)] tracking-tight">ForgeMind AI</span>
+              <span className="font-bold text-lg text-[var(--text-primary)] tracking-tight">NEXO</span>
             </Link>
           </div>
 
@@ -85,7 +85,7 @@ export function Navbar() {
             
             <Link to="/register">
               <MagneticButton className="px-5 py-2 bg-[var(--text-primary)] text-[var(--bg-primary)] rounded-lg text-sm font-bold shadow-lg">
-                Start Using ForgeMind
+                Start Using NEXO
               </MagneticButton>
             </Link>
           </div>
@@ -135,7 +135,7 @@ export function Navbar() {
             </div>
             
             <Link to="/register" className="mt-8 w-full text-center py-4 bg-forge-500 text-white rounded-xl font-bold shadow-lg shadow-forge-500/25">
-              Start Using ForgeMind
+              Start Using NEXO
             </Link>
           </m.div>
         )}

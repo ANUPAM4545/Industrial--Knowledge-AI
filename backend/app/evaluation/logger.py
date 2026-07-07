@@ -1,12 +1,12 @@
 """
-ForgeMind AI — Evaluation Logger and Memory Repository
+NEXO — Evaluation Logger and Memory Repository
 """
 import logging
 from typing import Any, Dict, List, Optional
 from app.evaluation.interfaces import EvaluationRepository
 from app.evaluation.models import EvaluationResult
 
-logger = logging.getLogger("ForgeMind.Evaluation")
+logger = logging.getLogger("NEXO.Evaluation")
 logger.setLevel(logging.INFO)
 
 

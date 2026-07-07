@@ -21,7 +21,7 @@ export function HackathonShowcasePage() {
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
             className="text-5xl md:text-7xl font-black tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-slate-500"
           >
-            ForgeMind Enterprise <br />
+            NEXO Enterprise <br />
             Industrial Intelligence
           </motion.h1>
           
@@ -48,7 +48,7 @@ export function HackathonShowcasePage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">System Architecture</h2>
-            <p className="text-slate-400 max-w-2xl mx-auto text-lg">We moved beyond simple vector search. ForgeMind orchestrates specialized AI agents over both dense vectors and relational knowledge graphs.</p>
+            <p className="text-slate-400 max-w-2xl mx-auto text-lg">We moved beyond simple vector search. NEXO orchestrates specialized AI agents over both dense vectors and relational knowledge graphs.</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">

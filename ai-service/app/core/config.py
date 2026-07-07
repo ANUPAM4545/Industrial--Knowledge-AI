@@ -1,5 +1,5 @@
 """
-ForgeMind AI — AI Service Configuration
+NEXO — AI Service Configuration
 """
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class AIServiceSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    APP_NAME: str = "ForgeMind AI"
+    APP_NAME: str = "NEXO"
     APP_VERSION: str = "1.0.0"
     APP_ENV: str = "development"
     APP_DEBUG: bool = True

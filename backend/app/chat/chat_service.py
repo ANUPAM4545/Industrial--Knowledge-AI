@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Chat Service
+NEXO — Chat Service
 """
 import json
 from typing import Any, AsyncGenerator, Dict, Optional

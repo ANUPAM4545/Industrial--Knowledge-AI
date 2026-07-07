@@ -5,9 +5,9 @@ import { SectionTitle } from '../SectionTitle'
 import { Quote } from 'lucide-react'
 
 const testimonials = [
-  { quote: "We used to spend hours digging through engineering manuals. Now, our technicians just ask ForgeMind and get the exact page they need instantly.", author: "Sarah Jenkins", role: "VP of Engineering, Apex Manufacturing" },
+  { quote: "We used to spend hours digging through engineering manuals. Now, our technicians just ask NEXO and get the exact page they need instantly.", author: "Sarah Jenkins", role: "VP of Engineering, Apex Manufacturing" },
   { quote: "Our maintenance team is 30% faster on the floor. Instead of guessing, they get immediate, accurate answers straight from our equipment logs.", author: "David Chen", role: "Director of Operations, Nexus Energy" },
-  { quote: "Onboarding new logistics coordinators used to take months. With ForgeMind, they just ask questions and instantly learn our complex shipping protocols.", author: "Elena Rodriguez", role: "Logistics Manager, Horizon Freight" },
+  { quote: "Onboarding new logistics coordinators used to take months. With NEXO, they just ask questions and instantly learn our complex shipping protocols.", author: "Elena Rodriguez", role: "Logistics Manager, Horizon Freight" },
 ]
 
 export function Testimonials() {
@@ -15,7 +15,7 @@ export function Testimonials() {
     <SectionContainer className="bg-[var(--bg-primary)] overflow-hidden">
       <SectionTitle 
         title="Trusted by Industry Leaders"
-        subtitle="See what our customers are saying about ForgeMind AI."
+        subtitle="See what our customers are saying about NEXO."
       />
       
       <div className="relative flex overflow-x-hidden group py-8 perspective-1000">

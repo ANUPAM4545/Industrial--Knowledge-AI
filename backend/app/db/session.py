@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Database Session
+NEXO — Database Session
 Async SQLAlchemy engine and session factory.
 """
 from typing import AsyncGenerator

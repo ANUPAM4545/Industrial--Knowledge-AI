@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/ForgeMind_AI-Industrial_Knowledge_Intelligence-0f172a?style=for-the-badge&logo=brain&logoColor=white" alt="ForgeMind AI Banner" width="600"/>
+<img src="https://img.shields.io/badge/NEXO_AI-Industrial_Knowledge_Intelligence-0f172a?style=for-the-badge&logo=brain&logoColor=white" alt="NEXO Banner" width="600"/>
 
-# ⚡ ForgeMind AI
+# ⚡ NEXO
 
 ### AI-Powered Industrial Knowledge Intelligence Platform
 
@@ -17,7 +17,7 @@
 
 ---
 
-> **ForgeMind AI** transforms how industrial organizations interact with their knowledge assets.  
+> **NEXO** transforms how industrial organizations interact with their knowledge assets.  
 > Upload PDFs, DOCX files, SOPs, maintenance logs, and technical manuals — then query them using  
 > state-of-the-art RAG-powered AI chat with source citations.
 
@@ -45,7 +45,7 @@
 
 ## 🌟 Overview
 
-ForgeMind AI is a **production-grade, multi-service SaaS platform** designed for industrial enterprises. It enables organizations to:
+NEXO is a **production-grade, multi-service SaaS platform** designed for industrial enterprises. It enables organizations to:
 
 - 📄 **Ingest** industrial documents (PDFs, DOCX, manuals, SOPs, maintenance logs)
 - 🤖 **Query** documents using AI-powered natural language with RAG (Retrieval-Augmented Generation)
@@ -70,7 +70,7 @@ ForgeMind AI is a **production-grade, multi-service SaaS platform** designed for
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                         ForgeMind AI Platform                       │
+│                         NEXO Platform                       │
 ├──────────────────┬──────────────────┬───────────────────────────────┤
 │   Frontend       │   Backend API    │      AI Service               │
 │   React 19       │   FastAPI        │      LangChain + Qdrant        │
@@ -312,7 +312,7 @@ Copy `.env.example` to `.env` and configure:
 
 ```bash
 # ─── Application ───────────────────────────────────────
-APP_NAME=ForgeMind AI
+APP_NAME=NEXO
 APP_ENV=development          # development | production
 APP_DEBUG=true
 APP_SECRET_KEY=your-super-secret-key-change-in-production
@@ -359,7 +359,7 @@ ALLOWED_EXTENSIONS=pdf,docx,txt,png,jpg,jpeg
 # ─── Frontend ──────────────────────────────────────────
 VITE_API_BASE_URL=http://localhost:8000
 VITE_AI_SERVICE_URL=http://localhost:8001
-VITE_APP_NAME=ForgeMind AI
+VITE_APP_NAME=NEXO
 ```
 
 ---

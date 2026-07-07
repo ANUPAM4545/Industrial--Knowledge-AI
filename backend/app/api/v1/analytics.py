@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Analytics Endpoints
+NEXO — Analytics Endpoints
 """
 from fastapi import APIRouter, Query, status
 

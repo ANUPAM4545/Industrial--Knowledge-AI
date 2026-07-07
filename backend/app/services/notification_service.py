@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Notification Service (Real-time SSE + Redis Pub/Sub)
+NEXO — Notification Service (Real-time SSE + Redis Pub/Sub)
 """
 import asyncio
 import json

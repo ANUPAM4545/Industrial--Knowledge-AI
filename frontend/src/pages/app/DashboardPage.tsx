@@ -136,7 +136,7 @@ export function DashboardPage() {
         </div>
         <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-4">Your Workspace is Empty</h1>
         <p className="text-[var(--text-secondary)] text-lg mb-8 leading-relaxed">
-          Welcome to ForgeMind AI! Start by uploading your industrial documents, or explore the platform using our pre-configured Demo Workspace.
+          Welcome to NEXO! Start by uploading your industrial documents, or explore the platform using our pre-configured Demo Workspace.
         </p>
         <div className="flex items-center gap-4">
           <button

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Rate Limiting Policy Engine
+NEXO — Rate Limiting Policy Engine
 """
 from typing import Optional
 from app.models.user import UserRole

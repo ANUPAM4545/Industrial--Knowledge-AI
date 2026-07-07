@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Dashboard Insights generator
+NEXO — Dashboard Insights generator
 """
 from datetime import datetime, timezone
 from typing import Any, List

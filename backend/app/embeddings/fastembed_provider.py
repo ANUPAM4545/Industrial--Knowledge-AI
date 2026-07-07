@@ -1,5 +1,5 @@
 """
-ForgeMind AI — FastEmbed BGE Provider
+NEXO — FastEmbed BGE Provider
 """
 from typing import Any, Dict, List
 

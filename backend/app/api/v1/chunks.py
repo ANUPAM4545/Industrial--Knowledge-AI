@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Chunks API
+NEXO — Chunks API
 """
 from typing import Optional
 

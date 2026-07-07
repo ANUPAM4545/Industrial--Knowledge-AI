@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Rate Limiting Async Logger
+NEXO — Rate Limiting Async Logger
 """
 import asyncio
 import structlog

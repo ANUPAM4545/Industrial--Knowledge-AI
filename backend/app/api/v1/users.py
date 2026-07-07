@@ -1,5 +1,5 @@
 """
-ForgeMind AI — User Management Endpoints
+NEXO — User Management Endpoints
 """
 from fastapi import APIRouter, Query, status
 

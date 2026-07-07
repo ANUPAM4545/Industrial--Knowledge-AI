@@ -23,7 +23,7 @@ export function BlogPage() {
       category: 'Case Study',
       date: 'August 5, 2026',
       title: 'Reducing Pump Downtime by 40% with Knowledge Graphs',
-      description: 'A deep dive into how a major energy provider used ForgeMind AI to predict failures and access historical maintenance logs instantly.',
+      description: 'A deep dive into how a major energy provider used NEXO to predict failures and access historical maintenance logs instantly.',
       image: 'https://images.unsplash.com/photo-1531234799389-dcb5f7ce00eb?auto=format&fit=crop&w=800&q=80'
     }
   ]
@@ -33,7 +33,7 @@ export function BlogPage() {
       <div className="max-w-7xl mx-auto px-6 py-20 lg:py-32">
         <div className="text-center max-w-3xl mx-auto mb-20">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">The Industrial AI Blog</h1>
-          <p className="text-lg text-[var(--text-secondary)]">Insights, architecture deep-dives, and updates from the ForgeMind team.</p>
+          <p className="text-lg text-[var(--text-secondary)]">Insights, architecture deep-dives, and updates from the NEXO team.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

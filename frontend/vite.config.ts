@@ -14,8 +14,8 @@ export default defineConfig({
       registerType: 'prompt',
       injectRegister: false,
       manifest: {
-        name: 'ForgeMind AI',
-        short_name: 'ForgeMind',
+        name: 'NEXO',
+        short_name: 'NEXO',
         description: 'Enterprise Industrial Knowledge Intelligence Platform',
         theme_color: '#0a0b10',
         background_color: '#0a0b10',

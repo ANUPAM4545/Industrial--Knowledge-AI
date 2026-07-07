@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Notification Model
+NEXO — Notification Model
 """
 from datetime import datetime, timezone
 import uuid

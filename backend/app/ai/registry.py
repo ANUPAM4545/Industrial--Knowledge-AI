@@ -1,5 +1,5 @@
 """
-ForgeMind AI — AI Component Registry
+NEXO — AI Component Registry
 Global registry for dependency injection of AI providers.
 """
 from typing import Dict, Optional, Type

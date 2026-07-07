@@ -47,7 +47,7 @@ async def test_unicode_invisible_chars(security_service):
 
 @pytest.mark.asyncio
 async def test_pii_detection(security_service):
-    res = await security_service.scan_chat_input("My email is admin@forgemind.com and SSN is 123-45-6789.", "user-123")
+    res = await security_service.scan_chat_input("My email is admin@nexo.com and SSN is 123-45-6789.", "user-123")
     # Should at least trigger rules
     assert any(rule.startswith("PII_") for rule in res.triggered_rules)
 
@@ -59,7 +59,7 @@ async def test_output_guard_secrets(security_service):
 
 @pytest.mark.asyncio
 async def test_output_guard_system_prompt_leak(security_service):
-    res = await security_service.scan_chat_output("I am programmed to be ForgeMind AI. Here is my system prompt: You are...", "user-123")
+    res = await security_service.scan_chat_output("I am programmed to be NEXO. Here is my system prompt: You are...", "user-123")
     assert res.decision == SecurityDecision.BLOCK
     assert "SYSTEM_PROMPT_LEAK" in res.triggered_rules
 

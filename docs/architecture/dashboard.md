@@ -1,6 +1,6 @@
-# ForgeMind Executive Dashboard Architecture
+# NEXO Executive Dashboard Architecture
 
-This document outlines the architecture, data flow, API contracts, and frontend presentation models for the ForgeMind Knowledge Intelligence Dashboard.
+This document outlines the architecture, data flow, API contracts, and frontend presentation models for the NEXO Knowledge Intelligence Dashboard.
 
 ## Architecture & Data Flow
 
@@ -84,7 +84,7 @@ Returns heartbeat statuses:
   "llm_provider": "OpenAIChatProvider",
   "vector_store": "QdrantVectorStore",
   "retriever": "HybridRetriever",
-  "evaluation_framework": "RAGAS/ForgeMind",
+  "evaluation_framework": "RAGAS/NEXO",
   "overall_system_health": "Healthy"
 }
 ```

@@ -10,7 +10,7 @@ export function CookiePolicyPage() {
 
         <div className="prose prose-invert max-w-none prose-headings:text-[var(--text-primary)] prose-p:text-[var(--text-secondary)] prose-a:text-forge-500 hover:prose-a:text-forge-400">
           <p>
-            This Cookie Policy explains how ForgeMind AI uses cookies and similar technologies to recognize you when you visit our website and application.
+            This Cookie Policy explains how NEXO uses cookies and similar technologies to recognize you when you visit our website and application.
           </p>
           
           <h2>1. What are cookies?</h2>

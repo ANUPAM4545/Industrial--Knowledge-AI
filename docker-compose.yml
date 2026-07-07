@@ -1,11 +1,11 @@
 # ═══════════════════════════════════════════════════════════════
-#  ForgeMind AI — Docker Compose (Production)
+#  NEXO — Docker Compose (Production)
 # ═══════════════════════════════════════════════════════════════
 
 name: forgemind-ai
 
 x-common-variables: &common-variables
-  APP_NAME: ${APP_NAME:-ForgeMind AI}
+  APP_NAME: ${APP_NAME:-NEXO}
   APP_ENV: ${APP_ENV:-production}
 
 x-backend-variables: &backend-variables
@@ -71,7 +71,7 @@ services:
     restart: unless-stopped
     environment:
       VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
-      VITE_APP_NAME: ${VITE_APP_NAME:-ForgeMind AI}
+      VITE_APP_NAME: ${VITE_APP_NAME:-NEXO}
     networks:
       - forgemind-net
     healthcheck:

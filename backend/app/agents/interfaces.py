@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Agent Interfaces
+NEXO — Agent Interfaces
 Defines the LangGraph State and Agent contracts for the Enterprise Copilot.
 """
 from typing import TypedDict, List, Dict, Any, Annotated

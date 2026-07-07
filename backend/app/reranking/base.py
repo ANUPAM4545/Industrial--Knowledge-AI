@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Reranker Interface (re-export for clean imports)
+NEXO — Reranker Interface (re-export for clean imports)
 """
 from app.ai.interfaces import Reranker
 

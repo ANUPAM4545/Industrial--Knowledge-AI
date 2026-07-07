@@ -175,7 +175,7 @@ export default function ChatPage() {
           {messages.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-gray-400">
               <Search size={48} className="mb-4 text-indigo-200" />
-              <h2 className="text-2xl font-bold text-gray-700">ForgeMind AI</h2>
+              <h2 className="text-2xl font-bold text-gray-700">NEXO</h2>
               <p className="mt-2">Ask a question about your uploaded documents.</p>
             </div>
           ) : (

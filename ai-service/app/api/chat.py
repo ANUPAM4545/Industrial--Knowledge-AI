@@ -1,5 +1,5 @@
 """
-ForgeMind AI — AI Chat Endpoint (SSE Streaming)
+NEXO — AI Chat Endpoint (SSE Streaming)
 POST /chat/stream — Streaming chat response
 """
 from fastapi import APIRouter

@@ -1,6 +1,6 @@
 # Enterprise Rate Limiting & Abuse Protection System
 
-ForgeMind AI implements a robust, multi-layered Rate Limiting System to protect endpoints from abuse, scraping, brute-force attacks, and resource exhaustion.
+NEXO implements a robust, multi-layered Rate Limiting System to protect endpoints from abuse, scraping, brute-force attacks, and resource exhaustion.
 
 ## Architecture Highlights
 

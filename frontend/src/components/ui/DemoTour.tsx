@@ -14,8 +14,8 @@ interface TourStep {
 const TOUR_STEPS: TourStep[] = [
   {
     id: 'step_1',
-    title: 'Welcome to ForgeMind AI',
-    content: 'Experience how ForgeMind transforms your industrial documents into actionable intelligence. Let\'s take a quick tour.',
+    title: 'Welcome to NEXO',
+    content: 'Experience how NEXO transforms your industrial documents into actionable intelligence. Let\'s take a quick tour.',
     targetElementId: 'nav-dashboard',
     position: 'right'
   },

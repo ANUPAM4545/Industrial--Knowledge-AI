@@ -118,7 +118,7 @@ export function CTA() {
           Ready to unify <br /> your knowledge?
         </h2>
         <p className="text-lg md:text-xl text-[var(--text-secondary)] mb-12">
-          Join leading companies using ForgeMind to turn static documents into a powerful AI assistant.
+          Join leading companies using NEXO to turn static documents into a powerful AI assistant.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

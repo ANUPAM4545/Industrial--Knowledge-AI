@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Rate Limiting Configuration
+NEXO — Rate Limiting Configuration
 """
 from typing import Dict, Any
 from app.models.user import UserRole

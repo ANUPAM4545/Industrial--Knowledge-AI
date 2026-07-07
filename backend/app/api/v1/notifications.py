@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Notifications Router
+NEXO — Notifications Router
 """
 from typing import Optional
 from uuid import UUID

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Retrieval Data Models
+NEXO — Retrieval Data Models
 """
 from typing import Any, Dict, List
 import contextvars

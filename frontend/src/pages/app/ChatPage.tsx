@@ -186,7 +186,7 @@ export function ChatPage() {
               <div className="w-16 h-16 rounded-2xl bg-forge-600/10 flex items-center justify-center mb-4">
                 <Bot className="w-8 h-8 text-forge-400" />
               </div>
-              <h2 className="text-xl font-bold text-white mb-2">ForgeMind AI Chat</h2>
+              <h2 className="text-xl font-bold text-white mb-2">NEXO Chat</h2>
               <p className="text-slate-400 text-sm max-w-md mb-8">
                 Ask questions about your industrial documents. The AI will retrieve relevant information
                 and provide answers with exact source citations.

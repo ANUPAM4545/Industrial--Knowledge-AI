@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Marketing Models
+NEXO — Marketing Models
 """
 import enum
 from typing import Optional

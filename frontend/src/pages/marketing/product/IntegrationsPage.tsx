@@ -29,7 +29,7 @@ export function IntegrationsPage() {
             Connects to your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Tech Stack</span>
           </m.h1>
           <m.p variants={fadeUp} className="text-lg text-[var(--text-secondary)] leading-relaxed">
-            ForgeMind AI ingests data from where it already lives. No data migration required. We index, vectorize, and build graphs directly from your existing sources.
+            NEXO ingests data from where it already lives. No data migration required. We index, vectorize, and build graphs directly from your existing sources.
           </m.p>
         </m.div>
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ForgeMind AI — Database Seed Script
+NEXO — Database Seed Script
 Creates initial admin user and sample data.
 """
 import asyncio
@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 async def seed():
     """Run seed data creation."""
     print("╔═══════════════════════════════════╗")
-    print("║   ForgeMind AI — Seeding DB       ║")
+    print("║   NEXO — Seeding DB       ║")
     print("╚═══════════════════════════════════╝")
     print()
 
@@ -25,7 +25,7 @@ async def seed():
 
     # async with AsyncSessionLocal() as session:
     #     admin = User(
-    #         email="admin@forgemind.ai",
+    #         email="admin@nexo.ai",
     #         username="admin",
     #         full_name="Platform Admin",
     #         hashed_password=hash_password("Admin@1234"),
@@ -35,7 +35,7 @@ async def seed():
     #     )
     #     session.add(admin)
     #     await session.commit()
-    #     print(f"  ✓ Admin user created: admin@forgemind.ai")
+    #     print(f"  ✓ Admin user created: admin@nexo.ai")
 
     print("  ⚠  Seed logic not yet implemented.")
     print("  ✓  Run after implementing the auth service.")

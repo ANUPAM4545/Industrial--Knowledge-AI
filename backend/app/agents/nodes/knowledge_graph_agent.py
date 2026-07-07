@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Knowledge Graph Agent
+NEXO — Knowledge Graph Agent
 Interacts with the GraphProvider to fetch connected entities and relationships.
 """
 from typing import Dict, Any

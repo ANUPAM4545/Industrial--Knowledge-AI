@@ -20,7 +20,7 @@ _jwks_client = jwt.PyJWKClient(
     "https://api.clerk.com/v1/jwks",
     headers={
         "Authorization": f"Bearer {CLERK_SECRET_KEY}",
-        "User-Agent": "ForgeMind-Backend/1.0"
+        "User-Agent": "NEXO-Backend/1.0"
     }
 )
 

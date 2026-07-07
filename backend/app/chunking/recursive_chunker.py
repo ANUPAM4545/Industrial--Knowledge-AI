@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Recursive Chunker Strategy
+NEXO — Recursive Chunker Strategy
 """
 import re
 from typing import List

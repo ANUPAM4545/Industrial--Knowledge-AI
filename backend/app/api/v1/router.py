@@ -1,5 +1,5 @@
 """
-ForgeMind AI — API v1 Router
+NEXO — API v1 Router
 """
 import app.db.base
 from fastapi import APIRouter

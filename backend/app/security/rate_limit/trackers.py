@@ -1,5 +1,5 @@
 """
-ForgeMind AI — User & IP Tracker
+NEXO — User & IP Tracker
 """
 from typing import Optional
 from sqlalchemy import select, func, desc

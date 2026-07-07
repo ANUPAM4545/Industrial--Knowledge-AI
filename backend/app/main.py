@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Backend Application Entry Point
+NEXO — Backend Application Entry Point
 """
 from contextlib import asynccontextmanager
 
@@ -26,21 +26,21 @@ logger = structlog.get_logger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager."""
-    logger.info("Starting ForgeMind AI Backend", version=settings.APP_VERSION)
+    logger.info("Starting NEXO Backend", version=settings.APP_VERSION)
     register_security_handlers()
     await SecurityEventBus.start_worker()
     # TODO: Initialize DB connection pool, Qdrant client, etc.
     yield
     # TODO: Close connections on shutdown
     await SecurityEventBus.stop_worker()
-    logger.info("Shutting down ForgeMind AI Backend")
+    logger.info("Shutting down NEXO Backend")
 
 
 def create_application() -> FastAPI:
     """Application factory."""
     app = FastAPI(
         title=settings.APP_NAME,
-        description="ForgeMind AI — Industrial Knowledge Intelligence Platform API",
+        description="NEXO — Industrial Knowledge Intelligence Platform API",
         version=settings.APP_VERSION,
         docs_url="/docs" if settings.APP_DEBUG else None,
         redoc_url="/redoc" if settings.APP_DEBUG else None,

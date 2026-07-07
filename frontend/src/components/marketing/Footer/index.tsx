@@ -49,7 +49,7 @@ export function Footer() {
             <m.div whileHover={{ rotate: 90 }} transition={{ type: "spring" }}>
                <Zap className="w-5 h-5 text-forge-500" />
             </m.div>
-            <span className="font-bold text-[var(--text-primary)] text-lg tracking-tight">ForgeMind AI</span>
+            <span className="font-bold text-[var(--text-primary)] text-lg tracking-tight">NEXO</span>
           </div>
           <p className="text-[var(--text-secondary)] text-sm mb-8 leading-relaxed max-w-sm">
             A secure AI assistant for your entire company. Instantly find answers in your documents.
@@ -85,7 +85,7 @@ export function Footer() {
             <m.a whileHover={{ y: -3 }} href="https://github.com" target="_blank" rel="noreferrer" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"><Code className="w-5 h-5" /></m.a>
             <m.a whileHover={{ y: -3 }} href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-[var(--text-muted)] hover:text-[#0A66C2] transition-colors"><Globe className="w-5 h-5" /></m.a>
             <m.a whileHover={{ y: -3 }} href="https://twitter.com" target="_blank" rel="noreferrer" className="text-[var(--text-muted)] hover:text-[#1DA1F2] transition-colors"><MessageSquare className="w-5 h-5" /></m.a>
-            <m.a whileHover={{ y: -3 }} href="mailto:hello@forgemind.ai" className="text-[var(--text-muted)] hover:text-forge-500 transition-colors"><Mail className="w-5 h-5" /></m.a>
+            <m.a whileHover={{ y: -3 }} href={`mailto:${import.meta.env.VITE_CONTACT_EMAIL || 'hello@nexo.ai'}`} className="text-[var(--text-muted)] hover:text-forge-500 transition-colors"><Mail className="w-5 h-5" /></m.a>
           </div>
         </div>
 
@@ -112,7 +112,7 @@ export function Footer() {
         <m.div variants={stagger} initial="hidden" whileInView="visible" viewport={{ once: true }} className="col-span-1 md:col-span-2 flex flex-col gap-4">
           <h4 className="font-semibold text-[var(--text-primary)] mb-2 tracking-wide text-sm">Company</h4>
           {[
-            { name: 'About ForgeMind', path: '/about' },
+            { name: 'About NEXO', path: '/about' },
             { name: 'Roadmap', path: '/roadmap' },
             { name: 'Blog', path: '/blog' },
             { name: 'Contact', path: '/contact' }
@@ -148,7 +148,7 @@ export function Footer() {
 
       <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-[var(--border-subtle)] flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="text-[var(--text-muted)] text-sm flex items-center gap-2">
-          © {new Date().getFullYear()} ForgeMind AI. All rights reserved.
+          © {new Date().getFullYear()} NEXO. All rights reserved.
           <span className="px-2 py-0.5 rounded-full bg-[var(--surface-elevated)] border border-[var(--border-subtle)] text-[10px] font-mono tracking-widest hidden sm:inline-block">v1.0.0</span>
         </p>
         <div className="flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer px-3 py-1.5 rounded-full bg-[var(--surface-primary)] border border-[var(--border-subtle)] shadow-sm">

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Evaluation Service Orchestrator
+NEXO — Evaluation Service Orchestrator
 """
 from typing import Any, Dict, List, Optional
 from app.evaluation.interfaces import (

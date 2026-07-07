@@ -1,5 +1,5 @@
 """
-ForgeMind AI — System Quality Telemetry Metrics
+NEXO — System Quality Telemetry Metrics
 """
 from datetime import datetime, timezone
 import math

@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════
-#  ForgeMind AI — Makefile
+#  NEXO — Makefile
 #  Run `make help` to see all available commands.
 # ═══════════════════════════════════════════════════════════════
 
@@ -15,7 +15,7 @@ RESET  := \033[0m
 help: ## Show this help message
 	@echo ""
 	@echo "$(CYAN)╔══════════════════════════════════════╗$(RESET)"
-	@echo "$(CYAN)║       ForgeMind AI — Commands         ║$(RESET)"
+	@echo "$(CYAN)║       NEXO — Commands         ║$(RESET)"
 	@echo "$(CYAN)╚══════════════════════════════════════╝$(RESET)"
 	@echo ""
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -25,11 +25,11 @@ help: ## Show this help message
 # ─── Docker Compose ──────────────────────────────────────────────
 
 dev: ## Start development environment (with hot reload)
-	@echo "$(YELLOW)Starting ForgeMind AI in development mode...$(RESET)"
+	@echo "$(YELLOW)Starting NEXO in development mode...$(RESET)"
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 
 prod: ## Start production environment
-	@echo "$(YELLOW)Starting ForgeMind AI in production mode...$(RESET)"
+	@echo "$(YELLOW)Starting NEXO in production mode...$(RESET)"
 	docker compose -f docker-compose.yml up --build -d
 
 build: ## Build all Docker images
@@ -139,7 +139,7 @@ health: ## Check all service health endpoints
 # ─── Setup ───────────────────────────────────────────────────────
 
 setup: ## Initial project setup (copy env, install deps)
-	@echo "$(YELLOW)Setting up ForgeMind AI...$(RESET)"
+	@echo "$(YELLOW)Setting up NEXO...$(RESET)"
 	@cp -n .env.example .env || true
 	@echo "$(GREEN)✓ .env file created (edit with your values)$(RESET)"
 	@$(MAKE) frontend-install

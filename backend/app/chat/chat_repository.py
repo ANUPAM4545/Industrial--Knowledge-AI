@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Chat Repository
+NEXO — Chat Repository
 """
 from typing import List, Optional
 

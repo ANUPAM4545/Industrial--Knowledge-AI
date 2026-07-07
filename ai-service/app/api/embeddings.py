@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Embedding Endpoints
+NEXO — Embedding Endpoints
 POST /embeddings/document  — Embed and index a document
 DELETE /embeddings/{document_id} — Remove document vectors
 """

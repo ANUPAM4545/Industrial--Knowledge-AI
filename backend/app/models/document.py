@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Document Model
+NEXO — Document Model
 """
 import enum
 from typing import Optional

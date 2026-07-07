@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Query Rewriter
+NEXO — Query Rewriter
 """
 from typing import List, Any
 

@@ -24,7 +24,7 @@ export function Security() {
             </h2>
             
             <p className="text-lg text-[var(--text-secondary)] mb-8 leading-relaxed">
-              ForgeMind blocks harmful instructions before they ever reach the AI, keeping your internal data safe.
+              NEXO blocks harmful instructions before they ever reach the AI, keeping your internal data safe.
             </p>
             
             <ul className="space-y-4">

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Knowledge Graph Models
+NEXO — Knowledge Graph Models
 Stores extracted entities and their relationships.
 """
 from typing import Optional, List

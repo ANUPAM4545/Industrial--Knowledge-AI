@@ -1,5 +1,5 @@
 """
-ForgeMind AI — RAG Unit Tests
+NEXO — RAG Unit Tests
 """
 import pytest
 

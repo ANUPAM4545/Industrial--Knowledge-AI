@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Embedding Exceptions
+NEXO — Embedding Exceptions
 """
 
 class EmbeddingError(Exception):

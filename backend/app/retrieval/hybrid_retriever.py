@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Hybrid Retriever
+NEXO — Hybrid Retriever
 """
 import asyncio
 import time

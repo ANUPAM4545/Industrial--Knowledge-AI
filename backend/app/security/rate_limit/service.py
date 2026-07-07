@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Rate Limiting Service
+NEXO — Rate Limiting Service
 """
 import structlog
 from typing import Optional, Dict, Any

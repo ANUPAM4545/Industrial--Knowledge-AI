@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Database Index Statistics Telemetry
+NEXO — Database Index Statistics Telemetry
 """
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Response Metrics Implementation
+NEXO — Response Metrics Implementation
 """
 from typing import Any, Dict, List
 from app.evaluation.interfaces import ResponseMetricsCalculator

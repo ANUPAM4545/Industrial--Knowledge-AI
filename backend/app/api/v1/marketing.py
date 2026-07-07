@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Marketing API
+NEXO — Marketing API
 Handles public endpoints for marketing such as Contact form and Newsletter.
 """
 from typing import Optional

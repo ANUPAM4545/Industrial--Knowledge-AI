@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Heading Chunker Strategy
+NEXO — Heading Chunker Strategy
 """
 from typing import List
 

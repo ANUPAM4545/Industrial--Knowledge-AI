@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Chunking Strategy Interface
+NEXO — Chunking Strategy Interface
 """
 from abc import ABC, abstractmethod
 from typing import List

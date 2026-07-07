@@ -51,7 +51,7 @@ export function FeaturesPage() {
             Built for <span className="text-transparent bg-clip-text bg-forge-gradient">Industrial Scale</span>
           </m.h1>
           <m.p variants={fadeUp} className="text-lg text-[var(--text-secondary)] leading-relaxed">
-            ForgeMind AI is not just another chatbot. It is a comprehensive intelligence platform designed specifically for complex engineering, manufacturing, and operational environments.
+            NEXO is not just another chatbot. It is a comprehensive intelligence platform designed specifically for complex engineering, manufacturing, and operational environments.
           </m.p>
         </m.div>
 

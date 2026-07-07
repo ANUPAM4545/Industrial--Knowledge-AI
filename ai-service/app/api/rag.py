@@ -1,5 +1,5 @@
 """
-ForgeMind AI — RAG Pipeline Endpoints
+NEXO — RAG Pipeline Endpoints
 POST /rag/query — Full RAG query with citations
 """
 from typing import List, Optional

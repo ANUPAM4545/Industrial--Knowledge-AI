@@ -13,7 +13,7 @@ export function ContactPage() {
           <div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">Get in touch</h1>
             <p className="text-lg text-[var(--text-secondary)] mb-12">
-              Interested in deploying ForgeMind AI at your facility? Have questions about our architecture? Our engineering team is ready to talk.
+              Interested in deploying NEXO at your facility? Have questions about our architecture? Our engineering team is ready to talk.
             </p>
 
             <div className="space-y-8">
@@ -33,7 +33,7 @@ export function ContactPage() {
                 </div>
                 <div>
                   <h4 className="font-bold mb-1">Email Us</h4>
-                  <p className="text-[var(--text-secondary)]">hello@forgemind.ai</p>
+                  <p className="text-[var(--text-secondary)]">hello@nexo.ai</p>
                 </div>
               </div>
 

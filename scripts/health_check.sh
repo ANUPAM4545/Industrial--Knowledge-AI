@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ForgeMind AI — Health Check Script
+# NEXO — Health Check Script
 # Checks all service endpoints and reports status.
 
 set -e
@@ -22,7 +22,7 @@ check_service() {
 
 echo ""
 echo "╔══════════════════════════════════╗"
-echo "║   ForgeMind AI — Health Check    ║"
+echo "║   NEXO — Health Check    ║"
 echo "╚══════════════════════════════════╝"
 echo ""
 

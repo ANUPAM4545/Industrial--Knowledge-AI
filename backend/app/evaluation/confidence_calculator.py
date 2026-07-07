@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Confidence Calculator Implementation
+NEXO — Confidence Calculator Implementation
 """
 from app.evaluation.interfaces import ConfidenceCalculator
 

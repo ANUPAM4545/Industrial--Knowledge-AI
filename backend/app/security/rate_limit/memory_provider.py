@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Memory Rate Limiter Provider (Development)
+NEXO — Memory Rate Limiter Provider (Development)
 """
 import time
 from typing import Dict, Tuple

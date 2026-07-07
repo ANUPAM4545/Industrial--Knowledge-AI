@@ -6,7 +6,7 @@ os.makedirs(docs_dir, exist_ok=True)
 files = {
     "01_overview.md": """# Project Overview
 
-**ForgeMind AI** is an AI-Powered Industrial Knowledge Intelligence Platform. It is designed to allow organizations to ingest industrial documents (PDFs, DOCX, SOPs) and query them using state-of-the-art RAG-powered AI chat.
+**NEXO** is an AI-Powered Industrial Knowledge Intelligence Platform. It is designed to allow organizations to ingest industrial documents (PDFs, DOCX, SOPs) and query them using state-of-the-art RAG-powered AI chat.
 
 ## Current Capabilities
 The project is currently in a scaffolded state. 
@@ -99,9 +99,9 @@ The codebase is in its foundational stages. Specific prompt templates (e.g., sys
 
 > **Note:** The requirements specified an analysis of a Video Pipeline (Script generation, Voice generation, Video rendering, Upload pipeline). 
 
-**This component does not exist in the ForgeMind AI repository.**
+**This component does not exist in the NEXO repository.**
 
-ForgeMind AI is an Industrial Knowledge Intelligence Platform focused on document ingestion (PDF, DOCX) and RAG (Retrieval-Augmented Generation) chat. It does not generate, render, or upload video content.
+NEXO is an Industrial Knowledge Intelligence Platform focused on document ingestion (PDF, DOCX) and RAG (Retrieval-Augmented Generation) chat. It does not generate, render, or upload video content.
 
 Any reference to Remotion, FFmpeg, Whisper, or Edge TTS is not applicable to the current system architecture.
 """,

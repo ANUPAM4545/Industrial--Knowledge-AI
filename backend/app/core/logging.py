@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Logging Configuration
+NEXO — Logging Configuration
 Structured JSON logging with structlog.
 """
 import logging

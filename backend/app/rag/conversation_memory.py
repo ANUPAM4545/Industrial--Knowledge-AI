@@ -1,5 +1,5 @@
 """
-ForgeMind AI — RAG Conversation Memory
+NEXO — RAG Conversation Memory
 """
 from typing import List
 from app.chat.models import Message, Role

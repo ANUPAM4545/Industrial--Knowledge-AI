@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Pinecone Vector Store (Placeholder)
+NEXO — Pinecone Vector Store (Placeholder)
 """
 from typing import Any, Dict, List, Optional, Tuple
 

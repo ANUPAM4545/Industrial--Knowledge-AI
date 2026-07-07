@@ -1,6 +1,6 @@
 # Explainable Document Viewer Architecture
 
-This document details the software design, sequence flows, character highlighting offsets, and explainability mapping behind the ForgeMind Executive Document Viewer (Milestone 6A).
+This document details the software design, sequence flows, character highlighting offsets, and explainability mapping behind the NEXO Executive Document Viewer (Milestone 6A).
 
 ---
 

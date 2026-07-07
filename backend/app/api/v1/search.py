@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Semantic Search Endpoints
+NEXO — Semantic Search Endpoints
 """
 from fastapi import APIRouter, Query, status, Depends
 from app.security.rate_limit.decorators import rate_limit

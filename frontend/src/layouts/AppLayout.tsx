@@ -120,7 +120,7 @@ export function AppLayout() {
             className="md:hidden absolute top-0 left-0 w-full z-40 bg-forge-600 text-white px-4 py-2 flex items-center justify-between"
           >
             <div className="flex flex-col">
-              <span className="text-sm font-semibold">Install ForgeMind</span>
+              <span className="text-sm font-semibold">Install NEXO</span>
               <span className="text-xs text-white/80">Add to home screen</span>
             </div>
             <button onClick={promptInstall} className="px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded-lg text-xs font-bold transition-colors">Install</button>
@@ -147,7 +147,7 @@ export function AppLayout() {
                 <div className="w-8 h-8 rounded-xl bg-forge-gradient flex items-center justify-center shadow-glow-sm">
                   <Zap className="w-4 h-4 text-white" />
                 </div>
-                <span className="font-bold text-[var(--text-primary)] tracking-wide">ForgeMind AI</span>
+                <span className="font-bold text-[var(--text-primary)] tracking-wide">NEXO</span>
               </motion.div>
             )}
           </AnimatePresence>
@@ -308,7 +308,7 @@ export function AppLayout() {
                 className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-forge-500/10 border border-forge-500/20 hover:border-forge-500/40 text-forge-400 text-sm font-semibold transition-all shadow-glow-sm"
               >
                 <Download className="w-4 h-4" />
-                <span>Install ForgeMind</span>
+                <span>Install NEXO</span>
               </button>
             )}
             <ThemeToggle />

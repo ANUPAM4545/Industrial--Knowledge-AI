@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Chat Schemas (Pydantic v2)
+NEXO — Chat Schemas (Pydantic v2)
 """
 from datetime import datetime
 from typing import List, Optional

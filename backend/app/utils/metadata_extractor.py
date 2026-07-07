@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Metadata Extractor Utility
+NEXO — Metadata Extractor Utility
 """
 from typing import Optional
 

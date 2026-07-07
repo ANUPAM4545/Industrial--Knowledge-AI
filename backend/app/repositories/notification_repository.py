@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Notification Repository
+NEXO — Notification Repository
 """
 from typing import List, Optional
 from uuid import UUID

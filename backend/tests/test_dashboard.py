@@ -177,7 +177,7 @@ async def test_dashboard_endpoints(monkeypatch):
             llm_provider="MockLLM",
             vector_store="MockStore",
             retriever="HybridRetriever",
-            evaluation_framework="RAGAS/ForgeMind",
+            evaluation_framework="RAGAS/NEXO",
             overall_system_health="Healthy"
         )
     monkeypatch.setattr(DashboardService, "get_system_health", mock_system)

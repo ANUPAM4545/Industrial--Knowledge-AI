@@ -56,7 +56,7 @@ export const viewerService = {
         return {
           page_number: page,
           text_content: page === 1 
-            ? "ForgeMind Enterprise safety standards specify that backup pressure check valves must trigger immediate sensor indicators if backup power thresholds fall below emergency limit levels."
+            ? "NEXO Enterprise safety standards specify that backup pressure check valves must trigger immediate sensor indicators if backup power thresholds fall below emergency limit levels."
             : "Section 2: Regular maintenance operations require physical validation of hydraulic check rings.",
           highlights: page === 1 ? [
             {

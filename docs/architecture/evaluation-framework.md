@@ -1,7 +1,7 @@
 # AI Evaluation & Quality Framework (Milestone 5A.5)
 
 ## Overview
-The AI Evaluation & Quality Framework allows tracking and profiling of retrieval and generation quality for ForgeMind AI. It scores RAG pipeline outputs using vector similarities, citation correctness, response length, and completeness indicators without altering generative logic.
+The AI Evaluation & Quality Framework allows tracking and profiling of retrieval and generation quality for NEXO. It scores RAG pipeline outputs using vector similarities, citation correctness, response length, and completeness indicators without altering generative logic.
 
 ## Architecture
 

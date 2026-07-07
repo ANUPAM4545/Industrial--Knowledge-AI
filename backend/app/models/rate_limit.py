@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Rate Limit Models
+NEXO — Rate Limit Models
 """
 import enum
 from typing import Optional

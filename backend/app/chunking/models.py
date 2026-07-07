@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Chunking Domain Models
+NEXO — Chunking Domain Models
 """
 from datetime import datetime
 from typing import Any, Dict, List, Optional

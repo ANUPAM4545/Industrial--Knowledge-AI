@@ -1,5 +1,5 @@
 """
-ForgeMind AI — User Model
+NEXO — User Model
 """
 import enum
 from typing import Optional

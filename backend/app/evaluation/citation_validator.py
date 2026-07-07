@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Citation Validator Implementation
+NEXO — Citation Validator Implementation
 """
 import re
 from typing import Any, Dict, List

@@ -85,7 +85,7 @@ export class DemoDashboardProvider implements IDashboardProvider {
       llm_provider: "OpenAI (gpt-4o-mini)",
       vector_store: "Qdrant Vector Database",
       retriever: "Hybrid Search (Vector + BM25)",
-      evaluation_framework: "ForgeMind Evaluation Suite",
+      evaluation_framework: "NEXO Evaluation Suite",
       overall_system_health: "Healthy"
     }
   }

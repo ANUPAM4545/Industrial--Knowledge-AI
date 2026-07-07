@@ -1,5 +1,5 @@
 """
-ForgeMind AI — BGE Reranker
+NEXO — BGE Reranker
 """
 from typing import Any, Dict, List
 

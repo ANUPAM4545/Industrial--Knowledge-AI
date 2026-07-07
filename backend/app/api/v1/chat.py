@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Chat API Router
+NEXO — Chat API Router
 """
 from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status

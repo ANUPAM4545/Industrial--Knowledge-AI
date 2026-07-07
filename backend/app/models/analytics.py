@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Analytics Models
+NEXO — Analytics Models
 """
 from typing import Optional
 

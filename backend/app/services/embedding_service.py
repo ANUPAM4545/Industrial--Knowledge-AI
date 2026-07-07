@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Embedding Service
+NEXO — Embedding Service
 """
 from datetime import datetime
 from typing import Dict, Any

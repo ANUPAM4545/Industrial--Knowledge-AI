@@ -1,5 +1,5 @@
 """
-ForgeMind AI — RAG Retriever
+NEXO — RAG Retriever
 """
 from typing import Any, Dict, List, Optional
 

@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Adaptive Rate Limiter
+NEXO — Adaptive Rate Limiter
 """
 from app.security.rate_limit.models import RateLimitPolicy
 from app.security.rate_limit.config import ADAPTIVE_RISK_MULTIPLIERS, EMERGENCY_RATE_LIMIT

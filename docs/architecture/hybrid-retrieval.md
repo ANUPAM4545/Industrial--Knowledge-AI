@@ -2,7 +2,7 @@
 
 ## Overview
 
-ForgeMind AI's retrieval engine combines the high-precision semantic capabilities of **Vector Search** with the exact term matching performance of **BM25 Keyword Search**. The hybrid pipeline merges, deduplicates, and normalizes candidate outputs before passing them to a **Reranking Engine** for high-fidelity cross-encoder ordering.
+NEXO's retrieval engine combines the high-precision semantic capabilities of **Vector Search** with the exact term matching performance of **BM25 Keyword Search**. The hybrid pipeline merges, deduplicates, and normalizes candidate outputs before passing them to a **Reranking Engine** for high-fidelity cross-encoder ordering.
 
 ## High-Level Pipeline Flow
 

@@ -31,7 +31,7 @@ export function InteractiveWorkflow() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center max-w-3xl mx-auto mb-24">
           <h2 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-6">
-            How ForgeMind <span className="text-forge-400">Works</span>
+            How NEXO <span className="text-forge-400">Works</span>
           </h2>
           <p className="text-[var(--text-secondary)] text-lg">
             A simple, secure process that turns your scattered documents into a powerful AI assistant.

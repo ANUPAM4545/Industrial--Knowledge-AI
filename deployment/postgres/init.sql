@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════
--- ForgeMind AI — PostgreSQL Initialization
+-- NEXO — PostgreSQL Initialization
 -- ═══════════════════════════════════════════════════════════════
 
 -- Enable required extensions
@@ -27,4 +27,4 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO forgemind;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO forgemind;
 
 -- ─── Comments ─────────────────────────────────────────────────
-COMMENT ON DATABASE forgemind_db IS 'ForgeMind AI — Industrial Knowledge Intelligence Platform';
+COMMENT ON DATABASE forgemind_db IS 'NEXO — Industrial Knowledge Intelligence Platform';

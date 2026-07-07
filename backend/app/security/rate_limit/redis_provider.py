@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Redis Rate Limiter Provider (Production)
+NEXO — Redis Rate Limiter Provider (Production)
 """
 import time
 from typing import Tuple

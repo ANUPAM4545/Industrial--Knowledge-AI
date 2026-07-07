@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Observability API Router
+NEXO — Observability API Router
 """
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession

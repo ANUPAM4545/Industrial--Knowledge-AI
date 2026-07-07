@@ -26,7 +26,7 @@ const FEATURES = [
   },
   {
     title: 'Find the right information instantly',
-    description: 'ForgeMind combines keyword search and AI understanding to find the most accurate answer.',
+    description: 'NEXO combines keyword search and AI understanding to find the most accurate answer.',
     icon: Search,
     colSpan: 'col-span-1 md:col-span-1 lg:col-span-1',
     bg: 'bg-amber-500/5',

@@ -1,6 +1,6 @@
 # Enterprise Security Center
 
-ForgeMind AI features a unified Enterprise Security Center that centralizes observability, threat monitoring, and session management.
+NEXO features a unified Enterprise Security Center that centralizes observability, threat monitoring, and session management.
 
 ## Architecture
 

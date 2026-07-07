@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Qdrant Vector Store
+NEXO — Qdrant Vector Store
 """
 import uuid
 from typing import Any, Dict, List, Optional, Tuple

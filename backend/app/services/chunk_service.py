@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Chunk Service
+NEXO — Chunk Service
 """
 from typing import List
 

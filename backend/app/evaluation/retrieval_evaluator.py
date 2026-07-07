@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Retrieval Evaluator Implementation
+NEXO — Retrieval Evaluator Implementation
 """
 from typing import Any, Dict, List
 from app.evaluation.interfaces import RetrievalEvaluator

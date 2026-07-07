@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Document Schemas (Pydantic v2)
+NEXO — Document Schemas (Pydantic v2)
 
 Extends the scaffold schemas with:
 - Upload request validation

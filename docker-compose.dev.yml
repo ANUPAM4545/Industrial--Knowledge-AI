@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════
-#  ForgeMind AI — Docker Compose Dev Override
+#  NEXO — Docker Compose Dev Override
 #  Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 # ═══════════════════════════════════════════════════════════════
 
@@ -22,7 +22,7 @@ services:
     environment:
       VITE_API_BASE_URL: http://localhost:8005
       VITE_AI_SERVICE_URL: http://localhost:8006
-      VITE_APP_NAME: "ForgeMind AI [DEV]"
+      VITE_APP_NAME: "NEXO [DEV]"
     command: npm run dev -- --host 0.0.0.0
 
   # ─── Backend Dev (Hot Reload) ──────────────────────────────────
@@ -66,7 +66,7 @@ services:
     ports:
       - "50500:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@forgemind.ai}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@nexo.ai}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-pgadmin_password}
       PGADMIN_CONFIG_SERVER_MODE: "False"
     volumes:

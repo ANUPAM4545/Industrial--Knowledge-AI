@@ -1,5 +1,5 @@
 """
-ForgeMind AI — RAG Response Formatter
+NEXO — RAG Response Formatter
 """
 from typing import Any, Dict
 

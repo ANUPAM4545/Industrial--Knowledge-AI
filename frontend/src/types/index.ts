@@ -1,5 +1,5 @@
 /**
- * ForgeMind AI — TypeScript Type Definitions
+ * NEXO — TypeScript Type Definitions
  */
 
 // ─── User ─────────────────────────────────────────────────────────────

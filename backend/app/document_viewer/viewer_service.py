@@ -9,7 +9,7 @@ from app.repositories.document_repository import DocumentRepository
 from app.storage.base import StorageProvider
 from app.document_viewer.models import DocumentViewerInfo, DocumentPageData, DocumentSearchMatch
 
-logger = logging.getLogger("ForgeMind.ViewerService")
+logger = logging.getLogger("NEXO.ViewerService")
 
 
 class DocumentViewerService:

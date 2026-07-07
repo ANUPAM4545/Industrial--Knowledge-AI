@@ -44,9 +44,9 @@ export function Hero() {
 
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--text-primary)] leading-[1.15] mb-6">
-              Turn your documents into an{' '}
+              Your AI Workspace for{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-forge-400 via-purple-400 to-amber-400 animate-gradient-x block sm:inline">
-                AI assistant your team can chat with.
+                Company Knowledge.
               </span>
             </h1>
           </m.div>
@@ -57,7 +57,9 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="text-lg lg:text-xl text-[var(--text-secondary)] max-w-xl leading-relaxed"
           >
-            Find answers in thousands of PDFs, manuals, and reports in seconds. Every answer includes the exact document it came from, so you can always trust the source.
+            Upload your documents.<br />
+            Ask questions.<br />
+            Get trusted answers instantly.
           </m.p>
 
           <m.div 
@@ -95,7 +97,7 @@ export function Hero() {
               </div>
               <div className="mx-auto px-4 py-1 rounded-md bg-[var(--bg-glass-hover)] border border-[var(--border-subtle)] text-[10px] text-[var(--text-muted)] font-mono flex items-center gap-2">
                 <Search className="w-3 h-3" />
-                forgemind.app / {activeView.id}
+                nexo.app / {activeView.id}
               </div>
             </div>
 
@@ -209,16 +211,15 @@ export function Hero() {
                     )}
                     {activeView.id === 'dev' && (
                       <div className="flex-1 rounded-xl bg-[#0a0a0a] border border-[var(--border-subtle)] p-4 font-mono text-xs flex flex-col gap-2 overflow-hidden shadow-inner">
-                        <div className="text-green-400">$ npm install @forgemind/sdk</div>
-                        <div className="text-slate-400">Installing dependencies...</div>
-                        <div className="text-blue-400">added 12 packages in 2s</div>
-                        <div className="text-green-400 mt-2">$ forgemind init</div>
+                        <div className="text-green-400">$ npm install @nexo/sdk</div>
+                        <div className="text-[var(--text-muted)] mt-1"># Initialize the client</div>
+                        <div className="text-green-400 mt-2">$ nexo init</div>
                         <div className="text-slate-300">Initializing new AI workspace...</div>
-                        <div className="flex gap-2 mt-2">
-                          <span className="text-purple-400">import</span> 
-                          <span className="text-yellow-300">&#123; ForgeMind &#125;</span> 
-                          <span className="text-purple-400">from</span> 
-                          <span className="text-green-300">'@forgemind/sdk'</span>
+                        <div>
+                          <span className="text-purple-400">import</span>{' '}
+                          <span className="text-forge-400">{"{ Client }"}</span>{' '}
+                          <span className="text-purple-400">from</span>{' '}
+                          <span className="text-green-300">'@nexo/sdk'</span>
                         </div>
                       </div>
                     )}

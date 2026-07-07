@@ -1,5 +1,5 @@
 # ─────────────────────────────────────────────────────────────
-# ForgeMind AI — AI Service Dockerfile
+# NEXO — AI Service Dockerfile
 # Includes Tesseract OCR for document processing
 # ─────────────────────────────────────────────────────────────
 

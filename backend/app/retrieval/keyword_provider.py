@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Keyword Search Provider (BM25)
+NEXO — Keyword Search Provider (BM25)
 """
 import re
 from typing import Any, Dict, List, Optional, Tuple

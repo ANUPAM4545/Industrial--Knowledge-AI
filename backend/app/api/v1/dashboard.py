@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Dashboard REST Endpoints
+NEXO — Dashboard REST Endpoints
 """
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status

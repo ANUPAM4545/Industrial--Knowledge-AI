@@ -149,7 +149,7 @@ export function SettingsPage() {
                     </div>
                     <div>
                       <p className="font-semibold text-[var(--text-primary)] text-sm">Installation Status</p>
-                      <p className="text-xs text-[var(--text-muted)]">Run ForgeMind natively on your device.</p>
+                      <p className="text-xs text-[var(--text-muted)]">Run NEXO natively on your device.</p>
                     </div>
                   </div>
                   {isInstalled ? (
@@ -163,7 +163,7 @@ export function SettingsPage() {
                   )}
                 </div>
                 <div className="text-xs text-[var(--text-secondary)] mb-4">
-                  ForgeMind AI is built as a Progressive Web App (PWA). You can install it on your device to enable quick launching, offline capabilities, and enhanced performance.
+                  NEXO is built as a Progressive Web App (PWA). You can install it on your device to enable quick launching, offline capabilities, and enhanced performance.
                 </div>
               </div>
 

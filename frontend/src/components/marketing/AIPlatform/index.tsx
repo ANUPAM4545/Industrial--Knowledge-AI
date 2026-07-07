@@ -35,7 +35,7 @@ export function AIPlatform() {
           <div className="inline-block relative">
              <div className="absolute inset-0 bg-forge-500/20 blur-2xl rounded-full" />
              <h3 className="relative text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-forge-400 to-purple-400">
-               ForgeMind changes that.
+               NEXO changes that.
              </h3>
           </div>
         </m.div>

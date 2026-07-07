@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Rate Limiting Middleware
+NEXO — Rate Limiting Middleware
 """
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware

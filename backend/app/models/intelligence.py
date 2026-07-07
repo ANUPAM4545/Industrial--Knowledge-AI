@@ -1,5 +1,5 @@
 """
-ForgeMind AI — Intelligence Models
+NEXO — Intelligence Models
 Stores AI-generated recommendations, insights, and workflow configurations.
 """
 from typing import Optional
