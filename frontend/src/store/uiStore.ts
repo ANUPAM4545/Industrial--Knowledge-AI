@@ -10,8 +10,20 @@ interface UIState {
   zoomLevel: number
   lastViewedPages: Record<string, number>
   developerMode: boolean
-  demoMode: boolean
+  workspaceMode: 'empty' | 'demo' | 'live'
+  tourState: {
+    isActive: boolean
+    currentStep: number
+    hasSeenTour: boolean
+  }
   theme: 'dark' | 'light' | 'system'
+  
+  // Notification Preferences
+  notifications: {
+    email: boolean
+    push: boolean
+    weeklyReport: boolean
+  }
 
   // Actions
   toggleSidebar: () => void
@@ -22,8 +34,11 @@ interface UIState {
   setZoomLevel: (zoom: number) => void
   setLastViewedPage: (docId: string, page: number) => void
   setDeveloperMode: (mode: boolean) => void
-  setDemoMode: (mode: boolean) => void
+  setWorkspaceMode: (mode: 'empty' | 'demo' | 'live') => void
+  resetDemoWorkspace: () => void
+  setTourState: (state: Partial<UIState['tourState']>) => void
   setTheme: (theme: 'dark' | 'light' | 'system') => void
+  setNotifications: (prefs: Partial<UIState['notifications']>) => void
 }
 
 export const applyTheme = (theme: 'dark' | 'light' | 'system') => {
@@ -68,8 +83,15 @@ export const useUIStore = create<UIState>()((set) => ({
   zoomLevel: getLocal('zoomLevel', 100),
   lastViewedPages: getLocal('lastViewedPages', {}),
   developerMode: getLocal('developerMode', false),
-  demoMode: getLocal('demoMode', false),
+  workspaceMode: getLocal('workspaceMode', 'live'),
+  tourState: getLocal('tourState', { isActive: false, currentStep: 0, hasSeenTour: false }),
   theme: getLocal<'dark' | 'light' | 'system'>('theme', 'dark'),
+  
+  notifications: getLocal('notifications', {
+    email: true,
+    push: false,
+    weeklyReport: true
+  }),
 
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
@@ -97,20 +119,39 @@ export const useUIStore = create<UIState>()((set) => ({
     return { developerMode: mode }
   }),
 
-  setDemoMode: (mode) => set(() => {
-    setLocal('demoMode', mode)
-    if (mode) {
-      // Auto enable Developer Mode for best dashboard diagnostics display
+  setWorkspaceMode: (mode) => set(() => {
+    setLocal('workspaceMode', mode)
+    if (mode === 'demo') {
       setLocal('developerMode', true)
-      return { demoMode: true, developerMode: true }
+      return { workspaceMode: 'demo', developerMode: true }
     }
-    return { demoMode: false }
+    return { workspaceMode: mode }
+  }),
+
+  resetDemoWorkspace: () => set(() => {
+    // Clear any local mutations or reset the demo
+    setLocal('tourState', { isActive: false, currentStep: 0, hasSeenTour: false })
+    return {
+      tourState: { isActive: false, currentStep: 0, hasSeenTour: false }
+    }
+  }),
+
+  setTourState: (stateUpdate) => set((state) => {
+    const updated = { ...state.tourState, ...stateUpdate }
+    setLocal('tourState', updated)
+    return { tourState: updated }
   }),
 
   setTheme: (theme) => set(() => {
     setLocal('theme', theme)
     applyTheme(theme)
     return { theme }
+  }),
+
+  setNotifications: (prefs) => set((state) => {
+    const updated = { ...state.notifications, ...prefs }
+    setLocal('notifications', updated)
+    return { notifications: updated }
   }),
 }))
 

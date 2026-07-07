@@ -83,132 +83,30 @@ export interface SmartInsight {
   timestamp: string;
 }
 
+import { ProviderFactory } from './providers/ProviderFactory';
+
 export const dashboardService = {
   async getOverview(): Promise<DashboardOverview> {
-    if (useUIStore.getState().demoMode) {
-      return {
-        total_documents: 14,
-        indexed_documents: 14,
-        pending_documents: 0,
-        failed_documents: 0,
-        total_chunks: 425,
-        total_vectors: 425,
-        total_conversations: 8,
-        questions_today: 12,
-        average_confidence: 94.2,
-        average_latency: 245,
-        average_retrieval_score: 89.6
-      };
-    }
-    const response = await apiClient.get('/dashboard/overview');
-    return response.data;
+    return ProviderFactory.getDashboardProvider().getOverview();
   },
 
   async getKnowledge(): Promise<KnowledgeHealth> {
-    if (useUIStore.getState().demoMode) {
-      const mockDocs: DocumentMetadataHealth[] = [
-        {
-          document_id: "demo_1",
-          title: "Standard Safety SOP.pdf",
-          references_count: 42,
-          confidence_score: 98.4,
-          file_size_bytes: 2048576,
-          status: "ready",
-          created_at: new Date().toISOString()
-        },
-        {
-          document_id: "demo_2",
-          title: "Valve Specs Checklist.docx",
-          references_count: 28,
-          confidence_score: 95.1,
-          file_size_bytes: 512400,
-          status: "ready",
-          created_at: new Date().toISOString()
-        }
-      ];
-      return {
-        most_referenced_documents: mockDocs,
-        least_used_documents: [],
-        documents_missing_metadata: [],
-        low_confidence_documents: [],
-        failed_processing_jobs: [],
-        largest_documents: mockDocs,
-        newest_documents: mockDocs
-      };
-    }
-    const response = await apiClient.get('/dashboard/knowledge');
-    return response.data;
+    return ProviderFactory.getDashboardProvider().getKnowledge();
   },
 
   async getSearch(): Promise<SearchAnalytics> {
-    if (useUIStore.getState().demoMode) {
-      return {
-        most_frequent_queries: [
-          { query_text: "What are the temperature parameters for emergency backup valves?", frequency: 18 },
-          { query_text: "How to troubleshoot backup safety power limits?", frequency: 12 }
-        ],
-        top_keywords: [
-          { keyword: "valve", count: 32 },
-          { keyword: "safety", count: 28 },
-          { keyword: "sensor", count: 21 }
-        ],
-        average_query_length: 8.5,
-        retrieval_success_rate: 98.2,
-        average_similarity: 0.89,
-        average_citation_count: 3.2
-      };
-    }
-    const response = await apiClient.get('/dashboard/search');
-    return response.data;
+    return ProviderFactory.getDashboardProvider().getSearch();
   },
 
   async getSystem(): Promise<SystemHealth> {
-    if (useUIStore.getState().demoMode) {
-      return {
-        embedding_provider: "FastEmbed (bge-small-en-v1.5)",
-        llm_provider: "OpenAI (gpt-4o-mini)",
-        vector_store: "Qdrant Vector Database",
-        retriever: "Hybrid Search (Vector + BM25)",
-        evaluation_framework: "ForgeMind Evaluation Suite",
-        overall_system_health: "Optimal"
-      };
-    }
-    const response = await apiClient.get('/dashboard/system');
-    return response.data;
+    return ProviderFactory.getDashboardProvider().getSystem();
   },
 
   async getTrends(): Promise<DashboardTrends> {
-    if (useUIStore.getState().demoMode) {
-      const dates = ["07-01", "07-02", "07-03", "07-04", "07-05"];
-      return {
-        daily_uploads: dates.map((d, i) => ({ date: d, value: [1, 2, 0, 3, 2][i] })),
-        daily_queries: dates.map((d, i) => ({ date: d, value: [5, 8, 12, 10, 15][i] })),
-        confidence_trend: dates.map((d, i) => ({ date: d, value: [92.1, 93.4, 94.2, 94.0, 94.2][i] })),
-        latency_trend: dates.map((d, i) => ({ date: d, value: [280, 260, 245, 250, 245][i] })),
-        document_growth: dates.map((d, i) => ({ date: d, value: [8, 10, 10, 13, 14][i] })),
-        vector_growth: dates.map((d, i) => ({ date: d, value: [210, 280, 280, 390, 425][i] }))
-      };
-    }
-    const response = await apiClient.get('/dashboard/trends');
-    return response.data;
+    return ProviderFactory.getDashboardProvider().getTrends();
   },
 
   async getInsights(): Promise<SmartInsight[]> {
-    if (useUIStore.getState().demoMode) {
-      return [
-        {
-          text: "Hybrid search accuracy increased by 4.2% after optimizing BM25 parameters.",
-          type: "success",
-          timestamp: new Date().toISOString()
-        },
-        {
-          text: "Document index size is growing. Consider enabling auto-pruning parameters for temp manuals.",
-          type: "info",
-          timestamp: new Date().toISOString()
-        }
-      ];
-    }
-    const response = await apiClient.get('/dashboard/insights');
-    return response.data;
+    return ProviderFactory.getDashboardProvider().getInsights();
   }
 };

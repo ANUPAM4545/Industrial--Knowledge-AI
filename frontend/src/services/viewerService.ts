@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { apiClient } from './apiClient'
 import { useUIStore } from '../store/uiStore'
 
 export interface DocumentViewerInfo {
@@ -32,11 +32,11 @@ export interface DocumentSearchMatch {
   text_match: string
 }
 
-const API_BASE = '/api/v1/documents'
+const API_BASE = '/documents'
 
 export const viewerService = {
   getViewerInfo: async (id: string): Promise<DocumentViewerInfo> => {
-    if (useUIStore.getState().demoMode && id.startsWith('demo_')) {
+    if (useUIStore.getState().workspaceMode === 'demo' && id.startsWith('demo_')) {
       return {
         document_id: id,
         title: id === 'demo_1' ? "Standard Safety SOP.pdf" : "Valve Specs Checklist.docx",
@@ -46,12 +46,12 @@ export const viewerService = {
         file_size: id === 'demo_1' ? 2048576 : 512400
       };
     }
-    const resp = await axios.get(`${API_BASE}/${id}/viewer`)
+    const resp = await apiClient.get(`${API_BASE}/${id}/viewer`)
     return resp.data
   },
 
   getPageContent: async (id: string, page: number): Promise<DocumentPageData> => {
-    if (useUIStore.getState().demoMode && id.startsWith('demo_')) {
+    if (useUIStore.getState().workspaceMode === 'demo' && id.startsWith('demo_')) {
       if (id === 'demo_1') {
         return {
           page_number: page,
@@ -90,7 +90,7 @@ export const viewerService = {
         };
       }
     }
-    const resp = await axios.get(`${API_BASE}/${id}/page/${page}`)
+    const resp = await apiClient.get(`${API_BASE}/${id}/page/${page}`)
     return resp.data
   },
 
@@ -102,7 +102,7 @@ export const viewerService = {
     confidence: number
     retrieval_method: string
   }> => {
-    if (useUIStore.getState().demoMode && id.startsWith('demo_')) {
+    if (useUIStore.getState().workspaceMode === 'demo' && id.startsWith('demo_')) {
       return {
         page_number: 1,
         chunk_id: citationId,
@@ -112,12 +112,12 @@ export const viewerService = {
         retrieval_method: citationId === "demo_chunk_1" ? "hybrid" : "vector"
       };
     }
-    const resp = await axios.get(`${API_BASE}/${id}/citation/${citationId}`)
+    const resp = await apiClient.get(`${API_BASE}/${id}/citation/${citationId}`)
     return resp.data
   },
 
   searchInsideDocument: async (id: string, query: string): Promise<DocumentSearchMatch[]> => {
-    if (useUIStore.getState().demoMode && id.startsWith('demo_')) {
+    if (useUIStore.getState().workspaceMode === 'demo' && id.startsWith('demo_')) {
       const q = query.toLowerCase();
       if (q.includes("valve") || q.includes("safety") || q.includes("sensor")) {
         return [
@@ -132,7 +132,7 @@ export const viewerService = {
       }
       return [];
     }
-    const resp = await axios.get(`${API_BASE}/${id}/search`, { params: { q: query } })
+    const resp = await apiClient.get(`${API_BASE}/${id}/search`, { params: { q: query } })
     return resp.data
   }
 }
