@@ -18,11 +18,11 @@ export function KnowledgeExplorer() {
             <Network className="w-4 h-4" />
             Knowledge Graph Explorer
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-            See the connections.
+          <h2 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-6">
+            See how your documents <br/> <span className="text-amber-400">are connected</span>.
           </h2>
-          <p className="text-lg text-slate-400">
-            Industrial intelligence isn't just about search; it's about context. The Knowledge Explorer visually maps relationships across thousands of technical manuals, failure logs, and schematics.
+          <p className="text-lg text-[var(--text-secondary)]">
+            Explore a visual map of your company's knowledge. Discover relationships between manuals, reports, and guidelines you didn't know existed.
           </p>
         </m.div>
 
@@ -31,10 +31,10 @@ export function KnowledgeExplorer() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="relative w-full aspect-[2/1] rounded-3xl liquid-glass border border-white/10 overflow-hidden group"
+          className="relative w-full aspect-[2/1] rounded-3xl liquid-glass border border-[var(--border-strong)] overflow-hidden group"
         >
           {/* Simulated Graph Background */}
-          <div className="absolute inset-0 bg-[#0B0F19]">
+          <div className="absolute inset-0 bg-[var(--surface-primary)]">
              {/* We will draw a few animated nodes and edges to simulate a graph */}
              <svg className="w-full h-full opacity-30" preserveAspectRatio="none">
                <line x1="20%" y1="30%" x2="50%" y2="50%" stroke="#f59e0b" strokeWidth="1" />
@@ -52,13 +52,13 @@ export function KnowledgeExplorer() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] to-transparent pointer-events-none" />
 
           {/* Floating UI overlay */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full liquid-glass border border-white/10 flex items-center gap-6">
-            <div className="flex items-center gap-2 text-sm text-slate-300">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full liquid-glass border border-[var(--border-strong)] flex items-center gap-6">
+            <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
                <Database className="w-4 h-4 text-forge-400" />
                145k Nodes
             </div>
             <div className="w-px h-4 bg-white/20" />
-            <div className="flex items-center gap-2 text-sm text-slate-300">
+            <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
                <Network className="w-4 h-4 text-amber-400" />
                1.2M Edges
             </div>

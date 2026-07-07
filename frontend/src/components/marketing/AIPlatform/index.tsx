@@ -10,10 +10,9 @@ export function AIPlatform() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
-          className="text-4xl md:text-6xl font-bold text-white leading-tight"
+          className="text-4xl md:text-6xl font-bold text-[var(--text-primary)] leading-tight"
         >
-          Industrial knowledge is <span className="text-forge-400">scattered</span>. <br/>
-          Traditional search <span className="text-slate-500 line-through">fails</span>.
+          Important information is <br/> <span className="text-forge-400">often buried</span>.
         </m.h2>
 
         <m.p 
@@ -21,9 +20,9 @@ export function AIPlatform() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-xl md:text-2xl text-slate-400 leading-relaxed max-w-3xl mx-auto"
+          className="text-xl md:text-2xl text-[var(--text-secondary)] leading-relaxed max-w-3xl mx-auto"
         >
-          For decades, critical engineering intelligence has been locked away in PDFs, schematics, and disjointed databases. Retrieving the right technical spec during an outage was impossible.
+          Inside PDFs, manuals, spreadsheets, and reports. Finding the right answer can take hours.
         </m.p>
 
         <m.div
@@ -36,7 +35,7 @@ export function AIPlatform() {
           <div className="inline-block relative">
              <div className="absolute inset-0 bg-forge-500/20 blur-2xl rounded-full" />
              <h3 className="relative text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-forge-400 to-purple-400">
-               ForgeMind solves this.
+               ForgeMind changes that.
              </h3>
           </div>
         </m.div>

@@ -42,7 +42,7 @@ function AnimatedCounter({ from, to, duration = 2 }: { from: number, to: number,
 
 export function PlatformOverview() {
   return (
-    <section className="py-20 border-y border-white/5 bg-[#080B14]/50 relative z-10">
+    <section className="py-20 border-y border-[var(--border-subtle)] bg-[var(--bg-secondary)] relative z-10">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
           {STATS.map((stat, i) => (
@@ -57,7 +57,7 @@ export function PlatformOverview() {
               <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400">
                 <AnimatedCounter from={0} to={stat.value} />{stat.suffix}
               </div>
-              <div className="text-sm font-medium text-slate-500 uppercase tracking-wider">
+              <div className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider">
                 {stat.label}
               </div>
             </m.div>

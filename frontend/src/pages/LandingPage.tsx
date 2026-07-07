@@ -22,7 +22,7 @@ export function LandingPage() {
 
   return (
     <LazyMotion features={domAnimation}>
-      <div className="relative min-h-screen bg-[#080B14] text-[var(--text-primary)] overflow-hidden font-sans selection:bg-forge-500/30">
+      <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] overflow-hidden font-sans selection:bg-forge-500/30">
         <AnimatedBackground />
         <Navbar />
 
