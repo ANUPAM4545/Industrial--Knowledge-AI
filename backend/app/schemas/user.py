@@ -9,7 +9,7 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 class UserBase(BaseModel):
     email: EmailStr
-    username: str
+    username: Optional[str] = None
     full_name: str
     role: str = "operator"
     department: Optional[str] = None
@@ -19,8 +19,8 @@ class UserResponse(UserBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: str
-    status: str
-    is_verified: bool
+    status: Optional[str] = None
+    is_verified: Optional[bool] = None
     avatar_url: Optional[str] = None
     bio: Optional[str] = None
     created_at: datetime

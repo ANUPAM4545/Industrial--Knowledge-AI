@@ -45,14 +45,14 @@ class Document(Base):
     file_size: Mapped[int] = mapped_column(BigInteger, nullable=False)
     mime_type: Mapped[str] = mapped_column(String(200), nullable=False)
     document_type: Mapped[DocumentType] = mapped_column(
-        Enum(DocumentType),
+        Enum(DocumentType, values_callable=lambda obj: [e.value for e in obj]),
         default=DocumentType.OTHER,
         nullable=False,
     )
 
     # Processing
     status: Mapped[DocumentStatus] = mapped_column(
-        Enum(DocumentStatus),
+        Enum(DocumentStatus, values_callable=lambda obj: [e.value for e in obj]),
         default=DocumentStatus.UPLOADED,
         nullable=False,
         index=True,

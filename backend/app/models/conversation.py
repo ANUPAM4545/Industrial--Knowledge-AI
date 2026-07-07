@@ -48,7 +48,10 @@ class Message(Base):
         nullable=False,
         index=True,
     )
-    role: Mapped[MessageRole] = mapped_column(Enum(MessageRole), nullable=False)
+    role: Mapped[MessageRole] = mapped_column(
+        Enum(MessageRole, values_callable=lambda obj: [e.value for e in obj]),
+        nullable=False
+    )
     content: Mapped[str] = mapped_column(Text, nullable=False)
 
     # AI metadata
