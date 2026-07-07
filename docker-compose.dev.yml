@@ -39,6 +39,7 @@ services:
     environment:
       APP_ENV: development
       APP_DEBUG: "true"
+      UPLOAD_DIR: "/tmp/uploads"
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
   # ─── AI Service Dev (Hot Reload) ──────────────────────────────

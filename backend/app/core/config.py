@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     APP_DEBUG: bool = True
     APP_VERSION: str = "1.0.0"
     APP_SECRET_KEY: str = "change-me-in-production"
+    ALLOW_ROLE_SELECTION: bool = True
 
     # ─── Backend ─────────────────────────────────────────────────
     BACKEND_HOST: str = "0.0.0.0"

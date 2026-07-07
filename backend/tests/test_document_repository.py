@@ -5,6 +5,7 @@ Unit tests for the DocumentRepository using an in-memory SQLite
 database (no Docker/Postgres needed to run the test suite).
 """
 import pytest
+import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -18,7 +19,7 @@ from app.repositories.document_repository import DocumentRepository
 TEST_DB_URL = "sqlite+aiosqlite:///:memory:"
 
 
-@pytest.fixture(scope="function")
+@pytest_asyncio.fixture(scope="function")
 async def async_session():
     """Provide a fresh in-memory SQLite session for each test."""
     engine = create_async_engine(TEST_DB_URL, echo=False)
@@ -36,7 +37,7 @@ async def async_session():
     await engine.dispose()
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def owner(async_session: AsyncSession) -> User:
     """Insert a test user and return the instance."""
     user = User(
@@ -54,8 +55,8 @@ async def owner(async_session: AsyncSession) -> User:
     return user
 
 
-@pytest.fixture
-def repo(async_session: AsyncSession) -> DocumentRepository:
+@pytest_asyncio.fixture
+async def repo(async_session: AsyncSession) -> DocumentRepository:
     return DocumentRepository(async_session)
 
 

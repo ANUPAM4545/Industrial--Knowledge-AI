@@ -14,10 +14,15 @@ def configure_logging() -> None:
     """Configure structured logging for the application."""
     log_level = getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO)
 
+    def add_logger_name_safe(logger, method_name, event_dict):
+        if hasattr(logger, "name"):
+            event_dict["logger"] = logger.name
+        return event_dict
+
     shared_processors = [
         structlog.contextvars.merge_contextvars,
         structlog.stdlib.add_log_level,
-        structlog.stdlib.add_logger_name,
+        add_logger_name_safe,
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.processors.StackInfoRenderer(),
     ]

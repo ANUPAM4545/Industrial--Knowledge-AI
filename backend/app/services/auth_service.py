@@ -57,7 +57,12 @@ class AuthService:
         if await self._repo.username_exists(data.username):
             raise ConflictException(f"Username '{data.username}' is already taken.")
 
-        role = self._parse_role(data.role)
+        from app.core.config import settings
+        if not settings.ALLOW_ROLE_SELECTION:
+            role = UserRole.OPERATOR
+        else:
+            role = self._parse_role(data.role)
+
         user = await self._repo.create(
             email=data.email,
             username=data.username,
