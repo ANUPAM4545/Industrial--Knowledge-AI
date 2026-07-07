@@ -52,7 +52,7 @@ export function Footer() {
             <span className="font-bold text-[var(--text-primary)] text-lg tracking-tight">ForgeMind AI</span>
           </div>
           <p className="text-[var(--text-secondary)] text-sm mb-8 leading-relaxed max-w-sm">
-            Enterprise-grade retrieval augmented generation for industrial operations. Turn static documents into actionable intelligence.
+            A secure AI assistant for your entire company. Instantly find answers in your documents.
           </p>
           
           <form onSubmit={handleSubscribe} className="relative max-w-xs mb-8">

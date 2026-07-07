@@ -32,15 +32,15 @@ export function Pricing() {
           className="p-8 rounded-3xl bg-[var(--surface-glass)] border border-[var(--border-subtle)] flex flex-col hover:shadow-[var(--shadow-large)] transition-shadow"
         >
           <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">Starter</h3>
-          <p className="text-[var(--text-secondary)] text-sm mb-6">Perfect for small teams and prototyping.</p>
+          <p className="text-[var(--text-secondary)] text-sm mb-6">Perfect for students and small teams.</p>
           <div className="mb-6">
             <span className="text-4xl font-bold text-[var(--text-primary)]">$0</span>
             <span className="text-[var(--text-secondary)]">/mo</span>
           </div>
           <ul className="space-y-4 mb-8 flex-1 text-sm text-[var(--text-secondary)]">
             <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Up to 500 documents</li>
-            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Standard Hybrid Search</li>
-            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Basic Analytics</li>
+            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Smart Search</li>
+            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> See Search History</li>
           </ul>
           <button className="w-full py-3 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-elevated)] hover:bg-[var(--border-subtle)] text-[var(--text-primary)] font-semibold transition-colors">
             Start Free
@@ -61,16 +61,16 @@ export function Pricing() {
           </div>
           
           <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2 relative z-10">Professional</h3>
-          <p className="text-[var(--text-secondary)] text-sm mb-6 relative z-10">For growing businesses needing scale.</p>
+          <p className="text-[var(--text-secondary)] text-sm mb-6 relative z-10">For growing companies.</p>
           <div className="mb-6 relative z-10">
             <span className="text-4xl font-bold text-[var(--text-primary)]">$99</span>
             <span className="text-[var(--text-secondary)]">/mo</span>
           </div>
           <ul className="space-y-4 mb-8 flex-1 text-sm text-[var(--text-secondary)] relative z-10">
             <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Up to 50,000 documents</li>
-            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Explainable AI & Citations</li>
-            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Developer Trace Mode</li>
-            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> PWA Offline Support</li>
+            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Verified Answers & Sources</li>
+            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Trace Every AI Step</li>
+            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Install on Desktop & Mobile</li>
           </ul>
           
           <MagneticButton className="w-full py-4 rounded-xl bg-forge-500 hover:bg-forge-400 text-white font-bold transition-colors shadow-lg shadow-forge-500/25">
@@ -85,13 +85,13 @@ export function Pricing() {
           className="p-8 rounded-3xl bg-[var(--surface-glass)] border border-[var(--border-subtle)] flex flex-col hover:shadow-[var(--shadow-large)] transition-shadow"
         >
           <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">Enterprise</h3>
-          <p className="text-[var(--text-secondary)] text-sm mb-6">Mission-critical support and security.</p>
+          <p className="text-[var(--text-secondary)] text-sm mb-6">For large organizations with strict security needs.</p>
           <div className="mb-6">
             <span className="text-4xl font-bold text-[var(--text-primary)]">Custom</span>
           </div>
           <ul className="space-y-4 mb-8 flex-1 text-sm text-[var(--text-secondary)]">
             <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Unlimited documents</li>
-            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Custom Vector Isolation</li>
+            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Private Data Isolation</li>
             <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> Dedicated Infrastructure</li>
             <li className="flex items-center gap-2"><Check className="w-4 h-4 text-status-success" /> 24/7 SLA Support</li>
           </ul>

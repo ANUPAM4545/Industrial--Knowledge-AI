@@ -5,9 +5,9 @@ import { SectionTitle } from '../SectionTitle'
 import { Quote } from 'lucide-react'
 
 const testimonials = [
-  { quote: "ForgeMind AI transformed how our engineers access SOPs. What used to take 20 minutes now takes 2 seconds.", author: "Sarah Jenkins", role: "VP of Engineering, Siemens" },
-  { quote: "The explainable AI feature is a game-changer. We can actually trust the answers because we can verify the source.", author: "David Chen", role: "Director of Operations, ABB" },
-  { quote: "Finally, an enterprise AI platform that respects our data privacy and delivers sub-second response times.", author: "Elena Rodriguez", role: "CTO, Honeywell" },
+  { quote: "We used to spend hours digging through engineering manuals. Now, our technicians just ask ForgeMind and get the exact page they need instantly.", author: "Sarah Jenkins", role: "VP of Engineering, Apex Manufacturing" },
+  { quote: "Our maintenance team is 30% faster on the floor. Instead of guessing, they get immediate, accurate answers straight from our equipment logs.", author: "David Chen", role: "Director of Operations, Nexus Energy" },
+  { quote: "Onboarding new logistics coordinators used to take months. With ForgeMind, they just ask questions and instantly learn our complex shipping protocols.", author: "Elena Rodriguez", role: "Logistics Manager, Horizon Freight" },
 ]
 
 export function Testimonials() {

@@ -115,16 +115,16 @@ export function CTA() {
         className="relative z-20 max-w-3xl mx-auto px-4"
       >
         <h2 className="text-4xl md:text-6xl font-bold mb-6 text-[var(--text-primary)] tracking-tight">
-          Ready to Transform <br /> Industrial Knowledge?
+          Ready to unify <br /> your knowledge?
         </h2>
         <p className="text-lg md:text-xl text-[var(--text-secondary)] mb-12">
-          Join leading enterprises using ForgeMind AI to turn static documents into actionable intelligence.
+          Join leading companies using ForgeMind to turn static documents into a powerful AI assistant.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Link to="/register" className="w-full sm:w-auto">
             <MagneticButton className="group px-10 py-5 bg-[var(--text-primary)] hover:bg-[var(--text-secondary)] text-[var(--bg-primary)] rounded-xl text-lg font-bold shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] w-full">
-              Launch Platform <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              Upload Your First Document <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </MagneticButton>
           </Link>
           <MagneticButton className="px-10 py-5 bg-[var(--surface-glass)] hover:bg-[var(--surface-elevated)] text-[var(--text-primary)] rounded-xl text-lg font-semibold border border-[var(--border-subtle)] backdrop-blur-sm w-full sm:w-auto">
