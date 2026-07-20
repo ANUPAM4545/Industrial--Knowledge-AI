@@ -25,8 +25,9 @@ class ChatService:
     """
     Orchestrates the entire RAG pipeline.
     """
-    def __init__(self, repository: ChatRepository, similarity_service: SimilaritySearchService, security_service: SecurityService = None):
+    def __init__(self, repository: ChatRepository, document_repository, similarity_service: SimilaritySearchService, security_service: SecurityService = None):
         self.repository = repository
+        self.document_repository = document_repository
         self.retriever = RAGRetriever(similarity_service)
         self.security_service = security_service
         self.query_processor = QueryProcessor()
@@ -39,6 +40,7 @@ class ChatService:
     async def process_chat(
         self, 
         user_id: str, 
+        workspace_id: str,
         query: str, 
         conversation_id: Optional[str] = None
     ) -> Dict[str, Any]:
@@ -61,12 +63,41 @@ class ChatService:
                     "traces": []
                 }
 
+        # 1.5 Document Base Check
+        user_docs, _ = await self.document_repository.list_by_workspace(workspace_id=workspace_id, page_size=1)
+        if not user_docs:
+            return {
+                "conversation_id": conversation_id or "blocked",
+                "answer": "No documents have been indexed yet. Upload a document to start chatting.",
+                "citations": [],
+                "traces": []
+            }
+        
+        has_ready = any(d.status.value == "ready" for d in user_docs) if user_docs else False
+        if not has_ready:
+            # Let's get the full list to check processing vs failed
+            all_docs, _ = await self.document_repository.list_by_workspace(workspace_id=workspace_id, page_size=100)
+            if all_docs and any(d.status.value in ["uploaded", "processing"] for d in all_docs):
+                msg = "Your documents are still being processed. Please wait until indexing is complete."
+            else:
+                msg = "No documents have been successfully indexed yet. Upload a document to start chatting."
+                
+            return {
+                "conversation_id": conversation_id or "blocked",
+                "answer": msg,
+                "citations": [],
+                "traces": []
+            }
+            
+        valid_document_ids = [d.id for d in user_docs if d.status.value == "ready"]
+        document_titles = {d.id: d.title for d in user_docs}
+
         # 2. Conversation Management
         if not conversation_id:
-            conv = await self.repository.create_conversation(title=query[:50], user_id=user_id)
+            conv = await self.repository.create_conversation(title=query[:50], user_id=user_id, workspace_id=workspace_id)
             conversation_id = conv.id
         else:
-            conv = await self.repository.get_conversation(conversation_id, user_id)
+            conv = await self.repository.get_conversation(conversation_id, user_id, workspace_id)
             if not conv:
                 raise ValueError("Conversation not found")
                 
@@ -83,6 +114,8 @@ class ChatService:
         # 3. Build Initial State
         initial_state: CopilotState = {
             "conversation_id": conversation_id,
+            "user_id": user_id,
+            "workspace_id": workspace_id,
             "messages": state_messages,
             "current_intent": "",
             "extracted_entities": [],
@@ -91,7 +124,12 @@ class ChatService:
             "traces": [],
             "final_answer": "",
             "confidence_score": 0.0,
-            "next_action": ""
+            "next_action": "",
+            "validation_passed": False,
+            "no_context_found": False,
+            "citations": [],
+            "valid_document_ids": valid_document_ids,
+            "document_titles": document_titles
         }
         
         # 4. Run Orchestrator
@@ -117,14 +155,16 @@ class ChatService:
         
         # We can extract citations from the retrieved_chunks in the state
         chunks = final_state.get("retrieved_chunks", [])
-        citations = self.citation_builder.build(chunks) if chunks else []
+        document_titles = final_state.get("document_titles", {})
+        citations = self.citation_builder.build(chunks, document_titles) if chunks else []
         
         # 5. Save Messages
-        await self.repository.add_message(conversation_id, Role.USER.value, query)
+        await self.repository.add_message(conversation_id, Role.USER.value, query, workspace_id)
         await self.repository.add_message(
             conversation_id=conversation_id, 
             role=Role.ASSISTANT.value, 
             content=answer, 
+            workspace_id=workspace_id,
             context_json={"citations": citations, "traces": traces}
         )
         
@@ -138,28 +178,57 @@ class ChatService:
     async def process_chat_stream(
         self, 
         user_id: str, 
+        workspace_id: str,
         query: str, 
         conversation_id: Optional[str] = None
     ) -> AsyncGenerator[str, None]:
         """Process a chat query and stream the response via SSE format."""
+        import time
+        import asyncio
+        
+        start_time = time.time()
         
         # 1. Security Scan (Input)
         if self.security_service:
             sec_result = await self.security_service.scan_chat_input(query, user_id, conversation_id)
             if sec_result.decision == SecurityDecision.BLOCK:
-                yield f"data: {json.dumps({'type': 'chunk', 'content': 'This request could not be completed because it conflicts with the platform\\'s safety and security policies.'})}\n\n"
+                msg = "This request could not be completed because it conflicts with the platform's safety and security policies."
+                yield f"data: {json.dumps({'type': 'chunk', 'content': msg})}\n\n"
                 yield f"data: {json.dumps({'type': 'done'})}\n\n"
                 return
             elif sec_result.decision == SecurityDecision.REVIEW:
-                yield f"data: {json.dumps({'type': 'chunk', 'content': 'This request is potentially sensitive. Please rephrase.'})}\n\n"
+                msg = "This request is potentially sensitive. Please rephrase."
+                yield f"data: {json.dumps({'type': 'chunk', 'content': msg})}\n\n"
                 yield f"data: {json.dumps({'type': 'done'})}\n\n"
                 return
 
+        # 1.5 Document Base Check
+        user_docs, _ = await self.document_repository.list_by_workspace(workspace_id=workspace_id, page_size=1)
+        if not user_docs:
+            msg = "No documents have been indexed yet. Upload a document to start chatting."
+            yield f"data: {json.dumps({'type': 'chunk', 'content': msg})}\n\n"
+            yield f"data: {json.dumps({'type': 'done'})}\n\n"
+            return
+            
+        has_ready = any(d.status.value == "ready" for d in user_docs) if user_docs else False
+        if not has_ready:
+            all_docs, _ = await self.document_repository.list_by_workspace(workspace_id=workspace_id, page_size=100)
+            if all_docs and any(d.status.value in ["uploaded", "processing"] for d in all_docs):
+                msg = "Your documents are still being processed. Please wait until indexing is complete."
+            else:
+                msg = "No documents have been successfully indexed yet. Upload a document to start chatting."
+            yield f"data: {json.dumps({'type': 'chunk', 'content': msg})}\n\n"
+            yield f"data: {json.dumps({'type': 'done'})}\n\n"
+            return
+            
+        valid_document_ids = [d.id for d in user_docs if d.status.value == "ready"]
+        document_titles = {d.id: d.title for d in user_docs}
+
         if not conversation_id:
-            conv = await self.repository.create_conversation(title=query[:50], user_id=user_id)
+            conv = await self.repository.create_conversation(title=query[:50], user_id=user_id, workspace_id=workspace_id)
             conversation_id = conv.id
         else:
-            conv = await self.repository.get_conversation(conversation_id, user_id)
+            conv = await self.repository.get_conversation(conversation_id, user_id, workspace_id)
             if not conv:
                 yield f"data: {json.dumps({'error': 'Conversation not found'})}\n\n"
                 return
@@ -174,6 +243,8 @@ class ChatService:
         # 3. Build Initial State
         initial_state: CopilotState = {
             "conversation_id": conversation_id,
+            "user_id": user_id,
+            "workspace_id": workspace_id,
             "messages": state_messages,
             "current_intent": "",
             "extracted_entities": [],
@@ -182,50 +253,80 @@ class ChatService:
             "traces": [],
             "final_answer": "",
             "confidence_score": 0.0,
-            "next_action": ""
+            "next_action": "",
+            "validation_passed": False,
+            "no_context_found": False,
+            "citations": [],
+            "valid_document_ids": valid_document_ids,
+            "document_titles": document_titles
         }
 
         # Save user message immediately
-        await self.repository.add_message(conversation_id, Role.USER.value, query)
+        await self.repository.add_message(conversation_id, Role.USER.value, query, workspace_id)
         
-        # Run Orchestrator
-        final_state = await self.orchestrator.run(initial_state)
-        
-        chunks = final_state.get("retrieved_chunks", [])
-        if chunks and self.security_service:
-            text_chunks = [c.page_content if hasattr(c, "page_content") else str(c) for c in chunks]
-            await self.security_service.scan_and_sanitize_context(text_chunks, user_id, conversation_id)
-        
-        answer = final_state.get("final_answer", "I could not process that request.")
-        
-        if self.security_service:
-            out_res = await self.security_service.scan_chat_output(answer, user_id, conversation_id)
-            if out_res.decision == SecurityDecision.BLOCK:
-                answer = "This request could not be completed because it conflicts with the platform's safety and security policies."
-                
-        traces = final_state.get("traces", [])
-        chunks = final_state.get("retrieved_chunks", [])
-        citations = self.citation_builder.build(chunks) if chunks else []
-        
-        # Yield metadata (citations, convo ID, traces) first
-        meta_event = {
-            "type": "metadata",
-            "conversation_id": conversation_id,
-            "citations": citations,
-            "traces": traces
-        }
-        yield f"data: {json.dumps(meta_event)}\n\n"
-        
-        # Yield the answer in one go (or chunk it manually for visual effect)
-        # In a full langgraph stream, we'd use astream() instead of run()
-        for i in range(0, len(answer), 20):
-            yield f"data: {json.dumps({'type': 'chunk', 'content': answer[i:i+20]})}\n\n"
+        try:
+            # Run Orchestrator. The reasoning agent inside generates and validates the entire response
+            # to guarantee no unverified output is exposed.
+            final_state = await self.orchestrator.run(initial_state)
             
-        # Yield done and save AI response
-        yield f"data: {json.dumps({'type': 'done'})}\n\n"
-        await self.repository.add_message(
-            conversation_id=conversation_id, 
-            role=Role.ASSISTANT.value, 
-            content=answer, 
-            context_json={"citations": citations, "traces": traces}
-        )
+            ttft = time.time() - start_time
+            
+            chunks = final_state.get("retrieved_chunks", [])
+            if chunks and self.security_service:
+                text_chunks = [c.page_content if hasattr(c, "page_content") else str(c) for c in chunks]
+                await self.security_service.scan_and_sanitize_context(text_chunks, user_id, conversation_id)
+            
+            answer = final_state.get("final_answer", "I could not process that request.")
+            
+            if self.security_service:
+                out_res = await self.security_service.scan_chat_output(answer, user_id, conversation_id)
+                if out_res.decision == SecurityDecision.BLOCK:
+                    answer = "This request could not be completed because it conflicts with the platform's safety and security policies."
+                    
+            traces = final_state.get("traces", [])
+            chunks = final_state.get("retrieved_chunks", [])
+            document_titles = final_state.get("document_titles", {})
+            citations = self.citation_builder.build(chunks, document_titles) if chunks else []
+            
+            # Update traces with overall streaming metrics
+            completion_time = time.time() - start_time
+            tokens_sec = len(answer.split()) / completion_time if completion_time > 0 else 0
+            for t in traces:
+                if t.get("agent_name") == "Advanced Reasoning Agent":
+                    if "metadata" not in t:
+                        t["metadata"] = {}
+                    t["metadata"]["ttft_sec"] = round(ttft, 2)
+                    t["metadata"]["total_generation_time"] = round(completion_time, 2)
+                    t["metadata"]["tokens_per_sec"] = round(tokens_sec, 2)
+            
+            # Yield metadata (citations, convo ID, traces) first
+            meta_event = {
+                "type": "metadata",
+                "conversation_id": conversation_id,
+                "citations": citations,
+                "traces": traces
+            }
+            yield f"data: {json.dumps(meta_event)}\n\n"
+            
+            # Stream the validated answer to simulate real-time typing safely
+            for i in range(0, len(answer), 20):
+                yield f"data: {json.dumps({'type': 'chunk', 'content': answer[i:i+20]})}\n\n"
+                await asyncio.sleep(0.01) # Backpressure/disconnect yield point
+                
+            # Yield done and save AI response
+            yield f"data: {json.dumps({'type': 'done'})}\n\n"
+            await self.repository.add_message(
+                conversation_id=conversation_id, 
+                role=Role.ASSISTANT.value, 
+                content=answer, 
+                workspace_id=workspace_id,
+                context_json={"citations": citations, "traces": traces}
+            )
+        except asyncio.CancelledError:
+            # Client disconnected mid-stream
+            print(f"Stream cancelled by client for conversation {conversation_id}")
+            raise
+        except Exception as e:
+            print(f"Streaming error: {e}")
+            yield f"data: {json.dumps({'type': 'chunk', 'content': 'An error occurred during generation.'})}\n\n"
+            yield f"data: {json.dumps({'type': 'done'})}\n\n"

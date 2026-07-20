@@ -12,7 +12,7 @@ class AgentTrace(TypedDict):
     agent_name: str
     action: str
     latency_ms: float
-    confidence: float
+    confidence: str
     metadata: Dict[str, Any]
 
 
@@ -22,6 +22,7 @@ class CopilotState(TypedDict):
     """
     # Conversation
     conversation_id: str
+    user_id: str
     messages: Annotated[List[Dict[str, Any]], operator.add]
     
     # Internal Reasoning State
@@ -37,6 +38,14 @@ class CopilotState(TypedDict):
     final_answer: str
     confidence_score: float
     next_action: str # Indicates where the graph should route next
+    
+    # Validation & RAG Metadata
+    validation_passed: bool
+    no_context_found: bool
+    citations: List[Dict[str, Any]]
+    valid_document_ids: List[str]
+    document_titles: Dict[str, str]
+
 
 
 class BaseAgent(ABC):
