@@ -10,6 +10,7 @@ interface UIState {
   zoomLevel: number
   lastViewedPages: Record<string, number>
   developerMode: boolean
+  workspaceMode: 'empty' | 'demo' | 'live'
 
   tourState: {
     isActive: boolean

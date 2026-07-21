@@ -1,11 +1,11 @@
 """
 Authentication Endpoints
 """
-from fastapi import APIRouter, status
+from fastapi import Request, APIRouter, status
 
-from app.api.deps import CurrentUser
-from app.schemas.user import UserResponse
-from fastapi import Depends
+from app.api.deps import DBSession, CurrentUser
+from app.schemas.user import UpdateUserRequest, UserResponse
+from fastapi import Request, Depends
 from app.security.rate_limit.decorators import rate_limit
 from app.security.rate_limit.models import LimitType
 
@@ -20,8 +20,8 @@ router = APIRouter()
 )
 async def get_me(
     current_user: CurrentUser,
-    request: __import__('fastapi').Request,
-    session: __import__('app.api.deps', fromlist=['DBSession']).DBSession
+    request: Request,
+    session: DBSession
 ) -> UserResponse:
     """
     Return the profile of the currently authenticated user from the local database.
@@ -57,9 +57,9 @@ async def get_me(
     dependencies=[Depends(rate_limit(LimitType.AUTH, "me_update"))]
 )
 async def update_me(
-    payload: __import__('app.schemas.user', fromlist=['UpdateUserRequest']).UpdateUserRequest,
+    payload: UpdateUserRequest,
     current_user: CurrentUser,
-    session: __import__('app.api.deps', fromlist=['DBSession']).DBSession
+    session: DBSession
 ) -> UserResponse:
     """
     Update the current user's profile information (e.g. department, full_name).

@@ -12,10 +12,9 @@ All routes are JWT-protected via CurrentUser.
 Business logic lives in DocumentService — routers only handle HTTP.
 """
 from typing import Optional
-from fastapi import APIRouter, File, Form, Query, Response, UploadFile, status, Depends
-from fastapi.responses import StreamingResponse
+from fastapi import Request, APIRouter, File, Form, Query, Response, UploadFile, status, Depends
 
-from app.api.deps import CurrentUser, CurrentWorkspace, DBSession, Storage
+from app.api.deps import DBSession, CurrentUser, CurrentWorkspace, DBSession, Storage
 from app.schemas.document import (
     DocumentListResponse,
     DocumentResponse,
@@ -42,7 +41,7 @@ async def upload_document(
     current_workspace: CurrentWorkspace,
     session: DBSession,
     storage: Storage,
-    request: __import__('fastapi').Request,
+    request: Request,
     file: UploadFile = File(..., description="PDF or DOCX file, max 50 MB"),
     title: str = Form(..., min_length=1, max_length=500),
     description: Optional[str] = Form(None),
@@ -134,17 +133,6 @@ async def get_document(
     """
     service = DocumentService(session, storage)
     document = await service.get_document(document_id, workspace_id=current_workspace.id)
-    from app.services.audit_service import AuditService
-    audit = AuditService(session)
-    await audit.log_action(
-        action="DOCUMENT_UPLOAD",
-        status="SUCCESS",
-        workspace_id=current_workspace.id,
-        user_id=current_user.id,
-        resource_type="DOCUMENT",
-        resource_id=document.id,
-        request=request
-    )
     return DocumentResponse.model_validate(document)
 
 
@@ -215,7 +203,7 @@ async def delete_document(
     current_workspace: CurrentWorkspace,
     session: DBSession,
     storage: Storage,
-    request: __import__('fastapi').Request,
+    request: Request,
 ) -> None:
     """
     Soft delete a document.

@@ -21,7 +21,7 @@ export interface Message {
   id: string;
   role: 'user' | 'assistant' | 'system';
   content: string;
-  context_json?: { citations?: Citation[] };
+  context_json?: { citations?: Citation[], traces?: any[] };
   created_at: string;
 }
 

@@ -2,7 +2,7 @@
 NEXO — Chat API Router
 """
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import Request, APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,7 +10,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import CurrentUser, CurrentWorkspace, get_db
 from app.chat.chat_repository import ChatRepository
 from app.chat.chat_service import ChatService
-from app.models.user import User
 from app.repositories.document_repository import DocumentRepository
 from app.services.similarity_service import SimilaritySearchService
 from app.security.security_service import SecurityService
@@ -46,7 +45,7 @@ async def process_chat(
     request: ChatRequest,
     current_user: CurrentUser,
     current_workspace: CurrentWorkspace,
-    fastapi_req: __import__('fastapi').Request,
+    fastapi_req: Request,
     db: AsyncSession = Depends(get_db),
     chat_service: ChatService = Depends(get_chat_service)
 ):
@@ -84,7 +83,7 @@ async def process_chat_stream(
     request: ChatRequest,
     current_user: CurrentUser,
     current_workspace: CurrentWorkspace,
-    fastapi_req: __import__('fastapi').Request,
+    fastapi_req: Request,
     db: AsyncSession = Depends(get_db),
     chat_service: ChatService = Depends(get_chat_service)
 ):

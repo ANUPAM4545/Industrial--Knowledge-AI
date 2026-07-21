@@ -78,6 +78,7 @@ export interface Message {
   role: MessageRole
   content: string
   citations?: Citation[]
+  context_json?: { citations?: Citation[], traces?: any[] }
   tokens_used?: number
   model_used?: string
   created_at: string

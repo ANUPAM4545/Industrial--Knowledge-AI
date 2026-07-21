@@ -67,7 +67,6 @@ async def get_current_user(
     """
     from app.services.clerk_service import verify_clerk_token, fetch_clerk_user_info
     from sqlalchemy import select
-    from fastapi import Request
     
     # Priority: Header -> Query Parameter
     actual_token = token or query_token
@@ -125,7 +124,7 @@ def get_notification_service(session: DBSession):
     repository = NotificationRepository(session)
     return NotificationService(repository)
 
-NotificationSvc = Annotated[__import__('app.services.notification_service', fromlist=['NotificationService']).NotificationService, Depends(get_notification_service)]
+NotificationSvc = Annotated['NotificationService', Depends(get_notification_service)]
 
 
 # ─── RBAC Dependency Factory ────────────────────────────────────────
@@ -164,7 +163,7 @@ async def get_current_workspace(
     """
     from sqlalchemy import select
     from sqlalchemy.orm import selectinload
-    from app.models.workspace import Workspace, WorkspaceMember, WorkspaceRole
+    from app.models.workspace import Workspace, WorkspaceRole
     from app.models.workspace_settings import WorkspaceSettings
 
     if not x_workspace_id:

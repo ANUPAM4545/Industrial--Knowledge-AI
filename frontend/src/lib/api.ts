@@ -27,11 +27,11 @@ function getHeaders(customHeaders: HeadersInit = {}) {
   };
 
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    (headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;
   }
   
   if (workspaceId) {
-    headers['X-Workspace-ID'] = workspaceId;
+    (headers as Record<string, string>)['X-Workspace-ID'] = workspaceId;
   }
   
   return headers;
