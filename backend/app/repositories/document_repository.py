@@ -25,28 +25,20 @@ class DocumentRepository:
 
     # ─── Read ──────────────────────────────────────────────────────────
 
-    async def get_by_id(self, document_id: str) -> Optional[Document]:
-        """Fetch a single document by primary key."""
-        result = await self._session.execute(
-            select(Document).where(Document.id == document_id)
-        )
-        return result.scalar_one_or_none()
-
-    async def get_by_id_and_owner(
-        self, document_id: str, owner_id: str
-    ) -> Optional[Document]:
-        """Fetch a document only if it belongs to the given owner."""
+    async def get_by_id(self, document_id: str, workspace_id: str) -> Optional[Document]:
+        """Fetch a single document by primary key and workspace."""
         result = await self._session.execute(
             select(Document).where(
                 Document.id == document_id,
-                Document.owner_id == owner_id,
+                Document.workspace_id == workspace_id,
+                Document.deleted_at.is_(None)
             )
         )
         return result.scalar_one_or_none()
 
-    async def list_by_owner(
+    async def list_by_workspace(
         self,
-        owner_id: str,
+        workspace_id: str,
         *,
         page: int = 1,
         page_size: int = 20,
@@ -54,11 +46,14 @@ class DocumentRepository:
         search: Optional[str] = None,
     ) -> tuple[list[Document], int]:
         """
-        Paginated list of documents for a given owner.
+        Paginated list of documents for a given workspace.
 
         Returns (items, total_count).
         """
-        base_query = select(Document).where(Document.owner_id == owner_id)
+        base_query = select(Document).where(
+            Document.workspace_id == workspace_id,
+            Document.deleted_at.is_(None)
+        )
 
         if status_filter is not None:
             base_query = base_query.where(Document.status == status_filter)
@@ -99,6 +94,7 @@ class DocumentRepository:
         file_size: int,
         mime_type: str,
         owner_id: str,
+        workspace_id: str,
         description: Optional[str] = None,
         category: Optional[str] = None,
         tags: Optional[str] = None,
@@ -125,6 +121,7 @@ class DocumentRepository:
             document_type=doc_type,
             status=DocumentStatus.UPLOADED,
             owner_id=owner_id,
+            workspace_id=workspace_id,
             description=description,
             category=category,
             tags=tags,
@@ -140,6 +137,7 @@ class DocumentRepository:
             "Document record created",
             document_id=doc.id,
             owner_id=owner_id,
+            workspace_id=workspace_id,
             size=file_size,
         )
         return doc
@@ -166,8 +164,12 @@ class DocumentRepository:
         )
         return document
 
-    async def delete(self, document: Document) -> None:
-        """Remove a document record from the database."""
-        await self._session.delete(document)
+    async def delete(self, document: Document, deleted_by: str) -> None:
+        """Soft remove a document record from the database."""
+        from datetime import datetime, timezone
+        document.deleted_at = datetime.now(timezone.utc)
+        document.deleted_by = deleted_by
+        
+        self._session.add(document)
         await self._session.flush()
-        logger.info("Document record deleted", document_id=document.id)
+        logger.info("Document record soft deleted", document_id=document.id)

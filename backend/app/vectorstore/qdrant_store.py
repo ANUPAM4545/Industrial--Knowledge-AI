@@ -20,7 +20,8 @@ class QdrantVectorStore(VectorStore):
     
     def __init__(self, url: str = None):
         self._url = url or settings.QDRANT_URL
-        self._client = AsyncQdrantClient(url=self._url)
+        api_key = getattr(settings, "QDRANT_API_KEY", None)
+        self._client = AsyncQdrantClient(url=self._url, api_key=api_key if api_key else None)
 
     async def create_collection(self, collection_name: str, dimension: int) -> None:
         """Create a new collection if it doesn't exist."""
@@ -80,10 +81,14 @@ class QdrantVectorStore(VectorStore):
         if filter_dict:
             conditions = []
             for key, value in filter_dict.items():
+                if isinstance(value, list):
+                    match_condition = qmodels.MatchAny(any=value)
+                else:
+                    match_condition = qmodels.MatchValue(value=value)
                 conditions.append(
                     qmodels.FieldCondition(
                         key=key,
-                        match=qmodels.MatchValue(value=value)
+                        match=match_condition
                     )
                 )
             qdrant_filter = qmodels.Filter(must=conditions)

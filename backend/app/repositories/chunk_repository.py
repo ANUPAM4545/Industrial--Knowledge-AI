@@ -50,6 +50,54 @@ class ChunkRepository:
         return result.scalars().all()
 
     @staticmethod
+    async def search_keyword(db: AsyncSession, query: str, document_ids: List[str], limit: int = 20) -> List[dict]:
+        """
+        Perform a keyword (lexical) search using PostgreSQL Full Text Search.
+        Returns dictionaries compatible with the similarity search results.
+        """
+        if not document_ids:
+            return []
+            
+        # Use websearch_to_tsquery for better user query handling (handles quotes, OR, -, etc.)
+        # and plainto_tsquery as fallback or just use plainto_tsquery
+        
+        stmt = (
+            select(
+                Chunk,
+                func.ts_rank_cd(
+                    func.to_tsvector('english', Chunk.text), 
+                    func.plainto_tsquery('english', query)
+                ).label('rank')
+            )
+            .where(Chunk.document_id.in_(document_ids))
+            .where(
+                func.to_tsvector('english', Chunk.text).op('@@')(func.plainto_tsquery('english', query))
+            )
+            .order_by(func.ts_rank_cd(
+                func.to_tsvector('english', Chunk.text), 
+                func.plainto_tsquery('english', query)
+            ).desc())
+            .limit(limit)
+        )
+        
+        result = await db.execute(stmt)
+        rows = result.all()
+        
+        formatted_results = []
+        for chunk, rank in rows:
+            formatted_results.append({
+                "score": float(rank), # We use rank as the lexical score
+                "chunk_id": chunk.id, # Internal DB ID or just use index
+                "document_id": chunk.document_id,
+                "chunk_index": chunk.chunk_index,
+                "text": chunk.text,
+                "page_number": chunk.page_number,
+                "heading": chunk.heading
+            })
+            
+        return formatted_results
+
+    @staticmethod
     async def get_chunk_summary(db: AsyncSession, document_id: str) -> ChunkProcessingSummary:
         """
         Calculate and return a summary of chunk quality metrics for a document.

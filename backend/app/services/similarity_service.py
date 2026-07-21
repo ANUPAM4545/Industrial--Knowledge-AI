@@ -15,6 +15,7 @@ class SimilaritySearchService:
         query: str,
         limit: int = 5,
         document_id: Optional[str] = None,
+        document_ids: Optional[List[str]] = None,
         collection_name: Optional[str] = None
     ) -> List[Dict[str, Any]]:
         """
@@ -42,6 +43,8 @@ class SimilaritySearchService:
         filter_dict = None
         if document_id:
             filter_dict = {"document_id": document_id}
+        elif document_ids:
+            filter_dict = {"document_id": document_ids}
             
         # 4. Execute search
         results = await vector_store.search(

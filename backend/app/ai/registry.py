@@ -68,8 +68,8 @@ class AIRegistry:
             store_name = settings.VECTOR_STORE
             if store_name not in self.vector_stores:
                 if store_name == "qdrant":
-                    from app.storage.qdrant_store import QdrantStore
-                    self.register_vector_store("qdrant", QdrantStore)
+                    from app.vectorstore.qdrant_store import QdrantVectorStore
+                    self.register_vector_store("qdrant", QdrantVectorStore)
                 else:
                     raise ValueError(f"Unknown vector store: {store_name}")
             

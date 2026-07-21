@@ -15,8 +15,8 @@ class GeminiProvider(LLMProvider):
     Google Gemini implementation for the LLMProvider interface.
     """
     
-    def __init__(self, model_name: str = "gemini-2.5-flash"):
-        self._model_name = model_name
+    def __init__(self, model_name: Optional[str] = None):
+        self._model_name = model_name or getattr(settings, "GEMINI_MODEL", "gemini-2.5-flash")
         # The new official SDK is `google-genai` which uses `from google import genai`
         self._client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
