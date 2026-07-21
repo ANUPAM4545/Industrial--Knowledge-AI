@@ -25,15 +25,15 @@
     <a href="https://clerk.dev/"><img src="https://img.shields.io/badge/Clerk-Auth-6C47FF?style=flat-square&logo=clerk&logoColor=white" alt="Clerk" /></a>
     <a href="https://deepmind.google/technologies/gemini/"><img src="https://img.shields.io/badge/Gemini-AI-4285F4?style=flat-square&logo=google&logoColor=white" alt="Gemini" /></a>
     <a href="https://www.docker.com/"><img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/PWA-Ready-5A0FC8?style=flat-square&logo=pwa&logoColor=white" alt="PWA Ready" /></a>
+    <img src="https://img.shields.io/badge/PWA-Ready-5A0FC8?style=flat-square&logo=pwa&logoColor=white" alt="PWA Ready" />
   </p>
 
   <p align="center">
-    <a href="#installation"><strong>Installation</strong></a> ·
-    <a href="#what-is-nexo"><strong>About</strong></a> ·
-    <a href="#architecture"><strong>Architecture</strong></a> ·
-    <a href="#api-reference"><strong>Docs</strong></a> ·
-    <a href="#contribution-guide"><strong>Contribute</strong></a>
+    <a href="#-installation"><strong>Installation</strong></a> ·
+    <a href="#-what-is-nexo"><strong>About</strong></a> ·
+    <a href="#-architecture"><strong>Architecture</strong></a> ·
+    <a href="#-api-reference"><strong>Docs</strong></a> ·
+    <a href="#-contribution-guide"><strong>Contribute</strong></a>
   </p>
 
   <br />
