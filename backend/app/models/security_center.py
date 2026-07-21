@@ -8,28 +8,32 @@ from datetime import datetime
 from sqlalchemy import Boolean, String, Integer, Float, JSON, DateTime, Index
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.db.base import Base
+from app.db.base import Base, WorkspaceMixin
 
 
-class AuditLog(Base):
+class AuditLog(Base, WorkspaceMixin):
     """
-    Immutable audit log for tracking system mutations (admin actions, RBAC changes, etc).
+    Immutable audit log for tracking system mutations and security events.
     """
     __tablename__ = "audit_logs"
 
     # id, created_at, updated_at provided by Base
+    # workspace_id provided by WorkspaceMixin
+    
     user_id: Mapped[Optional[str]] = mapped_column(String(255), index=True, nullable=True)
-    user_snapshot: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True) # E.g., {"email": "...", "role": "admin"}
+    session_id: Mapped[Optional[str]] = mapped_column(String(255), index=True, nullable=True)
     
-    action: Mapped[str] = mapped_column(String(255), index=True, nullable=False) # e.g. "USER_ROLE_CHANGED"
-    resource_type: Mapped[Optional[str]] = mapped_column(String(100), index=True, nullable=True) # e.g. "USER"
+    action: Mapped[str] = mapped_column(String(255), index=True, nullable=False) # e.g. "DOCUMENT_UPLOAD", "LOGIN_FAILED"
+    resource_type: Mapped[Optional[str]] = mapped_column(String(100), index=True, nullable=True) # e.g. "DOCUMENT"
     resource_id: Mapped[Optional[str]] = mapped_column(String(255), index=True, nullable=True)
-    
-    old_value: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
-    new_value: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
     
     ip_address: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     user_agent: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    
+    status: Mapped[str] = mapped_column(String(50), index=True, nullable=False) # "SUCCESS", "FAILURE", "BLOCKED"
+    severity: Mapped[str] = mapped_column(String(50), default="INFO", nullable=False) # "INFO", "WARNING", "CRITICAL"
+    
+    metadata_json: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
     
     __table_args__ = (
         Index('ix_audit_logs_action_time', 'action', 'created_at'),

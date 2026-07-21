@@ -61,9 +61,14 @@ class Settings(BaseSettings):
     AI_SERVICE_URL: str = "http://ai-service:8001"
     
     # ─── LLM Configuration ───────────────────────────────────────
-    LLM_PROVIDER: str = "openai"
+    LLM_PROVIDER: str = "gemini"
     OPENAI_API_KEY: str = ""
     GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-2.5-flash"
+    
+    # ─── Retrieval Settings ──────────────────────────────────────
+    MIN_CONFIDENCE_SCORE: float = 0.65
+    HIGH_CONFIDENCE_SCORE: float = 0.80
     
     # ─── Embeddings & Vector Store ───────────────────────────────
     EMBEDDING_PROVIDER: str = "fastembed"
@@ -71,6 +76,7 @@ class Settings(BaseSettings):
     EMBEDDING_MODEL: str = "BAAI/bge-small-en-v1.5"
     QDRANT_URL: str = "http://qdrant:6333"
     QDRANT_COLLECTION: str = "documents"
+    QDRANT_API_KEY: str = ""
 
     # ─── File Upload ─────────────────────────────────────────────
     UPLOAD_DIR: str = "/app/uploads"

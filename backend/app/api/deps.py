@@ -85,19 +85,27 @@ async def get_current_user(
     result = await session.execute(stmt)
     user = result.scalar_one_or_none()
 
-    if not user:
-        # Auto-sync user if they do not exist
+    if not user or user.full_name == "Unknown User":
+        # Auto-sync user if they do not exist or were previously saved as Unknown User
         user_info = await fetch_clerk_user_info(clerk_id)
-        user = User(
-            clerk_user_id=clerk_id,
-            email=user_info["email"],
-            full_name=user_info["full_name"],
-            role=UserRole.OPERATOR,
-            is_active=True
-        )
-        session.add(user)
-        await session.commit()
-        await session.refresh(user)
+        
+        # Only update if we successfully fetched real data
+        if user_info["full_name"] != "Unknown User":
+            if not user:
+                user = User(
+                    clerk_user_id=clerk_id,
+                    email=user_info["email"],
+                    full_name=user_info["full_name"],
+                    role=UserRole.OPERATOR,
+                    is_active=True
+                )
+                session.add(user)
+            else:
+                user.email = user_info["email"]
+                user.full_name = user_info["full_name"]
+                
+            await session.commit()
+            await session.refresh(user)
 
     if not user.is_active:
         raise ForbiddenException("User account is inactive")
@@ -124,13 +132,7 @@ NotificationSvc = Annotated[__import__('app.services.notification_service', from
 
 def require_roles(*roles: UserRole):
     """
-    Dependency factory: only allow users whose role is in `roles`.
-
-    Usage:
-        @router.get("/admin", dependencies=[Depends(require_roles(UserRole.ADMIN))])
-
-    Raises:
-        ForbiddenException: if the authenticated user's role is not permitted.
+    Global system role check (e.g. for superadmins).
     """
     async def _check_role(current_user: CurrentUser) -> User:
         if current_user.role not in roles:
@@ -143,6 +145,87 @@ def require_roles(*roles: UserRole):
 
     return _check_role
 
-
-# ─── Admin-only shortcut ────────────────────────────────────────────
 AdminOnly = Depends(require_roles(UserRole.ADMIN))
+
+# ─── Workspace Dependencies ──────────────────────────────────────────
+
+from fastapi import Header
+from app.models.workspace import Workspace, WorkspaceMember, WorkspaceRole
+
+async def get_current_workspace(
+    session: DBSession,
+    current_user: CurrentUser,
+    x_workspace_id: str = Header(None, description="The ID of the active workspace")
+) -> Workspace:
+    """
+    Validates that the current user belongs to the specified workspace, and returns the workspace.
+    If no workspace ID is provided in the header, defaults to the user's first active workspace.
+    If the user has NO workspaces, it auto-provisions a personal workspace.
+    """
+    from sqlalchemy import select
+    from sqlalchemy.orm import selectinload
+    from app.models.workspace import Workspace, WorkspaceMember, WorkspaceRole
+    from app.models.workspace_settings import WorkspaceSettings
+
+    if not x_workspace_id:
+        stmt = select(WorkspaceMember).where(
+            WorkspaceMember.user_id == current_user.id,
+            WorkspaceMember.is_active == True
+        ).options(selectinload(WorkspaceMember.workspace))
+        result = await session.execute(stmt)
+        member = result.scalars().first()
+        
+        if not member or not member.workspace.is_active:
+            # Auto-provision a Personal Workspace
+            new_workspace = Workspace(name=f"{current_user.full_name or 'User'}'s Workspace", description="Personal Workspace")
+            session.add(new_workspace)
+            await session.flush()
+            
+            settings = WorkspaceSettings(workspace_id=new_workspace.id)
+            session.add(settings)
+            
+            new_member = WorkspaceMember(workspace_id=new_workspace.id, user_id=current_user.id, role=WorkspaceRole.ADMIN)
+            session.add(new_member)
+            
+            await session.commit()
+            
+            new_workspace.current_user_role = WorkspaceRole.ADMIN
+            return new_workspace
+        
+        member.workspace.current_user_role = member.role
+        return member.workspace
+
+    stmt = select(WorkspaceMember).where(
+        WorkspaceMember.workspace_id == x_workspace_id,
+        WorkspaceMember.user_id == current_user.id,
+        WorkspaceMember.is_active == True
+    ).options(selectinload(WorkspaceMember.workspace))
+    
+    result = await session.execute(stmt)
+    member = result.scalar_one_or_none()
+    
+    if not member or not member.workspace.is_active:
+        raise ForbiddenException("You do not have access to this workspace or it is inactive.")
+        
+    # Attach role to workspace for convenience down the line
+    member.workspace.current_user_role = member.role
+    return member.workspace
+
+
+CurrentWorkspace = Annotated[Workspace, Depends(get_current_workspace)]
+
+
+def require_workspace_role(*roles: WorkspaceRole):
+    """
+    Dependency factory: allow users whose role in the CURRENT workspace is in `roles`.
+    """
+    async def _check_workspace_role(workspace: CurrentWorkspace) -> Workspace:
+        if workspace.current_user_role not in roles:
+            raise ForbiddenException(
+                f"This action requires one of workspace roles: "
+                f"{', '.join(r.value for r in roles)}. "
+                f"Your role is: {workspace.current_user_role.value}."
+            )
+        return workspace
+
+    return _check_workspace_role

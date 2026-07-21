@@ -40,6 +40,29 @@ class Base(DeclarativeBase):
         return f"<{self.__class__.__name__}(id={self.id})>"
 
 
+class WorkspaceMixin:
+    """Mixin to add workspace isolation to models."""
+    from sqlalchemy import String, ForeignKey
+    from sqlalchemy.orm import Mapped, mapped_column
+    
+    workspace_id: Mapped[str] = mapped_column(
+        String(36), 
+        ForeignKey("workspaces.id", ondelete="CASCADE"), 
+        index=True, 
+        nullable=False
+    )
+
+
+class SoftDeleteMixin:
+    """Mixin to add soft delete functionality to models."""
+    from datetime import datetime, timezone
+    from typing import Optional
+    from sqlalchemy import DateTime, String
+    from sqlalchemy.orm import Mapped, mapped_column
+    
+    deleted_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    deleted_by: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+
 # Import models at the bottom to register them with metadata without circular import cycles
 try:
     from app.models.user import User  # noqa
@@ -60,6 +83,16 @@ try:
     
     # Security Center
     from app.models.security_center import AuditLog, ActiveSession, BlockedEntity, SecurityReport, SecurityEvent # noqa
+
+    # Workspaces
+    from app.models.workspace import Workspace, WorkspaceMember # noqa
+    from app.models.workspace_settings import WorkspaceSettings # noqa
+
+    # AI Enterprise Models
+    from app.models.knowledge_graph import KnowledgeNode, KnowledgeEdge # noqa
+    from app.models.document_intelligence import DocumentIntelligence # noqa
+    from app.models.intelligence import Recommendation, WorkflowTemplate # noqa
+    from app.models.search_log import SearchLog # noqa
 except ImportError:
     pass
 

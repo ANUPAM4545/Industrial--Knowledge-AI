@@ -7,7 +7,7 @@ from typing import Optional
 from sqlalchemy import Boolean, Enum, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.db.base import Base
+from app.db.base import Base, SoftDeleteMixin
 
 
 class UserRole(str, enum.Enum):
@@ -28,7 +28,7 @@ class UserStatus(str, enum.Enum):
     PENDING = "pending"
 
 
-class User(Base):
+class User(Base, SoftDeleteMixin):
     """User account model."""
     __tablename__ = "users"
 

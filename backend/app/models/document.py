@@ -7,7 +7,7 @@ from typing import Optional
 from sqlalchemy import BigInteger, Enum, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.base import Base
+from app.db.base import Base, WorkspaceMixin, SoftDeleteMixin
 
 
 class DocumentStatus(str, enum.Enum):
@@ -32,8 +32,10 @@ class DocumentType(str, enum.Enum):
     OTHER = "other"
 
 
-class Document(Base):
-    """Uploaded industrial document."""
+class Document(Base, WorkspaceMixin, SoftDeleteMixin):
+    """
+    Represents an uploaded document in the system.
+    """
     __tablename__ = "documents"
 
     # Metadata
