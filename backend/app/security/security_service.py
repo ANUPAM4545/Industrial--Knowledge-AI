@@ -61,7 +61,7 @@ class SecurityService:
         await self.logger.log_event("chat_input", user_id, final_result, conversation_id)
         return final_result
 
-    async def scan_and_sanitize_context(self, chunks: List[str], user_id: str, conversation_id: Optional[str] = None) -> (List[str], SecurityScanResult):
+    async def scan_and_sanitize_context(self, chunks: List[str], user_id: str, conversation_id: Optional[str] = None) -> tuple[List[str], SecurityScanResult]:
         """Stage 3: Scan and sanitize retrieved context."""
         start_time = time.perf_counter()
         
