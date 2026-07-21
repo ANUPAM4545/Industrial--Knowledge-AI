@@ -76,6 +76,26 @@
       <img src="assets/screenshots/developer-mode.png" alt="Developer Mode" width="400"/>
     </td>
   </tr>
+  <tr>
+    <td width="50%" align="center">
+      <b>Knowledge Base</b><br />
+      <img src="assets/screenshots/knowledgebase.png" alt="Knowledge Base" width="400"/>
+    </td>
+    <td width="50%" align="center">
+      <b>Upload Documents</b><br />
+      <img src="assets/screenshots/upload-docs.png" alt="Upload Documents" width="400"/>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <b>AI Playground</b><br />
+      <img src="assets/screenshots/playground.png" alt="AI Playground" width="400"/>
+    </td>
+    <td width="50%" align="center">
+      <b>RAG AI Workflow</b><br />
+      <img src="assets/diagrams/rag-pipeline.svg" alt="RAG Pipeline" width="400"/>
+    </td>
+  </tr>
 </table>
 
 <details>
