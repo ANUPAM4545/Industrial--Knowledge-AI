@@ -4,7 +4,7 @@ NEXO — Celery Application Entrypoint
 import asyncio
 from celery import Celery
 from app.core.config import settings
-import app.db.models  # Pre-load all models to resolve SQLAlchemy foreign keys
+import app.db.models  # noqa: F401 (Pre-load all models to resolve SQLAlchemy foreign keys)
 
 # Initialize Celery App
 celery_app = Celery(
@@ -26,7 +26,6 @@ celery_app.conf.update(
 
 # Wrapper to run async tasks
 def run_async(coro):
-    import asyncio
     try:
         loop = asyncio.get_event_loop()
     except RuntimeError:

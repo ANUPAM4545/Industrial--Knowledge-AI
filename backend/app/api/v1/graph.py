@@ -1,11 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List, Dict, Any
 from app.db.session import get_db
 from app.api.deps import CurrentWorkspace
 from app.models.knowledge_graph import KnowledgeNode, KnowledgeEdge
-from app.models.workspace import Workspace
 
 router = APIRouter()
 

@@ -4,7 +4,6 @@ NEXO — Chat Service
 import json
 from typing import Any, AsyncGenerator, Dict, Optional
 
-from app.ai.registry import registry
 from app.chat.chat_repository import ChatRepository
 from app.chat.models import Role
 from app.rag.citation_builder import CitationBuilder

@@ -5,7 +5,7 @@ import enum
 from typing import Optional
 
 from sqlalchemy import BigInteger, Enum, ForeignKey, Integer, String, Text
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base, WorkspaceMixin, SoftDeleteMixin
 

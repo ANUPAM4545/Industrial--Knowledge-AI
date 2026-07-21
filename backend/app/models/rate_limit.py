@@ -1,11 +1,9 @@
 """
 NEXO — Rate Limit Models
 """
-import enum
 from typing import Optional
-from datetime import datetime
 
-from sqlalchemy import Boolean, Enum, String, Integer, Float, JSON, DateTime, func, Index
+from sqlalchemy import String, Integer, Float, Index
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base

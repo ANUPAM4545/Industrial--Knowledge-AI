@@ -2,7 +2,7 @@
 NEXO — Dashboard Insights generator
 """
 from datetime import datetime, timezone
-from typing import Any, List
+from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dashboard.models import SmartInsight
 from app.evaluation.logger import evaluation_db

@@ -5,7 +5,6 @@ import os
 import httpx
 import jwt
 import structlog
-from fastapi import Request
 from clerk_backend_api import Clerk
 
 logger = structlog.get_logger(__name__)

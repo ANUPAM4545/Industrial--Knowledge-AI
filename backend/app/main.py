@@ -15,7 +15,6 @@ from app.api.v1.router import api_router
 from app.core.config import settings
 from app.core.exceptions import register_exception_handlers
 from app.core.logging import configure_logging
-from app.db.session import engine
 from app.security.rate_limit.middleware import RateLimitMiddleware
 from app.security.rate_limit.exceptions import RateLimitExceeded
 

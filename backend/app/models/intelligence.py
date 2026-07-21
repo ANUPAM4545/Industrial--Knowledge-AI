@@ -2,12 +2,10 @@
 NEXO — Intelligence Models
 Stores AI-generated recommendations, insights, and workflow configurations.
 """
-from typing import Optional
 import uuid
 from datetime import datetime
 
 from sqlalchemy import Column, String, DateTime, Boolean, ForeignKey
-from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import JSONB
 
 from app.db.base import Base

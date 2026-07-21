@@ -2,10 +2,9 @@
 NEXO — Chat Database Models
 """
 import enum
-from datetime import datetime
 from typing import List, Optional
 
-from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Integer, String, Text, JSON
+from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String, Text, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, WorkspaceMixin, SoftDeleteMixin

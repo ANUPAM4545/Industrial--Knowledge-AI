@@ -1,7 +1,6 @@
 """
 NEXO — API v1 Router
 """
-import app.db.base
 from fastapi import APIRouter
 
 from app.api.v1 import (

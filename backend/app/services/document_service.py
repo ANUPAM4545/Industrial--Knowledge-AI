@@ -21,7 +21,7 @@ import structlog
 from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.exceptions import ForbiddenException, NotFoundException
+from app.core.exceptions import NotFoundException
 from app.models.document import Document, DocumentStatus
 from app.repositories.document_repository import DocumentRepository
 from app.storage.base import StorageProvider

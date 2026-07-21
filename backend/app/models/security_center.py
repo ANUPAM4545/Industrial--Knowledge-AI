@@ -1,11 +1,10 @@
 """
 NEXO — Security Center Models
 """
-import uuid
 from typing import Optional
 from datetime import datetime
 
-from sqlalchemy import Boolean, String, Integer, Float, JSON, DateTime, Index
+from sqlalchemy import Boolean, String, JSON, DateTime, Index
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base, WorkspaceMixin

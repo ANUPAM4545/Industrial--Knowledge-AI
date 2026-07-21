@@ -1,11 +1,9 @@
 """
 NEXO — Semantic Search Endpoints
 """
-from fastapi import APIRouter, Query, status, Depends
+from fastapi import APIRouter, status, Depends
 from app.security.rate_limit.decorators import rate_limit
 from app.security.rate_limit.models import LimitType
-
-router = APIRouter()
 
 from pydantic import BaseModel
 from typing import Any, Dict, List, Optional
@@ -13,6 +11,8 @@ from app.services.similarity_service import SimilaritySearchService
 from app.services.retrieval_service import RetrievalService
 from app.retrieval.retrieval_result import RetrievalProfiler, RetrievalResult
 from app.chat.models import Message, Role
+
+router = APIRouter()
 
 
 class SearchRequest(BaseModel):

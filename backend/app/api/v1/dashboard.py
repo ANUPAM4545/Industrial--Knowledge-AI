@@ -17,10 +17,6 @@ from app.dashboard.models import (
     DashboardTrends,
     SmartInsight,
 )
-from sqlalchemy import select
-from app.models.document import Document
-from sqlalchemy import func
-from app.models.chunk import Chunk
 
 router = APIRouter()
 

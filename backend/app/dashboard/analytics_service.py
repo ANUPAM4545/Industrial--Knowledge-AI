@@ -4,7 +4,6 @@ NEXO — Dashboard Trend & Analytics aggregator
 from datetime import datetime, timedelta, timezone
 from collections import Counter
 import re
-from typing import List, Any
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.evaluation.logger import evaluation_db
 from app.dashboard.models import TrendDatapoint, QueryMetric, KeywordMetric, SearchAnalytics, DashboardTrends

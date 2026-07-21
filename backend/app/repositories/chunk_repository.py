@@ -1,7 +1,6 @@
 """
 NEXO — Chunk Repository
 """
-import json
 from typing import List, Sequence
 
 from sqlalchemy import delete, func, select

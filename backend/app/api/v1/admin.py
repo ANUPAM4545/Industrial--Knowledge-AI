@@ -2,10 +2,9 @@
 NEXO — Admin Panel Endpoints
 """
 import asyncio
-from datetime import datetime, timedelta, timezone
-from fastapi import APIRouter, status, Depends
+from datetime import datetime, timezone
+from fastapi import APIRouter, status
 from sqlalchemy import select, func, text
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DBSession, AdminOnly
 from app.models.user import User

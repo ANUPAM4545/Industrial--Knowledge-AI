@@ -5,8 +5,7 @@ Stores AI-generated metadata for a document (Executive Summary, Topics, Keywords
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Column, String, DateTime, ForeignKey, Table
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, String, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import JSONB
 
 from app.db.base import Base, WorkspaceMixin, SoftDeleteMixin

@@ -3,7 +3,7 @@ NEXO — Workspaces API
 """
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
 
 from app.api.deps import CurrentUser, CurrentWorkspace, DBSession

@@ -2,11 +2,10 @@
 NEXO — Knowledge Graph Models
 Stores extracted entities and their relationships.
 """
-from typing import Optional, List
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Column, String, DateTime, ForeignKey, Float, Table
+from sqlalchemy import Column, String, DateTime, ForeignKey, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import JSONB
 

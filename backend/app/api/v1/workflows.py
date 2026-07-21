@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from typing import List, Dict, Any
+from typing import Dict, Any
 from app.db.session import get_db
-from app.api.deps import CurrentWorkspace, CurrentUser
+from app.api.deps import CurrentUser
 from app.models.intelligence import WorkflowTemplate
 from pydantic import BaseModel
 

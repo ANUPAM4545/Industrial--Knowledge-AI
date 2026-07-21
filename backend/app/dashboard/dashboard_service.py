@@ -3,7 +3,6 @@ NEXO — Executive Dashboard Service
 """
 from datetime import datetime, timezone
 from collections import Counter
-from typing import List, Dict, Any
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,8 +19,6 @@ from app.dashboard.models import (
     DocumentMetadataHealth,
     SystemHealth,
 )
-from app.dashboard.analytics_service import DashboardAnalyticsService
-from app.dashboard.insights_service import DashboardInsightsService
 
 
 class DashboardService:

@@ -5,8 +5,8 @@ from datetime import datetime, timezone
 import uuid
 from typing import Optional
 
-from sqlalchemy import Boolean, Column, DateTime, Enum, ForeignKey, Index, String, Text, Uuid, JSON
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Index, String, Text, Uuid, JSON
+from sqlalchemy.orm import Mapped, mapped_column
 import enum
 
 from app.db.base import Base

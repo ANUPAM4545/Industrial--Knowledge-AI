@@ -3,7 +3,6 @@ from typing import Optional, List
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.workspace import Workspace, WorkspaceMember, WorkspaceRole
-from app.models.user import User
 
 logger = structlog.get_logger(__name__)
 
