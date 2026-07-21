@@ -2,13 +2,14 @@
 NEXO — Workspace Models
 """
 import enum
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
-from sqlalchemy import Boolean, Enum, ForeignKey, String, JSON
+from sqlalchemy import Boolean, Enum, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from app.db.base import Base, SoftDeleteMixin
 
+if TYPE_CHECKING:
+    from app.models.workspace_settings import WorkspaceSettings
 
 class WorkspaceRole(str, enum.Enum):
     """Roles within a specific workspace."""
@@ -35,7 +36,7 @@ class Workspace(Base, SoftDeleteMixin):
         back_populates="workspace", 
         cascade="all, delete-orphan"
     )
-    settings: Mapped[Optional["WorkspaceSettings"]] = relationship(
+    settings: Mapped[Optional["WorkspaceSettings"]] = relationship(  # noqa: F821
         "WorkspaceSettings",
         back_populates="workspace",
         uselist=False,

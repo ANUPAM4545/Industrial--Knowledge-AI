@@ -1,13 +1,14 @@
 """
 NEXO — Workspace Settings Model
 """
-from typing import Optional
 
+from typing import TYPE_CHECKING
 from sqlalchemy import Boolean, ForeignKey, Integer, String, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from app.db.base import Base, SoftDeleteMixin
 
+if TYPE_CHECKING:
+    from app.models.workspace import Workspace
 
 class WorkspaceSettings(Base, SoftDeleteMixin):
     """
@@ -45,7 +46,7 @@ class WorkspaceSettings(Base, SoftDeleteMixin):
     developer_mode: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     # Relationships
-    workspace: Mapped["Workspace"] = relationship("Workspace", back_populates="settings")
+    workspace: Mapped["Workspace"] = relationship("Workspace", back_populates="settings")  # noqa: F821
 
     def __repr__(self) -> str:
         return f"<WorkspaceSettings(workspace_id={self.workspace_id})>"
