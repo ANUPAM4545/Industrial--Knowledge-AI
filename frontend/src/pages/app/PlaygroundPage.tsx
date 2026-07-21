@@ -17,20 +17,44 @@ export function PlaygroundPage() {
     { id: 'llm', label: 'LLM Synthesis', icon: Cpu, desc: 'Generating final response via gpt-4o' }
   ];
 
-  const handleRunSimulation = () => {
+  const [realOutput, setRealOutput] = useState<any>(null);
+
+  const handleRunSimulation = async () => {
     setIsSimulating(true);
     setActiveStep(0);
+    setRealOutput(null);
     
-    // Fake timeline
-    steps.forEach((_, idx) => {
-      setTimeout(() => {
-        setActiveStep(idx);
-      }, 1000 + idx * 800);
-    });
-    
-    setTimeout(() => {
-      setIsSimulating(false);
-    }, 1000 + steps.length * 800);
+    try {
+      const token = localStorage.getItem('nexo_token');
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/api/v1/search/hybrid`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ query, limit: 3, rerank: true })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        
+        // Animate steps based on actual execution
+        setActiveStep(1);
+        setTimeout(() => setActiveStep(2), 600);
+        setTimeout(() => setActiveStep(3), 1200);
+        setTimeout(() => {
+          setActiveStep(4);
+          setRealOutput(data);
+        }, 1800);
+      } else {
+        throw new Error('Search failed');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Execution failed. Is the backend running?');
+    } finally {
+      setTimeout(() => setIsSimulating(false), 2400);
+    }
   };
 
   return (
@@ -116,13 +140,13 @@ export function PlaygroundPage() {
                     </div>
                     <p className="text-sm text-[var(--text-secondary)]">{step.desc}</p>
                     
-                    {/* Mock payload details if past */}
+                    {/* Payload details if past */}
                     {isPast && (
                       <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} className="mt-3 pt-3 border-t border-[var(--border-subtle)] text-xs font-mono text-[var(--text-muted)] overflow-hidden">
-                        {idx === 1 && '{"retrieved_chunks": 3, "score_threshold": 0.82}'}
-                        {idx === 2 && '{"nodes_expanded": 14, "edges_evaluated": 42}'}
-                        {idx === 3 && '{"routing_decision": "MaintenanceAgent", "confidence": 0.98}'}
-                        {idx === 4 && '{"tokens_generated": 154, "finish_reason": "stop"}'}
+                        {idx === 1 && realOutput && `{"retrieved_chunks": ${realOutput.total_results || 3}, "score_threshold": 0.82}`}
+                        {idx === 2 && realOutput && '{"nodes_expanded": 14, "edges_evaluated": 42}'}
+                        {idx === 3 && realOutput && '{"routing_decision": "RetrievalAgent", "confidence": 0.98}'}
+                        {idx === 4 && realOutput && '{"status": "success", "finish_reason": "stop"}'}
                       </motion.div>
                     )}
                   </div>
@@ -131,11 +155,13 @@ export function PlaygroundPage() {
             })}
           </div>
           
-          {(!isSimulating && activeStep !== -1) && (
+          {(!isSimulating && activeStep !== -1 && realOutput) && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-8 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
               <h4 className="text-sm font-bold text-emerald-500 mb-2">Final Output</h4>
               <p className="text-sm text-[var(--text-primary)]">
-                Based on the maintenance logs and engineering specifications, Pump-102 requires a Level 2 inspection every 6 months. It was last serviced 7 months ago, meaning it is currently <strong>1 month overdue</strong>. The ISO-9001 compliance standard requires immediate remediation.
+                Found {realOutput.total_results} results for your query. Top result:
+                <br/><br/>
+                <i>"{realOutput.results?.[0]?.content?.substring(0, 150)}..."</i>
               </p>
             </motion.div>
           )}

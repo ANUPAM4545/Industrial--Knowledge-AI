@@ -160,36 +160,7 @@ export function AppLayout() {
           </button>
         </div>
 
-        {/* Demo Mode Button */}
-        <div className="p-4">
-          <button
-            onClick={() => setWorkspaceMode(workspaceMode === 'demo' ? 'live' : 'demo')}
-            className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold w-full transition-all border overflow-hidden",
-              workspaceMode === 'demo'
-                ? "bg-indigo-500/10 border-indigo-500/30 text-indigo-400 shadow-glow-sm"
-                : "bg-[var(--bg-glass)] border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-strong)]"
-            )}
-            title="Toggle Demo Workspace"
-          >
-            <Sparkles className={cn("w-4 h-4 shrink-0", workspaceMode === 'demo' ? "text-indigo-400 animate-spin" : "")} />
-            <AnimatePresence>
-              {sidebarOpen && (
-                <motion.div
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: 'auto' }}
-                  exit={{ opacity: 0, width: 0 }}
-                  className="flex justify-between items-center flex-1 whitespace-nowrap overflow-hidden"
-                >
-                  <span className="ml-1">Demo Workspace</span>
-                  <span className={cn("text-[10px] uppercase px-1.5 py-0.5 rounded ml-2", workspaceMode === 'demo' ? "bg-indigo-500/20 text-indigo-300" : "bg-[var(--bg-glass-hover)] text-[var(--text-muted)]")}>
-                    {workspaceMode === 'demo' ? 'ON' : 'OFF'}
-                  </span>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </button>
-        </div>
+
 
         {/* Navigation */}
         <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
@@ -267,7 +238,9 @@ export function AppLayout() {
               >
                 <div className="flex flex-col truncate">
                   <p className="text-sm font-semibold text-[var(--text-primary)] truncate">{dbUser?.full_name ?? clerkUser?.fullName}</p>
-                  <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-semibold truncate">{dbUser?.department ?? dbUser?.role ?? 'Role'}</p>
+                  <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-semibold truncate">
+                    {dbUser?.department || dbUser?.role || 'Operator'}
+                  </p>
                 </div>
                 <button
                   onClick={handleLogout}

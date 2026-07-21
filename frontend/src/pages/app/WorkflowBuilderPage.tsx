@@ -13,7 +13,7 @@ import 'reactflow/dist/style.css';
 import { useUIStore } from '../../store/uiStore';
 import { Play, Save, Plus, Settings } from 'lucide-react';
 
-const initialNodes = [
+const defaultNodes = [
   { id: '1', position: { x: 100, y: 100 }, data: { label: 'New PDF Upload' }, type: 'input' },
   { id: '2', position: { x: 350, y: 100 }, data: { label: 'OCR & Text Extraction' } },
   { id: '3', position: { x: 600, y: 100 }, data: { label: 'Entity Extraction (NER)' } },
@@ -22,7 +22,7 @@ const initialNodes = [
   { id: '6', position: { x: 1100, y: 175 }, data: { label: 'Notify Engineering Team' }, type: 'output' },
 ];
 
-const initialEdges = [
+const defaultEdges = [
   { id: 'e1-2', source: '1', target: '2', animated: true },
   { id: 'e2-3', source: '2', target: '3', animated: true },
   { id: 'e3-4', source: '3', target: '4', animated: true },
@@ -35,8 +35,55 @@ export function WorkflowBuilderPage() {
   const { theme } = useUIStore();
   const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
   
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
+
+  React.useEffect(() => {
+    const fetchWorkflows = async () => {
+      try {
+        const { apiClient } = await import('../../services/apiClient');
+        const res = await apiClient.get('/workflows');
+        if (res.status === 200) {
+          const data = res.data;
+          if (data && data.length > 0) {
+            // Load the first workflow
+            const wf = data[0];
+            if (wf.workflow_json && wf.workflow_json.nodes) {
+              setNodes(wf.workflow_json.nodes);
+              setEdges(wf.workflow_json.edges);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load workflows', err);
+      }
+    };
+    fetchWorkflows();
+  }, []);
+
+  const handleSave = async () => {
+    try {
+      const { apiClient } = await import('../../services/apiClient');
+      const payload = {
+        name: 'Default Pipeline',
+        description: 'AI processing pipeline',
+        is_active: true,
+        workflow_json: { nodes, edges }
+      };
+
+      const res = await apiClient.post('/workflows/', payload);
+
+      if (res.status === 201) {
+        alert('Workflow saved successfully!');
+      } else {
+        alert('Failed to save workflow');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saving workflow');
+    }
+  };
+
 
   const onConnect = useCallback(
     (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -61,7 +108,7 @@ export function WorkflowBuilderPage() {
             <Settings size={16} />
             Configure
           </button>
-          <button className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-[var(--accent-primary)] text-white hover:bg-opacity-90 transition-all text-sm font-medium shadow-[var(--shadow-soft)]">
+          <button onClick={handleSave} className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-[var(--accent-primary)] text-white hover:bg-opacity-90 transition-all text-sm font-medium shadow-[var(--shadow-soft)]">
             <Save size={16} />
             Save Workflow
           </button>

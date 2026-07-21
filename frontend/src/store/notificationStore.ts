@@ -30,7 +30,7 @@ interface NotificationState {
   markAllAsRead: (token: string) => Promise<void>
   deleteNotification: (id: string, token: string) => Promise<void>
   
-  connectSSE: (token: string) => void
+  connectSSE: (getToken: () => Promise<string | null>) => void
   disconnectSSE: () => void
 }
 
@@ -112,7 +112,7 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
     }
   },
 
-  connectSSE: (token: string) => {
+  connectSSE: async (getToken: () => Promise<string | null>) => {
     const { eventSource } = get()
     if (eventSource) return // Already connected
     
@@ -122,6 +122,9 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
     // Wait, FastAPI with Clerk expects the token in the `Authorization` header.
     // Since browser native `EventSource` doesn't send headers, we usually append `?token=...` and handle it in the backend, or use `fetch-event-source` lib.
     
+    const token = await getToken()
+    if (!token) return
+
     // Instead of adding a new dependency like @microsoft/fetch-event-source right now,
     // we'll pass ?token=... to the SSE endpoint and let the backend extract it if the header is missing.
     const url = `${import.meta.env.VITE_API_BASE_URL}/api/v1/notifications/stream?token=${token}`
@@ -153,7 +156,7 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
       set({ eventSource: null })
       // Simple reconnect logic
       setTimeout(() => {
-        get().connectSSE(token)
+        get().connectSSE(getToken)
       }, 5000)
     }
 

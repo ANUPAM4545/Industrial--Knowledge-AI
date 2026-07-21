@@ -185,17 +185,7 @@ export function KnowledgeBasePage() {
               action={
                 !search && !statusFilter ? (
                   <div className="flex gap-3 justify-center mt-4">
-                    {workspaceMode === 'live' && (
-                      <button
-                        onClick={() => {
-                          setWorkspaceMode('demo')
-                          setTourState({ isActive: true, currentStep: 0, hasSeenTour: false })
-                        }}
-                        className="px-4 py-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 font-semibold rounded-lg transition-colors flex items-center gap-2"
-                      >
-                        Explore Demo Workspace
-                      </button>
-                    )}
+
                     <button
                       id="empty-upload-btn"
                       type="button"

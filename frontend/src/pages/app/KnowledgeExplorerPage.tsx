@@ -6,27 +6,6 @@ import { Search, Filter, Expand, Maximize2, Zap, AlertTriangle, Shield, CheckCir
 import { useUIStore } from '../../store/uiStore';
 
 
-const KNOWLEDGE_GRAPH_DATA = {
-  nodes: [
-    { id: 'Pump-102', group: 'Equipment', size: 20, description: 'Main coolant pump for Reactor B' },
-    { id: 'O-Ring_Failure', group: 'Incident', size: 15, description: 'Seal blowout due to thermal stress' },
-    { id: 'Maintenance_Log_44', group: 'Document', size: 10, description: 'Routine inspection missing lubrication' },
-    { id: 'ISO-9001', group: 'Standard', size: 15, description: 'Quality management system requirements' },
-    { id: 'Valve_P1', group: 'Equipment', size: 15, description: 'Pressure relief valve' },
-    { id: 'Tech_John', group: 'Person', size: 10, description: 'Senior Maintenance Engineer' },
-    { id: 'SOP_Coolant_Swap', group: 'Document', size: 15, description: 'Standard operating procedure for coolant' },
-    { id: 'Risk_Overpressure', group: 'Risk', size: 12, description: 'System exceeding 1500 PSI' }
-  ],
-  links: [
-    { source: 'O-Ring_Failure', target: 'Pump-102', value: 2, label: 'OCCURRED_IN' },
-    { source: 'Maintenance_Log_44', target: 'Pump-102', value: 1, label: 'LOGGED_FOR' },
-    { source: 'Maintenance_Log_44', target: 'ISO-9001', value: 1, label: 'VIOLATES' },
-    { source: 'Valve_P1', target: 'Pump-102', value: 1, label: 'CONNECTED_TO' },
-    { source: 'Tech_John', target: 'Maintenance_Log_44', value: 1, label: 'AUTHORED' },
-    { source: 'SOP_Coolant_Swap', target: 'Pump-102', value: 1, label: 'APPLIES_TO' },
-    { source: 'Risk_Overpressure', target: 'Valve_P1', value: 2, label: 'MITIGATED_BY' }
-  ]
-};
 
 const COLOR_MAP: Record<string, string> = {
   Equipment: '#3b82f6', // blue-500
@@ -52,6 +31,25 @@ export function KnowledgeExplorerPage() {
   const [selectedNode, setSelectedNode] = useState<any>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const [searchQuery, setSearchQuery] = useState('');
+  const [graphData, setGraphData] = useState<{nodes: any[], links: any[]}>({ nodes: [], links: [] });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchGraph = async () => {
+      try {
+        const { apiClient } = await import('../../services/apiClient');
+        const res = await apiClient.get('/graph');
+        if (res.status === 200) {
+          setGraphData(res.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch graph data:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchGraph();
+  }, []);
   
   // Responsive Graph
   useEffect(() => {
@@ -73,20 +71,20 @@ export function KnowledgeExplorerPage() {
 
   // Filter Data based on search
   const filteredData = React.useMemo(() => {
-    if (!searchQuery) return KNOWLEDGE_GRAPH_DATA;
+    if (!searchQuery) return graphData;
     const lowerQuery = searchQuery.toLowerCase();
     
-    const nodes = KNOWLEDGE_GRAPH_DATA.nodes.filter(
+    const nodes = graphData.nodes.filter(
       n => n.id.toLowerCase().includes(lowerQuery) || n.group.toLowerCase().includes(lowerQuery)
     );
     
     const nodeIds = new Set(nodes.map(n => n.id));
-    const links = KNOWLEDGE_GRAPH_DATA.links.filter(
+    const links = graphData.links.filter(
       l => nodeIds.has(l.source) && nodeIds.has(l.target)
     );
     
     return { nodes, links };
-  }, [searchQuery]);
+  }, [searchQuery, graphData]);
 
   const handleNodeClick = useCallback((node: any) => {
     setSelectedNode(node);
@@ -251,14 +249,14 @@ export function KnowledgeExplorerPage() {
                   </div>
                   
                   <div>
-                    <h3 className="text-sm font-medium text-[var(--text-primary)] border-b border-[var(--border-secondary)] pb-2 mb-4">Connections ({KNOWLEDGE_GRAPH_DATA.links.filter(l => l.source === selectedNode.id || l.target === selectedNode.id).length})</h3>
+                    <h3 className="text-sm font-medium text-[var(--text-primary)] border-b border-[var(--border-secondary)] pb-2 mb-4">Connections ({graphData.links.filter((l: any) => l.source === selectedNode.id || l.target === selectedNode.id).length})</h3>
                     <div className="space-y-2">
-                      {KNOWLEDGE_GRAPH_DATA.links
-                        .filter(l => l.source === selectedNode.id || l.target === selectedNode.id)
-                        .map((link, idx) => {
+                      {graphData.links
+                        .filter((l: any) => l.source === selectedNode.id || l.target === selectedNode.id)
+                        .map((link: any, idx: number) => {
                           const isSource = link.source === selectedNode.id;
                           const connectedId = isSource ? link.target : link.source;
-                          const connectedNode = KNOWLEDGE_GRAPH_DATA.nodes.find(n => n.id === connectedId);
+                          const connectedNode = graphData.nodes.find((n: any) => n.id === connectedId);
                           
                           return (
                             <div key={idx} className="flex items-center gap-3 p-3 rounded-lg border border-[var(--border-secondary)] bg-[var(--bg-primary)] hover:border-[var(--accent-primary)] transition-colors cursor-pointer" onClick={() => handleNodeClick(connectedNode)}>

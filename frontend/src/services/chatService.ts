@@ -48,5 +48,51 @@ export const chatService = {
 
   async sendMessage(query: string, conversationId?: string): Promise<ChatResponse> {
     return ProviderFactory.getChatProvider().sendMessage(query, conversationId);
+  },
+
+  async *sendMessageStream(query: string, conversationId?: string, signal?: AbortSignal): AsyncGenerator<any, void, unknown> {
+    const token = localStorage.getItem('nexo_token');
+    const workspaceId = localStorage.getItem('nexo_workspace_id');
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    if (workspaceId) headers['X-Workspace-ID'] = workspaceId;
+
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/api/v1/chat/stream`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ query, conversation_id: conversationId }),
+      signal
+    });
+
+    if (!response.ok) {
+      throw new Error('Chat request failed');
+    }
+
+    const reader = response.body?.getReader();
+    if (!reader) throw new Error('No reader available');
+
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const dataStr = line.slice(6);
+          if (dataStr === '[DONE]') return;
+          try {
+            yield JSON.parse(dataStr);
+          } catch (e) {
+            console.error('Failed to parse SSE data', e);
+          }
+        }
+      }
+    }
   }
 };

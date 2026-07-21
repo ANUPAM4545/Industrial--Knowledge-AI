@@ -29,7 +29,7 @@ export const NotificationDropdown: React.FC = () => {
         const token = await getToken()
         if (token && mounted) {
           fetchNotifications(token)
-          connectSSE(token)
+          connectSSE(getToken)
         }
       }
     }

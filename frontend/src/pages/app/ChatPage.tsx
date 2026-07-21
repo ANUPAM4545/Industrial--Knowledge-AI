@@ -19,7 +19,7 @@ export function ChatPage() {
   // Split-pane layout preferences
   const splitPaneWidth = useUIStore((state) => state.splitPaneWidth)
   const setSplitPaneWidth = useUIStore((state) => state.setSplitPaneWidth)
-  const { workspaceMode, setWorkspaceMode, setTourState } = useUIStore()
+  const { workspaceMode, setWorkspaceMode, setTourState, developerMode } = useUIStore()
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null)
   const [selectedCitationId, setSelectedCitationId] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -109,25 +109,44 @@ export function ChatPage() {
     setInputValue('')
     setIsLoading(true)
 
+    // Create a placeholder AI message that will be updated as the stream comes in
+    const aiMessageId = Date.now().toString() + 1
+    setMessages((prev) => [
+      ...prev, 
+      { id: aiMessageId, role: 'assistant', content: '', created_at: new Date().toISOString() }
+    ])
+
     try {
-      const response = await chatService.sendMessage(userMessage.content, activeConversationId)
-      
-      if (!activeConversationId) {
-        setActiveConversationId(response.conversation_id)
-        loadConversations()
-      }
+      const stream = chatService.sendMessageStream(userMessage.content, activeConversationId)
+      let firstTokenReceived = false;
 
-      const aiMessage: Message = {
-        id: Date.now().toString() + 1,
-        role: 'assistant',
-        content: response.answer,
-        context_json: { citations: response.citations },
-        created_at: new Date().toISOString(),
-      }
+      for await (const chunk of stream) {
+        if (!firstTokenReceived) {
+          setIsLoading(false) // Hide loading spinner once we get first token
+          firstTokenReceived = true
+        }
 
-      setMessages((prev) => [...prev, aiMessage])
+        if (chunk.event === 'metadata') {
+          if (!activeConversationId && chunk.payload?.conversation_id) {
+            setActiveConversationId(chunk.payload.conversation_id)
+            loadConversations()
+          }
+          setMessages((prev) => prev.map((msg) => 
+            msg.id === aiMessageId ? { ...msg, context_json: chunk.payload } : msg
+          ))
+        } else if (chunk.event === 'token' && chunk.payload) {
+          setMessages((prev) => prev.map((msg) => 
+            msg.id === aiMessageId ? { ...msg, content: msg.content + chunk.payload } : msg
+          ))
+        } else if (chunk.event === 'error') {
+          throw new Error(chunk.payload || 'Stream error')
+        }
+      }
     } catch (error) {
       console.error('Failed to send message:', error)
+      setMessages((prev) => prev.map((msg) => 
+        msg.id === aiMessageId && !msg.content ? { ...msg, content: 'Sorry, I encountered an error. Please try again.' } : msg
+      ))
     } finally {
       setIsLoading(false)
     }
@@ -294,6 +313,43 @@ export function ChatPage() {
                         ))}
                       </div>
                     )}
+                    {/* Developer Diagnostics */}
+                    {msg.role === 'assistant' && msg.context_json?.traces && msg.context_json.traces.length > 0 && (
+                      developerMode ? (
+                        <div className="mt-4 p-3 bg-slate-900 border border-slate-700 rounded-lg text-xs font-mono space-y-2">
+                          <div className="flex items-center justify-between border-b border-slate-700 pb-2 mb-2">
+                            <span className="text-slate-400 font-semibold uppercase tracking-wider">Developer Diagnostics</span>
+                          </div>
+                          {msg.context_json.traces.map((trace: any, i: number) => (
+                            <div key={i} className="space-y-1 pb-2 border-b border-slate-800 last:border-0 last:pb-0">
+                              <p className="text-indigo-400 font-semibold">{trace.agent_name}</p>
+                              <p className="text-slate-300">Action: {trace.action}</p>
+                              <div className="flex gap-4 text-slate-500">
+                                <span>Latency: {trace.latency_ms}ms</span>
+                                <span>Confidence: {(trace.confidence * 100).toFixed(1)}%</span>
+                              </div>
+                              <div className="text-slate-600">
+                                {Object.entries(trace.metadata || {}).map(([k, v]) => (
+                                  <span key={k} className="mr-3">{k}: {String(v)}</span>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="mt-2 flex items-center">
+                          {msg.context_json.traces.some((t: any) => t.confidence >= 0.8) ? (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                              High Confidence
+                            </span>
+                          ) : msg.context_json.traces.some((t: any) => t.confidence >= 0.65) ? (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                              Medium Confidence
+                            </span>
+                          ) : null}
+                        </div>
+                      )
+                    )}
                     {/* Suggested follow-up queries inside last message bubble */}
                     {msg.role === 'assistant' && idx === messages.length - 1 && (
                       <div className="flex gap-2 flex-wrap mt-3 pt-2">
@@ -345,7 +401,7 @@ export function ChatPage() {
                       handleSend()
                     }
                   }}
-                  disabled={isLoading}
+                  disabled={isLoading || (messages.length > 0 && messages[messages.length - 1].content.includes('No documents have been successfully indexed yet'))}
                   className="input-field resize-none min-h-[42px] max-h-32 py-2.5 pr-4 disabled:opacity-50"
                   placeholder="Ask anything about your documents..."
                   style={{ overflow: 'hidden' }}
@@ -354,7 +410,7 @@ export function ChatPage() {
               <button
                 id="chat-send-btn"
                 onClick={handleSend}
-                disabled={!inputValue.trim() || isLoading}
+                disabled={!inputValue.trim() || isLoading || (messages.length > 0 && messages[messages.length - 1].content.includes('No documents have been successfully indexed yet'))}
                 className="btn-primary py-2.5 px-4 flex-shrink-0 disabled:opacity-40"
               >
                 <Send className="w-4 h-4" />
