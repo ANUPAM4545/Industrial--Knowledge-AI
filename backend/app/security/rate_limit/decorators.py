@@ -1,10 +1,8 @@
 """
 NEXO — Rate Limiting FastAPI Dependencies / Decorators
 """
-from typing import Callable, Optional
-from fastapi import Request, Depends, HTTPException
-from app.models.user import User
-from app.api.deps import get_current_user, get_db
+from typing import Optional
+from fastapi import Request, Depends
 from app.security.rate_limit.models import LimitType
 from app.security.rate_limit.config import RATE_LIMIT_PROVIDER
 from app.security.rate_limit.memory_provider import MemoryRateLimiterProvider

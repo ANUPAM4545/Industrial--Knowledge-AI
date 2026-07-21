@@ -2,8 +2,8 @@
 NEXO — Rate Limiting Service
 """
 import structlog
-from typing import Optional, Dict, Any
-from app.models.user import UserRole, User
+from typing import Optional
+from app.models.user import User
 from app.security.rate_limit.interfaces import RateLimiterProvider
 from app.security.rate_limit.models import LimitType, RateLimitDecision
 from app.security.rate_limit.policy_engine import PolicyEngine

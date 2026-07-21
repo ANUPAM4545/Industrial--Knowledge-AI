@@ -1,6 +1,6 @@
 import re
 import time
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 from .interfaces import InputGuard, SecurityScanResult, SecurityDecision
 from .security_config import get_decision_from_score

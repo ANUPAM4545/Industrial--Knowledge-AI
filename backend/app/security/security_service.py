@@ -1,5 +1,5 @@
 import time
-from typing import Dict, Any, List, Optional
+from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .interfaces import SecurityScanResult, SecurityDecision

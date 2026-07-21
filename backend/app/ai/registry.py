@@ -2,7 +2,7 @@
 NEXO — AI Component Registry
 Global registry for dependency injection of AI providers.
 """
-from typing import Dict, Optional, Type
+from typing import Dict, Type
 
 from app.ai.interfaces import (
     EmbeddingProvider, 

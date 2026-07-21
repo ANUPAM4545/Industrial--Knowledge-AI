@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query, status, HTTPException
+from fastapi import APIRouter, Query, HTTPException
 from typing import List
 
 from app.api.deps import DBSession, AdminOnly, CurrentUser

@@ -1,11 +1,9 @@
 from typing import List, Dict, Any, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, or_, and_, desc, text
+from sqlalchemy import select, desc, text
 from sqlalchemy.sql import text
 
-from app.models.security_log import SecurityLog
-from app.models.rate_limit import RateLimitLog
-from app.models.security_center import SecurityEvent, AuditLog, ActiveSession
+from app.models.security_center import AuditLog, ActiveSession
 
 class SecurityCenterRepository:
     def __init__(self, session: AsyncSession):

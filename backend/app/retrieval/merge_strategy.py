@@ -2,7 +2,7 @@
 NEXO — Retrieval Merge Strategy
 """
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Set, Tuple
+from typing import Any, Dict, List
 
 
 class MergeStrategy(ABC):

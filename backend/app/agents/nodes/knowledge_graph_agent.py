@@ -2,7 +2,6 @@
 NEXO — Knowledge Graph Agent
 Interacts with the GraphProvider to fetch connected entities and relationships.
 """
-from typing import Dict, Any
 
 from app.agents.interfaces import BaseAgent, CopilotState, AgentTrace
 

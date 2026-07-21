@@ -1,6 +1,5 @@
-from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, text
+from sqlalchemy import select, text
 
 from app.models.security_center import BlockedEntity
 from app.security.event_bus import SecurityEventBus, EventType

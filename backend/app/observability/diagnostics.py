@@ -1,7 +1,7 @@
 """
 NEXO — Pipeline Diagnostics Compiler
 """
-from typing import Any, Dict, List, Optional
+from typing import Optional
 from app.ai.registry import registry
 from app.retrieval.retrieval_result import RetrievalProfiler
 from app.evaluation.logger import evaluation_db

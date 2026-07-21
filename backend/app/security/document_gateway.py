@@ -3,7 +3,7 @@ Document Security Gateway & Classification
 """
 import filetype
 from enum import Enum
-from typing import List, Dict, Any, Optional
+from typing import List
 from fastapi import UploadFile, HTTPException
 
 class DocumentPolicyType(Enum):

@@ -1,8 +1,8 @@
 """
 NEXO — Observability Data Models
 """
-from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, Field
+from typing import Optional
+from pydantic import BaseModel
 
 
 class PipelineDiagnostics(BaseModel):

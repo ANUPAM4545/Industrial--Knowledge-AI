@@ -2,8 +2,8 @@
 NEXO — User & IP Tracker
 """
 from typing import Optional
-from sqlalchemy import select, func, desc
-from datetime import datetime, timedelta, timezone
+from sqlalchemy import select
+from datetime import datetime, timedelta
 from app.db.session import AsyncSessionLocal
 from app.models.security_log import SecurityLog
 

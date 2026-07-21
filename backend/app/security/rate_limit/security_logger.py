@@ -3,7 +3,6 @@ NEXO — Rate Limiting Async Logger
 """
 import asyncio
 import structlog
-from datetime import datetime
 from app.db.session import AsyncSessionLocal
 from app.models.rate_limit import RateLimitLog
 from app.security.event_bus import SecurityEventBus, EventType

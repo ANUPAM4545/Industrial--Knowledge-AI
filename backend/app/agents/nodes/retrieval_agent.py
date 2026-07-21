@@ -2,7 +2,6 @@
 NEXO — Retrieval Agent
 Queries the Vector Database (Qdrant) for semantic matches.
 """
-from typing import Dict, Any
 
 from app.agents.interfaces import BaseAgent, CopilotState, AgentTrace
 from app.services.similarity_service import SimilaritySearchService

@@ -1,7 +1,7 @@
 """
 NEXO — Rate Limiting Configuration
 """
-from typing import Dict, Any
+from typing import Dict
 from app.models.user import UserRole
 from app.security.rate_limit.models import LimitType, RateLimitPolicy
 

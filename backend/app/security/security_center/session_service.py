@@ -1,9 +1,8 @@
 import httpx
 import structlog
-from typing import Optional
 from datetime import datetime, timezone
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update
+from sqlalchemy import select
 
 from app.models.security_center import ActiveSession
 from app.core.config import settings

@@ -2,7 +2,6 @@
 NEXO — Reasoning Agent
 Synthesizes retrieved chunks and graph data using an LLM.
 """
-from typing import Dict, Any
 
 from app.agents.interfaces import BaseAgent, CopilotState, AgentTrace
 from app.ai.registry import registry
@@ -93,7 +92,7 @@ USER QUESTION:
             if "I couldn't find" in answer and len(answer) < 200:
                 answer = refusal_msg
                 
-        except Exception as e:
+        except Exception:
             answer = refusal_msg
             
         latency = round((time.time() - start_time) * 1000, 2)

@@ -3,7 +3,6 @@ NEXO — Rate Limiting Middleware
 """
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
-from app.api.deps import oauth2_scheme
 from app.services.clerk_service import verify_clerk_token
 from app.db.session import AsyncSessionLocal
 from app.models.user import User

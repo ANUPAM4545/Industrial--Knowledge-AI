@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict
 
 SECURITY_THRESHOLDS: Dict[str, float] = {
     "safe_max": 20.0,
