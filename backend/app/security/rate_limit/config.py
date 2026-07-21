@@ -6,7 +6,7 @@ from app.models.user import UserRole
 from app.security.rate_limit.models import LimitType, RateLimitPolicy
 
 # Default configuration can be overridden by env vars in production
-RATE_LIMIT_PROVIDER = "memory" # "redis" or "memory"
+RATE_LIMIT_PROVIDER = "redis" # "redis" or "memory"
 
 # Policy Matrix (Requests, Window_Seconds, Burst_Limit, Burst_Window)
 POLICY_MATRIX: Dict[LimitType, Dict[str, RateLimitPolicy]] = {
@@ -25,7 +25,7 @@ POLICY_MATRIX: Dict[LimitType, Dict[str, RateLimitPolicy]] = {
     },
     LimitType.DOCUMENT: {
         UserRole.VIEWER: RateLimitPolicy(requests=0, window_seconds=3600), # Not Allowed
-        UserRole.OPERATOR: RateLimitPolicy(requests=10, window_seconds=3600),
+        UserRole.OPERATOR: RateLimitPolicy(requests=100, window_seconds=3600),
         UserRole.ENGINEER: RateLimitPolicy(requests=30, window_seconds=3600),
         UserRole.MANAGER: RateLimitPolicy(requests=50, window_seconds=3600),
         UserRole.ADMIN: RateLimitPolicy(requests=100, window_seconds=3600),

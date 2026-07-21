@@ -4,7 +4,7 @@ NEXO — Rate Limiting Async Logger
 import asyncio
 import structlog
 from datetime import datetime
-from app.db.session import async_session_maker
+from app.db.session import AsyncSessionLocal
 from app.models.rate_limit import RateLimitLog
 from app.security.event_bus import SecurityEventBus, EventType
 
@@ -58,7 +58,7 @@ class SecurityLogger:
         decision: str, violation_type: str, user_id: str, role: str, security_score: float
     ) -> None:
         try:
-            async with async_session_maker() as session:
+            async with AsyncSessionLocal() as session:
                 log_entry = RateLimitLog(
                     ip_address=ip_address,
                     endpoint=endpoint,

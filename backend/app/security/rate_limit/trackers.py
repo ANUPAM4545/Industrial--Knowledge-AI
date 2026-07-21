@@ -4,7 +4,7 @@ NEXO — User & IP Tracker
 from typing import Optional
 from sqlalchemy import select, func, desc
 from datetime import datetime, timedelta, timezone
-from app.db.session import async_session_maker
+from app.db.session import AsyncSessionLocal
 from app.models.security_log import SecurityLog
 
 class SecurityReputationTracker:
@@ -28,15 +28,13 @@ class SecurityReputationTracker:
 
     @staticmethod
     async def _calculate_score(user_id: Optional[str] = None, ip_address: Optional[str] = None) -> float:
-        cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
+        cutoff = datetime.utcnow() - timedelta(hours=24)
         
-        async with async_session_maker() as session:
+        async with AsyncSessionLocal() as session:
             stmt = select(SecurityLog.risk_score).where(SecurityLog.created_at >= cutoff)
             
             if user_id:
                 stmt = stmt.where(SecurityLog.user_id == user_id)
-            elif ip_address:
-                stmt = stmt.where(SecurityLog.ip_address == ip_address)
             else:
                 return 0.0
                 

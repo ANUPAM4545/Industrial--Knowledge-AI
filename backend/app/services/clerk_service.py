@@ -45,7 +45,7 @@ async def fetch_clerk_user_info(clerk_user_id: str):
         # The clerk-backend-api Python SDK has strict Pydantic validation that crashes
         # if the Clerk API returns null for certain OAuth fields (like attempts or expire_at).
         # We use a direct HTTP request to bypass this parsing bug.
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=15.0) as client:
             response = await client.get(
                 f"https://api.clerk.com/v1/users/{clerk_user_id}",
                 headers={"Authorization": f"Bearer {CLERK_SECRET_KEY}"}

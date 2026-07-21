@@ -24,6 +24,11 @@ services:
       VITE_AI_SERVICE_URL: http://localhost:8006
       VITE_APP_NAME: "NEXO [DEV]"
     command: npm run dev -- --host 0.0.0.0
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5173/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   # ─── Backend Dev (Hot Reload) ──────────────────────────────────
   backend:
@@ -39,8 +44,7 @@ services:
     environment:
       APP_ENV: development
       APP_DEBUG: "true"
-      UPLOAD_DIR: "/tmp/uploads"
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --timeout-graceful-shutdown 2
 
   # ─── AI Service Dev (Hot Reload) ──────────────────────────────
   ai-service:
@@ -91,10 +95,17 @@ services:
     profiles:
       - nginx
 
-  # ─── Disable worker in dev (crashing due to missing celery app) ────────────────
+  # ─── Enable worker in dev ──────────────────────────────────────
   worker:
-    profiles:
-      - disabled
+    # No profile overrides, so it starts automatically
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      APP_ENV: development
+      APP_DEBUG: "true"
+    volumes:
+      - ./backend:/app
 
 volumes:
   pgadmin-data:

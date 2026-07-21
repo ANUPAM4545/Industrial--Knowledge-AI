@@ -8,7 +8,7 @@ import structlog
 from typing import Any, Dict
 
 from app.security.event_bus import EventType, SecurityEventBus
-from app.db.session import async_session_maker
+from app.db.session import AsyncSessionLocal
 from app.models.security_center import SecurityEvent, AuditLog
 
 logger = structlog.get_logger(__name__)
@@ -20,7 +20,7 @@ async def handle_timeline_event(event_type: EventType, payload: Dict[str, Any]):
     """
     if event_type in [EventType.LOGIN_FAILED, EventType.PERMISSION_DENIED, EventType.USER_BLOCKED]:
         try:
-            async with async_session_maker() as session:
+            async with AsyncSessionLocal() as session:
                 event = SecurityEvent(
                     event_type=event_type.value,
                     severity="MEDIUM" if event_type != EventType.USER_BLOCKED else "HIGH",
@@ -39,7 +39,7 @@ async def handle_audit_event(event_type: EventType, payload: Dict[str, Any]):
     """
     if event_type in [EventType.ROLE_CHANGED, EventType.ADMIN_ACTION]:
         try:
-            async with async_session_maker() as session:
+            async with AsyncSessionLocal() as session:
                 audit = AuditLog(
                     user_id=payload.get("admin_id") or payload.get("user_id"),
                     action=event_type.value,

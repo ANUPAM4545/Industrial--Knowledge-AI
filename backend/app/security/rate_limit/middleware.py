@@ -5,7 +5,7 @@ from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from app.api.deps import oauth2_scheme
 from app.services.clerk_service import verify_clerk_token
-from app.db.session import async_session_maker
+from app.db.session import AsyncSessionLocal
 from app.models.user import User
 from sqlalchemy import select
 
@@ -26,7 +26,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             try:
                 clerk_id = verify_clerk_token(token)
                 # Quick DB lookup
-                async with async_session_maker() as session:
+                async with AsyncSessionLocal() as session:
                     stmt = select(User).where(User.clerk_user_id == clerk_id)
                     result = await session.execute(stmt)
                     user = result.scalar_one_or_none()

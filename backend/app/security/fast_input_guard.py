@@ -8,12 +8,14 @@ from .security_config import MAX_PROMPT_LENGTH, get_decision_from_score
 
 # Fast regex patterns for obvious injections
 FAST_INJECTION_PATTERN = re.compile(
-    r"(ignore\s+(all\s+)?(previous\s+)?(instructions|directions))|"
+    r"(ignore\s+(all\s+)?(previous\s+)?(instructions|directions|rules))|"
     r"(forget\s+(about\s+)?(your\s+)?(system\s+)?prompt)|"
     r"(you\s+are\s+now)|"
     r"(act\s+as\s+dan)|"
     r"(developer\s+mode)|"
-    r"(reveal\s+(your\s+)?(hidden\s+)?(instructions|prompt))|"
+    r"(reveal\s+(your\s+)?(hidden\s+)?(instructions|prompt|rules))|"
+    r"(bypass\s+(all\s+)?(security|rules|filters))|"
+    r"(disregard\s+(all\s+)?(previous\s+)?(instructions|rules))|"
     r"(\<system\>)|(\<\/system\>)|"
     r"(\<role\>)",
     re.IGNORECASE
