@@ -18,13 +18,36 @@ router = APIRouter()
     summary="Get current user profile (Synced with Clerk)",
     dependencies=[Depends(rate_limit(LimitType.AUTH, "me"))]
 )
-async def get_me(current_user: CurrentUser) -> UserResponse:
+async def get_me(
+    current_user: CurrentUser,
+    request: __import__('fastapi').Request,
+    session: __import__('app.api.deps', fromlist=['DBSession']).DBSession
+) -> UserResponse:
     """
     Return the profile of the currently authenticated user from the local database.
 
     Requires a valid Clerk `Authorization: Bearer <access_token>` header.
     """
+    from app.services.audit_service import AuditService
+    from app.services.workspace_service import WorkspaceService
+    
+    # Try to find a workspace for logging
+    ws_service = WorkspaceService(session)
+    workspaces = await ws_service.get_user_workspaces(current_user.id)
+    workspace_id = workspaces[0].id if workspaces else None
+
+    if workspace_id:
+        audit = AuditService(session)
+        await audit.log_action(
+            action="LOGIN_SUCCESS",
+            status="SUCCESS",
+            workspace_id=workspace_id,
+            user_id=current_user.id,
+            request=request,
+        )
+    
     return UserResponse.model_validate(current_user)
+
 
 @router.put(
     "/me",

@@ -10,12 +10,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import DBSession, AdminOnly
 from app.models.user import User
 from app.models.document import Document
-from app.models.conversation import Conversation
+from app.chat.models import Conversation
 from app.models.security_center import AuditLog
-from app.core.qdrant import get_qdrant_client
+from qdrant_client import AsyncQdrantClient
 from app.core.config import settings
 
-router = APIRouter(dependencies=[Depends(AdminOnly)])
+router = APIRouter(dependencies=[AdminOnly])
 
 @router.get("/stats", status_code=status.HTTP_200_OK)
 async def get_admin_stats(session: DBSession):
@@ -70,7 +70,7 @@ async def get_system_health(session: DBSession):
         
     # 2. Qdrant
     try:
-        qdrant = await get_qdrant_client()
+        qdrant = AsyncQdrantClient(url=settings.QDRANT_URL)
         await qdrant.get_collections()
         health["qdrant"] = "healthy"
     except Exception:

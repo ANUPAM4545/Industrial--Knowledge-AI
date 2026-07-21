@@ -4,7 +4,27 @@ NEXO — API v1 Router
 import app.db.base
 from fastapi import APIRouter
 
-from app.api.v1 import admin, analytics, auth, chat, chunks, dashboard, documents, embeddings, evaluation, marketing, notifications, observability, search, users, viewer, security
+from app.api.v1 import (
+    admin,
+    analytics,
+    auth,
+    chat,
+    chunks,
+    dashboard,
+    documents,
+    embeddings,
+    evaluation,
+    graph,
+    marketing,
+    notifications,
+    observability,
+    search,
+    users,
+    viewer,
+    security,
+    workspaces,
+    workflows,
+)
 from app.security.security_center import router as security_center_router
 
 api_router = APIRouter()
@@ -16,6 +36,7 @@ api_router.include_router(chunks.router, prefix="/documents", tags=["chunks"])
 api_router.include_router(embeddings.router, prefix="/documents", tags=["indexing"])
 api_router.include_router(viewer.router, prefix="/documents", tags=["viewer"])
 api_router.include_router(chat.router, prefix="/chat", tags=["chat"])
+api_router.include_router(graph.router, prefix="/graph", tags=["graph"])
 api_router.include_router(search.router, prefix="/search", tags=["Search"])
 api_router.include_router(analytics.router, prefix="/analytics", tags=["Analytics"])
 api_router.include_router(admin.router, prefix="/admin", tags=["Admin"])
@@ -26,3 +47,5 @@ api_router.include_router(marketing.router, prefix="/marketing", tags=["Marketin
 api_router.include_router(notifications.router, prefix="/notifications", tags=["Notifications"])
 api_router.include_router(security.router, prefix="/security", tags=["Security"])
 api_router.include_router(security_center_router.router, prefix="/security-center", tags=["Security Center"])
+api_router.include_router(workspaces.router, prefix="/workspaces", tags=["Workspaces"])
+api_router.include_router(workflows.router, prefix="/workflows", tags=["Workflows"])

@@ -5,19 +5,19 @@ import enum
 from datetime import datetime
 from typing import List, Optional
 
-from sqlalchemy import DateTime, Enum, ForeignKey, Integer, String, Text, JSON
+from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Integer, String, Text, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.base import Base
+from app.db.base import Base, WorkspaceMixin, SoftDeleteMixin
 
 
-class Conversation(Base):
+class Conversation(Base, WorkspaceMixin, SoftDeleteMixin):
     """
     A chat conversation instance tied to a user.
     """
     __tablename__ = "conversations"
 
-    title: Mapped[str] = mapped_column(String(255), default="New Conversation", nullable=False)
+    title: Mapped[str] = mapped_column(String(500), default="New Conversation", nullable=False)
     
     # Ownership
     user_id: Mapped[str] = mapped_column(
@@ -25,6 +25,15 @@ class Conversation(Base):
         ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
+    )
+
+    # Missing database fields
+    document_ids: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    message_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    is_archived: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False, 
+        nullable=False
     )
     
     # Relationships
@@ -46,9 +55,9 @@ class Role(str, enum.Enum):
     ASSISTANT = "assistant"
 
 
-class Message(Base):
+class Message(Base, WorkspaceMixin, SoftDeleteMixin):
     """
-    A single message inside a conversation.
+    A single message within a conversation.
     """
     __tablename__ = "messages"
 

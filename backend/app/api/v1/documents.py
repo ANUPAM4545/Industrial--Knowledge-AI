@@ -11,10 +11,11 @@ GET    /documents/{id}/download  — Download the original file
 All routes are JWT-protected via CurrentUser.
 Business logic lives in DocumentService — routers only handle HTTP.
 """
+from typing import Optional
 from fastapi import APIRouter, File, Form, Query, Response, UploadFile, status, Depends
 from fastapi.responses import StreamingResponse
 
-from app.api.deps import CurrentUser, DBSession, Storage
+from app.api.deps import CurrentUser, CurrentWorkspace, DBSession, Storage
 from app.schemas.document import (
     DocumentListResponse,
     DocumentResponse,
@@ -38,34 +39,41 @@ router = APIRouter()
 )
 async def upload_document(
     current_user: CurrentUser,
+    current_workspace: CurrentWorkspace,
     session: DBSession,
     storage: Storage,
+    request: __import__('fastapi').Request,
     file: UploadFile = File(..., description="PDF or DOCX file, max 50 MB"),
     title: str = Form(..., min_length=1, max_length=500),
-    description: str = Form(None),
-    category: str = Form(None),
-    tags: str = Form(None),
-    department: str = Form(None),
+    description: Optional[str] = Form(None),
+    category: Optional[str] = Form(None),
+    tags: Optional[str] = Form(None),
+    department: Optional[str] = Form(None),
 ) -> DocumentResponse:
     """
     Upload a PDF or DOCX document to the knowledge base.
-
-    - Validates file type (PDF / DOCX only) and size (≤ 50 MB).
-    - Stores the file under a UUID-based key (never exposes paths).
-    - Creates a database record with status **uploaded**.
-    - Triggers the background processing hook (status → processing).
-
-    Returns the created document metadata immediately (202 Accepted).
     """
     service = DocumentService(session, storage)
     document = await service.upload(
         file=file,
         title=title,
         owner_id=current_user.id,
+        workspace_id=current_workspace.id,
         description=description,
         category=category,
         tags=tags,
         department=department,
+    )
+    from app.services.audit_service import AuditService
+    audit = AuditService(session)
+    await audit.log_action(
+        action="DOCUMENT_UPLOAD",
+        status="SUCCESS",
+        workspace_id=current_workspace.id,
+        user_id=current_user.id,
+        resource_type="DOCUMENT",
+        resource_id=document.id,
+        request=request
     )
     return DocumentResponse.model_validate(document)
 
@@ -76,10 +84,10 @@ async def upload_document(
     "/",
     response_model=DocumentListResponse,
     status_code=status.HTTP_200_OK,
-    summary="List documents for the current user",
+    summary="List documents for the current workspace",
 )
 async def list_documents(
-    current_user: CurrentUser,
+    current_workspace: CurrentWorkspace,
     session: DBSession,
     storage: Storage,
     page: int = Query(1, ge=1, description="Page number (1-indexed)"),
@@ -88,15 +96,11 @@ async def list_documents(
     search: str = Query(None, description="Search by title or filename"),
 ) -> DocumentListResponse:
     """
-    Return a paginated list of documents owned by the current user.
-
-    - Supports filtering by `status` (uploaded, processing, ready, failed).
-    - Supports keyword search over title and original filename.
-    - Results are ordered by `created_at` descending.
+    Return a paginated list of documents in the current workspace.
     """
     service = DocumentService(session, storage)
     result = await service.list_documents(
-        owner_id=current_user.id,
+        workspace_id=current_workspace.id,
         page=page,
         page_size=page_size,
         status_filter=status_filter,
@@ -121,18 +125,26 @@ async def list_documents(
 )
 async def get_document(
     document_id: str,
-    current_user: CurrentUser,
+    current_workspace: CurrentWorkspace,
     session: DBSession,
     storage: Storage,
 ) -> DocumentResponse:
     """
     Return full metadata for a specific document.
-
-    Raises **403 Forbidden** if the document belongs to a different user.
-    Raises **404 Not Found** if the document does not exist.
     """
     service = DocumentService(session, storage)
-    document = await service.get_document(document_id, owner_id=current_user.id)
+    document = await service.get_document(document_id, workspace_id=current_workspace.id)
+    from app.services.audit_service import AuditService
+    audit = AuditService(session)
+    await audit.log_action(
+        action="DOCUMENT_UPLOAD",
+        status="SUCCESS",
+        workspace_id=current_workspace.id,
+        user_id=current_user.id,
+        resource_type="DOCUMENT",
+        resource_id=document.id,
+        request=request
+    )
     return DocumentResponse.model_validate(document)
 
 
@@ -146,17 +158,15 @@ async def get_document(
 )
 async def get_document_status(
     document_id: str,
-    current_user: CurrentUser,
+    current_workspace: CurrentWorkspace,
     session: DBSession,
     storage: Storage,
 ) -> DocumentStatusResponse:
     """
     Return the current processing pipeline status for a document.
-
-    Poll this endpoint after upload to track: uploaded → processing → ready.
     """
     service = DocumentService(session, storage)
-    document = await service.get_status(document_id, owner_id=current_user.id)
+    document = await service.get_status(document_id, workspace_id=current_workspace.id)
     return DocumentStatusResponse.model_validate(document)
 
 
@@ -169,19 +179,16 @@ async def get_document_status(
 )
 async def download_document(
     document_id: str,
-    current_user: CurrentUser,
+    current_workspace: CurrentWorkspace,
     session: DBSession,
     storage: Storage,
 ) -> Response:
     """
     Stream the original document file to the client.
-
-    Returns the file with the correct Content-Type and a
-    Content-Disposition header so browsers trigger a download.
     """
     service = DocumentService(session, storage)
     data, mime_type, original_filename = await service.download_document(
-        document_id, owner_id=current_user.id
+        document_id, workspace_id=current_workspace.id
     )
 
     safe_filename = original_filename.replace('"', "")
@@ -205,13 +212,25 @@ async def download_document(
 async def delete_document(
     document_id: str,
     current_user: CurrentUser,
+    current_workspace: CurrentWorkspace,
     session: DBSession,
     storage: Storage,
+    request: __import__('fastapi').Request,
 ) -> None:
     """
-    Permanently delete a document from storage and the database.
-
-    Raises **403 Forbidden** if the requester is not the document owner.
+    Soft delete a document.
     """
     service = DocumentService(session, storage)
-    await service.delete_document(document_id, owner_id=current_user.id)
+    await service.delete_document(document_id, workspace_id=current_workspace.id, deleted_by=current_user.id)
+
+    from app.services.audit_service import AuditService
+    audit = AuditService(session)
+    await audit.log_action(
+        action="DOCUMENT_DELETE",
+        status="SUCCESS",
+        workspace_id=current_workspace.id,
+        user_id=current_user.id,
+        resource_type="DOCUMENT",
+        resource_id=document_id,
+        request=request
+    )
