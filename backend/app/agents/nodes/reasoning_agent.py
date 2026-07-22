@@ -65,7 +65,7 @@ USER QUESTION:
 {user_query}
 """
 
-        llm = registry.get_llm_provider("gemini")
+        llm = registry.get_llm_provider()
         try:
             # Use stream_generate but consume it for validation before exposing it
             generator = llm.stream_generate(prompt)

@@ -48,14 +48,22 @@ export function WorkflowBuilderPage() {
           if (data && data.length > 0) {
             // Load the first workflow
             const wf = data[0];
-            if (wf.workflow_json && wf.workflow_json.nodes) {
+            if (wf.workflow_json && wf.workflow_json.nodes && wf.workflow_json.nodes.length > 0) {
               setNodes(wf.workflow_json.nodes);
               setEdges(wf.workflow_json.edges);
+            } else {
+              setNodes(defaultNodes);
+              setEdges(defaultEdges);
             }
+          } else {
+              setNodes(defaultNodes);
+              setEdges(defaultEdges);
           }
         }
       } catch (err) {
         console.error('Failed to load workflows', err);
+        setNodes(defaultNodes);
+        setEdges(defaultEdges);
       }
     };
     fetchWorkflows();
@@ -128,6 +136,7 @@ export function WorkflowBuilderPage() {
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           fitView
+          style={{ width: '100%', height: '100%' }}
           className={`${isDark ? 'dark' : 'light'}`}
         >
           <Controls className="bg-[var(--surface-primary)] border border-[var(--border-secondary)] rounded-md shadow-lg" />

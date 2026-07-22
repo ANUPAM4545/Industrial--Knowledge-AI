@@ -66,14 +66,21 @@ async def process_document(document_id: str, workspace_id: str, session: AsyncSe
         storage = LocalStorageProvider()
         data = await storage.download(document.stored_filename)
 
-        # 2. Extract Text using pypdf
-        pdf_reader = pypdf.PdfReader(io.BytesIO(data))
+        # 2. Extract Text
         pages = []
         full_text = ""
-        for i, page in enumerate(pdf_reader.pages):
-            text = page.extract_text() or ""
-            pages.append(ParsedPage(page_number=i + 1, text=text))
-            full_text += text + "\n"
+        try:
+            pdf_reader = pypdf.PdfReader(io.BytesIO(data))
+            for i, page in enumerate(pdf_reader.pages):
+                text = page.extract_text() or ""
+                pages.append(ParsedPage(page_number=i + 1, text=text))
+                full_text += text + "\n"
+        except Exception as pdf_err:
+            logger.warning("PDF parsing failed, falling back to raw text (mock file support)", error=str(pdf_err))
+            # Fallback for 30-byte mock files the user is uploading
+            text = data.decode("utf-8", errors="ignore")
+            pages.append(ParsedPage(page_number=1, text=text))
+            full_text = text
 
         parsed_doc = ParsedDocument(
             document_id=document_id,
@@ -89,6 +96,10 @@ async def process_document(document_id: str, workspace_id: str, session: AsyncSe
 
         # 4. Embed and Index Document
         await EmbeddingService.index_document(session, document_id)
+        
+        # 5. Extract Knowledge Graph
+        from app.services.graph_service import GraphExtractionService
+        await GraphExtractionService.extract_from_document(session, document_id, workspace_id)
         
         logger.info(
             "Document processing complete",

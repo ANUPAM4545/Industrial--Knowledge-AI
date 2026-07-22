@@ -21,30 +21,47 @@ async def get_knowledge_graph(
     edges_result = await db.execute(select(KnowledgeEdge).filter(KnowledgeEdge.workspace_id == workspace.id))
     edges = edges_result.scalars().all()
 
-    # If the graph is entirely empty, we could build a fallback graph from documents and chunks.
-    # But for a true "live" representation, we'll return exactly what's in the KnowledgeGraph tables.
-    
     response_nodes = []
-    for node in nodes:
-        response_nodes.append({
-            "id": node.label,
-            "group": node.type,
-            "size": 15,
-            "description": node.metadata_json.get("description", "") if node.metadata_json else ""
-        })
-        
     response_edges = []
-    for edge in edges:
-        # We need the source and target node labels
-        source_node = next((n for n in nodes if n.id == edge.source_node_id), None)
-        target_node = next((n for n in nodes if n.id == edge.target_node_id), None)
-        if source_node and target_node:
-            response_edges.append({
-                "source": source_node.label,
-                "target": target_node.label,
-                "value": 1,
-                "label": edge.relationship_type
+    
+    if not nodes:
+        # Fallback mock graph for demo purposes when DB is empty
+        response_nodes = [
+            {"id": "Pump 123", "group": "Equipment", "size": 25, "description": "Centrifugal pump in Sector 4"},
+            {"id": "Valve 45A", "group": "Equipment", "size": 15, "description": "Pressure release valve"},
+            {"id": "John Doe", "group": "Person", "size": 20, "description": "Senior Maintenance Engineer"},
+            {"id": "ISO-9001", "group": "Standard", "size": 20, "description": "Quality Management"},
+            {"id": "Leak Incident 092", "group": "Incident", "size": 15, "description": "Minor leak reported"},
+            {"id": "High Pressure Risk", "group": "Risk", "size": 20, "description": "System pressure above normal"},
+            {"id": "Maintenance Manual v2", "group": "Document", "size": 20, "description": "Latest procedures"},
+        ]
+        response_edges = [
+            {"source": "Pump 123", "target": "Valve 45A", "value": 1, "label": "CONNECTED_TO"},
+            {"source": "John Doe", "target": "Pump 123", "value": 1, "label": "MAINTAINS"},
+            {"source": "Pump 123", "target": "ISO-9001", "value": 1, "label": "COMPLIES_WITH"},
+            {"source": "Leak Incident 092", "target": "Valve 45A", "value": 1, "label": "INVOLVED"},
+            {"source": "High Pressure Risk", "target": "Pump 123", "value": 1, "label": "THREATENS"},
+            {"source": "John Doe", "target": "Maintenance Manual v2", "value": 1, "label": "AUTHORED"},
+        ]
+    else:
+        for node in nodes:
+            response_nodes.append({
+                "id": node.label,
+                "group": node.type,
+                "size": 20,
+                "description": node.metadata_json.get("description", "") if node.metadata_json else ""
             })
+            
+        for edge in edges:
+            source_node = next((n for n in nodes if n.id == edge.source_node_id), None)
+            target_node = next((n for n in nodes if n.id == edge.target_node_id), None)
+            if source_node and target_node:
+                response_edges.append({
+                    "source": source_node.label,
+                    "target": target_node.label,
+                    "value": 1,
+                    "label": edge.relationship_type
+                })
             
     return {
         "nodes": response_nodes,

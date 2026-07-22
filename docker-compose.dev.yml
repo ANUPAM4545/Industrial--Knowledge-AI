@@ -104,6 +104,7 @@ services:
     environment:
       APP_ENV: development
       APP_DEBUG: "true"
+      HF_HOME: "/tmp/huggingface"
     volumes:
       - ./backend:/app
 

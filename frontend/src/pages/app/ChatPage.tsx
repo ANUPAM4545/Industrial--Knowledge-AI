@@ -126,20 +126,20 @@ export function ChatPage() {
           firstTokenReceived = true
         }
 
-        if (chunk.event === 'metadata') {
-          if (!activeConversationId && chunk.payload?.conversation_id) {
-            setActiveConversationId(chunk.payload.conversation_id)
+        if (chunk.type === 'metadata') {
+          if (!activeConversationId && chunk.conversation_id) {
+            setActiveConversationId(chunk.conversation_id)
             loadConversations()
           }
           setMessages((prev) => prev.map((msg) => 
-            msg.id === aiMessageId ? { ...msg, context_json: chunk.payload } : msg
+            msg.id === aiMessageId ? { ...msg, context_json: chunk } : msg
           ))
-        } else if (chunk.event === 'token' && chunk.payload) {
+        } else if (chunk.type === 'chunk' && chunk.content) {
           setMessages((prev) => prev.map((msg) => 
-            msg.id === aiMessageId ? { ...msg, content: msg.content + chunk.payload } : msg
+            msg.id === aiMessageId ? { ...msg, content: msg.content + chunk.content } : msg
           ))
-        } else if (chunk.event === 'error') {
-          throw new Error(chunk.payload || 'Stream error')
+        } else if (chunk.type === 'error') {
+          throw new Error(chunk.content || 'Stream error')
         }
       }
     } catch (error) {

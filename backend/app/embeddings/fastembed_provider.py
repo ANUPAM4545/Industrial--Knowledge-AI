@@ -22,7 +22,7 @@ class FastEmbedProvider(EmbeddingProvider):
         
         try:
             # We initialize it synchronously here (typically at startup)
-            self.model = TextEmbedding(model_name=self._model_name)
+            self.model = TextEmbedding(model_name=self._model_name, cache_dir="/tmp/fastembed_cache")
         except Exception as e:
             raise ProviderInitializationError(f"Failed to initialize FastEmbed model {model_name}: {e}")
 

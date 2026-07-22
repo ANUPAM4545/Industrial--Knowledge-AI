@@ -51,7 +51,17 @@ export const chatService = {
   },
 
   async *sendMessageStream(query: string, conversationId?: string, signal?: AbortSignal): AsyncGenerator<any, void, unknown> {
-    const token = localStorage.getItem('nexo_token');
+    // @ts-ignore
+    const clerk = window.Clerk;
+    let token = localStorage.getItem('nexo_token');
+    if (clerk && clerk.session) {
+      try {
+        const clerkToken = await clerk.session.getToken();
+        if (clerkToken) token = clerkToken;
+      } catch (e) {
+        console.error("Failed to fetch Clerk token in stream", e);
+      }
+    }
     const workspaceId = localStorage.getItem('nexo_workspace_id');
     const headers: Record<string, string> = { 'Content-Type': 'application/json' };
     if (token) headers['Authorization'] = `Bearer ${token}`;

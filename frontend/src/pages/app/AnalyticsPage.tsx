@@ -1,24 +1,61 @@
-import { TrendingUp, Search, MessageSquare, FileText, Users } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { TrendingUp, Search, MessageSquare, FileText, Users, Loader2 } from 'lucide-react'
+import apiClient from '../../services/apiClient'
 import {
   AreaChart, Area, XAxis, YAxis,
   CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts'
 
-const mockData = Array.from({ length: 30 }, (_, i) => ({
-  date: `Jul ${i + 1}`,
-  searches: 0,
-  conversations: 0,
-  documents: 0,
-}))
-
-const cards = [
-  { label: 'Total Searches',    value: '—', icon: Search,        color: 'text-forge-400',  bg: 'bg-forge-400/10'  },
-  { label: 'AI Conversations',  value: '—', icon: MessageSquare, color: 'text-purple-400', bg: 'bg-purple-400/10' },
-  { label: 'Documents Indexed', value: '—', icon: FileText,      color: 'text-amber-400',  bg: 'bg-amber-400/10'  },
-  { label: 'Active Users',      value: '—', icon: Users,         color: 'text-green-400',  bg: 'bg-green-400/10'  },
-]
+interface DashboardStats {
+  total_documents: number;
+  total_users: number;
+  total_searches: number;
+  total_conversations: number;
+  documents_by_status: Record<string, number>;
+  searches_last_7_days: { date: string, value: number }[];
+  conversations_last_7_days: { date: string, value: number }[];
+}
 
 export function AnalyticsPage() {
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await apiClient.get('/analytics/dashboard')
+        setStats(response.data)
+      } catch (error) {
+        console.error('Failed to fetch analytics:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchStats()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="flex-1 flex items-center justify-center h-full">
+        <Loader2 className="w-8 h-8 animate-spin text-forge-400" />
+      </div>
+    )
+  }
+
+  const cards = [
+    { label: 'Total Searches',    value: stats?.total_searches ?? 0, icon: Search,        color: 'text-forge-400',  bg: 'bg-forge-400/10'  },
+    { label: 'AI Conversations',  value: stats?.total_conversations ?? 0, icon: MessageSquare, color: 'text-purple-400', bg: 'bg-purple-400/10' },
+    { label: 'Documents Indexed', value: stats?.total_documents ?? 0, icon: FileText,      color: 'text-amber-400',  bg: 'bg-amber-400/10'  },
+    { label: 'Active Users',      value: stats?.total_users ?? 0, icon: Users,         color: 'text-green-400',  bg: 'bg-green-400/10'  },
+  ]
+  
+  // Combine chart data
+  const chartData = stats?.searches_last_7_days.map((searchStat, idx) => ({
+    date: searchStat.date,
+    searches: searchStat.value,
+    conversations: stats.conversations_last_7_days[idx]?.value || 0
+  })) || []
+
   return (
     <div className="p-8 space-y-6">
       {/* Header */}
@@ -59,7 +96,7 @@ export function AnalyticsPage() {
           Activity Over Time
         </h2>
         <ResponsiveContainer width="100%" height={250}>
-          <AreaChart data={mockData}>
+          <AreaChart data={chartData}>
             <defs>
               <linearGradient id="aSearchGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#5b6ef4" stopOpacity={0.3} />
@@ -85,9 +122,20 @@ export function AnalyticsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="glass-card p-6">
           <h2 className="font-semibold text-[var(--text-primary)] mb-6">Documents by Status</h2>
-          <div className="flex flex-col items-center justify-center h-40 text-[var(--text-muted)] text-sm">
-            No data yet — upload documents to see breakdown
-          </div>
+          {stats?.documents_by_status && Object.keys(stats.documents_by_status).length > 0 ? (
+            <div className="space-y-4">
+              {Object.entries(stats.documents_by_status).map(([status, count]) => (
+                <div key={status} className="flex justify-between items-center">
+                  <span className="text-sm text-[var(--text-secondary)] capitalize">{status}</span>
+                  <span className="text-sm font-medium text-[var(--text-primary)]">{count}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-40 text-[var(--text-muted)] text-sm">
+              No data yet — upload documents to see breakdown
+            </div>
+          )}
         </div>
 
         <div className="glass-card p-6">

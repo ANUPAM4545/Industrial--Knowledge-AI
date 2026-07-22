@@ -40,7 +40,7 @@ async def create_workflow(
         description=workflow.description,
         is_active=workflow.is_active,
         workflow_json=workflow.workflow_json,
-        created_by_id=user.id
+        trigger_type='MANUAL'
     )
     db.add(db_workflow)
     await db.flush()
